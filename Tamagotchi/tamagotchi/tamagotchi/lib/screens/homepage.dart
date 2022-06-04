@@ -100,10 +100,9 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.call),
-              title: const Text('Authorization'),
+              title: const Text('Assistance'),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => FetchPage()));
+                print('Assistance');
               },
             ),
             const Divider(),
