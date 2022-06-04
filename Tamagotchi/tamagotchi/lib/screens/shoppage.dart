@@ -11,11 +11,11 @@ class ShopPage extends StatelessWidget {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 20, 178, 218),
+          backgroundColor: const Color.fromARGB(255, 20, 178, 218),
           title:
-              Center(child: Text(ShopPage.routename)) //ext(ShopPage.routename),
+              const Center(child: Text(ShopPage.routename)) //ext(ShopPage.routename),
           ),
-      backgroundColor: Color.fromARGB(255, 179, 210, 236),
+      backgroundColor: const Color.fromARGB(255, 179, 210, 236),
     );
   } //build
 } //ShopPage

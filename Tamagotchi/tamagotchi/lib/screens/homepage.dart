@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:tamagotchi/screens/shoppage.dart';
 import 'package:tamagotchi/screens/fetchuserdata.dart';
+import 'package:tamagotchi/screens/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/*
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  static const route = '/home/';
+  static const routename = 'Homepage';
+*/
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  static const route = '/homepage/';
+  static const routename = 'HomePage';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,13 +32,15 @@ class HomePage extends StatelessWidget {
                 icon: const Icon(Icons.shopping_cart),
                 tooltip: 'Go to the Shop',
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ShopPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ShopPage()));
                 },
               ),
             ],
-            backgroundColor: Color.fromARGB(255, 20, 178, 218),
-            title: Center(child: Text('HomePage'))),
+            backgroundColor: const Color.fromARGB(255, 20, 178, 218),
+            title: const Center(child: Text('HomePage'))),
         body: Container(
           margin: const EdgeInsets.all(20),
           //color: Color.fromARGB(255, 255, 255, 255),
@@ -44,6 +63,7 @@ class HomePage extends StatelessWidget {
                         MaterialPageRoute(builder: (_) => FetchPage()));
                   },
                 ),
+                /* 
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     primary: Colors.white,
@@ -54,6 +74,7 @@ class HomePage extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
+                */
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     primary: Colors.white,
@@ -67,32 +88,32 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 179, 210, 236),
+        backgroundColor: const Color.fromARGB(255, 179, 210, 236),
         drawer: Drawer(
             child: ListView(
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               child: Text('Menu'),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 20, 178, 218),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.call),
-              title: Text('Assistance'),
+              leading: const Icon(Icons.call),
+              title: const Text('Assistance'),
               onTap: () {
                 print('Assistance');
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Shopping'),
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Shopping'),
               onTap: () {
                 print('Shopping');
               },
             ),
-            Divider(),
+            const Divider(),
           ],
         )),
       ),
@@ -108,6 +129,6 @@ void _toLoginPage(BuildContext context) async {
   //Pop the drawer first
   Navigator.pop(context);
   //Then pop the HomePage
-  Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+  Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
   //Navigator.of(context).pushReplacementNamed(LoginPage.route);
 } //_toCalendarPage

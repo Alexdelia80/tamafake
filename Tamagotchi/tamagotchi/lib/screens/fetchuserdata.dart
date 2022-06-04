@@ -88,11 +88,11 @@ class FetchPage extends StatelessWidget {
                   endDate: DateTime.parse('2022-05-21'),
                   userID: '7ML2XV',
                 )) as List<FitbitHeartData>;
-                Navigator.pushNamed(context, 'avatar', arguments: HeartData);
+                //Navigator.pushNamed(context, 'avatar', arguments: HeartData);
                 // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
                 print(HeartData);
               },
-              child: Text('Load Heart Data'),
+              child: const Text('Load Heart Data'),
             ),
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
