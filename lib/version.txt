@@ -1,0 +1,8 @@
+VERSION 1.0.0
+Creato lo scheletro della app;
+Inserite login page, home page e fetch data;
+prova funzionamento positiva;
+
+VERSION 1.0.1
+Creato un widget che mostra i dati caricati dal
+sito fitbit a schermo

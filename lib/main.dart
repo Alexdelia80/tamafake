@@ -3,6 +3,7 @@ import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
+import 'package:tamafake/screens/heartpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         HomePage.route: (context) => const HomePage(),
         '/shop/': (context) => const ShopPage(),
         '/fetchpage/': (context) => FetchPage(),
+        '/heartpage/': (context) => HeartPage(),
       },
     );
   } //build

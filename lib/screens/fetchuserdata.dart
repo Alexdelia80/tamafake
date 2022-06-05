@@ -1,5 +1,6 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
+import 'package:tamafake/screens/heartpage.dart';
 //import 'package:healthpoint/screens/avatarpage.dart';
 //import 'package:healthpoint/utils/strings.dart';
 //import 'package:healthpoint/models/analisi.dart';
@@ -19,6 +20,8 @@ class FetchPage extends StatelessWidget {
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
   String? userId;
+  dynamic stepsDataList = [];
+  final heartDataList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,7 @@ class FetchPage extends StatelessWidget {
                   userID: '7ML2XV',
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
+                //Navigator.pushNamed(context, '/heartpage/', arguments: stepsData);
                 print('$stepsData');
                 /*
                 final snackBar =
@@ -82,15 +86,19 @@ class FetchPage extends StatelessWidget {
                   clientSecret: fitclientsec,
                 );
 
-                final HeartData = await fitbitActivityDataManager
+                final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dateRangeWithUserID(
                   startDate: DateTime.parse('2022-05-16'),
                   endDate: DateTime.parse('2022-05-21'),
                   userID: '7ML2XV',
                 )) as List<FitbitHeartData>;
-                //Navigator.pushNamed(context, 'avatar', arguments: HeartData);
-                // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
-                print(HeartData);
+                // ------------------------------------------------------------------
+                // vado alla pagina dei dati cardiaci e mostro i miei dati nel widget
+                Navigator.pushNamed(context, '/heartpage/',
+                    arguments: heartData);
+                // come si evince passo l'argomento HeartData
+                // -------------------------------------------------------------------
+                print(heartData);
               },
               child: const Text('Load Heart Data'),
             ),
