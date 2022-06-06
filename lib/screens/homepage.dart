@@ -3,6 +3,7 @@ import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamafake/screens/authorizationpage.dart';
 
 /*
 class HomePage extends StatelessWidget {
@@ -107,13 +108,26 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('Shopping'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Authorization'),
               onTap: () {
-                print('Shopping');
+                print('Authorization');
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AuthorizationPage()));
               },
             ),
             const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Log Out'),
+              onTap: () {
+                print('Log Out');
+                _toLoginPage(context);
+              },
+             
+            ),
           ],
         )),
       ),
