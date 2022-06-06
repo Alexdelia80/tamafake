@@ -1,6 +1,8 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+//import 'package:tamafake/screens/homepage.dart';
 
 //import 'package:healthpoint/screens/avatarpage.dart';
 //import 'package:healthpoint/utils/strings.dart';
@@ -21,6 +23,8 @@ class AuthorizationPage extends StatelessWidget {
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
   String? userId;
+
+  var Request = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +47,9 @@ class AuthorizationPage extends StatelessWidget {
                     clientSecret: fitclientsec,
                     redirectUri: redirecturi,
                     callbackUrlScheme: callbackurl);
+
+                    Request = true;
+
               },
               child: const Text('Tap to authorize'),
             ),
@@ -54,6 +61,8 @@ class AuthorizationPage extends StatelessWidget {
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
+
+                Request = false; 
               },
               child: const Text('Tap to unauthorize'),
             ),
