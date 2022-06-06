@@ -42,7 +42,11 @@ class _HomePageState extends State<HomePage> {
             ],
             backgroundColor: const Color.fromARGB(255, 20, 178, 218),
             title: const Center(child: Text('HomePage'))),
+        
         body: Container(
+           
+              
+
           margin: const EdgeInsets.all(20),
           //color: Color.fromARGB(255, 255, 255, 255),
           width: 500,
@@ -89,6 +93,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+        
         backgroundColor: const Color.fromARGB(255, 179, 210, 236),
         drawer: Drawer(
             child: ListView(
