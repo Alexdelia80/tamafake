@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // bottoni al centro della pagina
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     primary: Colors.white,
@@ -63,18 +64,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(builder: (_) => FetchPage()));
                   },
                 ),
-                /* 
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.teal,
-                  ),
-                  child: const Text('Statistiche'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                */
+
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     primary: Colors.white,
@@ -83,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('LogOut'),
                   onPressed: () => _toLoginPage(context),
                 ),
+                // fine pulsanti da mettere nella barra laterale
                 // MyButton('label', Navigator.pop(context)),
               ],
             ),

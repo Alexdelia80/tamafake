@@ -4,12 +4,25 @@ import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/heartpage.dart';
+import 'package:tamafake/database/database.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:provider/provider.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MyApp());
+// We modified the main
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final AppDatabase database =
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+  final databaseRepository = DatabaseRepository(database: database);
+
+  runApp(ChangeNotifierProvider<DatabaseRepository>(
+    create: (context) => databaseRepository,
+    child: const MyApp(),
+  ));
 } //main
 
-// login e fitbitter ok
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -21,10 +34,10 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.route: (context) => const LoginPage(),
         HomePage.route: (context) => const HomePage(),
-        '/shop/': (context) => const ShopPage(),
-        '/fetchpage/': (context) => FetchPage(),
-        '/heartpage/': (context) => HeartPage(),
+        HeartPage.route: (context) => const HeartPage(),
+        ShopPage.route: (context) => const ShopPage(),
+        FetchPage.route: (context) => FetchPage(),
       },
     );
   } //build
-}//MyApp
+} //MyApp
