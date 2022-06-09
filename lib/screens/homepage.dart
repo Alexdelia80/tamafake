@@ -75,6 +75,8 @@ class _HomePageState extends State<HomePage> {
         
         backgroundColor: const Color.fromARGB(255, 179, 210, 236),
         drawer: Drawer(
+            backgroundColor: const Color.fromARGB(255, 179, 210, 236),
+
             child: ListView(
           children: <Widget>[
             const DrawerHeader(

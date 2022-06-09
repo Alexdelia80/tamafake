@@ -21,6 +21,7 @@ INJECTED from C:\Users\ASUS\tamafake\android\app\src\main\AndroidManifest.xml:1:
 MERGED from C:\Users\ASUS\tamafake\android\app\src\main\AndroidManifest.xml:1:1-42:12
 MERGED from [:shared_preferences_android] C:\Users\ASUS\tamafake\build\shared_preferences_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_web_auth] C:\Users\ASUS\tamafake\build\flutter_web_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:sqflite] C:\Users\ASUS\tamafake\build\sqflite\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [:flutter_secure_storage] C:\Users\ASUS\tamafake\build\flutter_secure_storage\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\ad201fac15a88598107ec645f351f5b4\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
@@ -68,6 +69,8 @@ MERGED from [:shared_preferences_android] C:\Users\ASUS\tamafake\build\shared_pr
 MERGED from [:shared_preferences_android] C:\Users\ASUS\tamafake\build\shared_preferences_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_web_auth] C:\Users\ASUS\tamafake\build\flutter_web_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_web_auth] C:\Users\ASUS\tamafake\build\flutter_web_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] C:\Users\ASUS\tamafake\build\sqflite\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] C:\Users\ASUS\tamafake\build\sqflite\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_secure_storage] C:\Users\ASUS\tamafake\build\flutter_secure_storage\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-11:53
