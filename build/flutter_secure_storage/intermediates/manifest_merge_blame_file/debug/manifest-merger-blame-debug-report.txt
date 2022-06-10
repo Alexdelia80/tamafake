@@ -6,6 +6,7 @@
 6    android:versionName="3.3.1" >
 7
 8    <uses-sdk
+<<<<<<< HEAD
 8-->/Users/Asya/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-5.0.2/android/src/main/AndroidManifest.xml:5:5-58
 9        android:minSdkVersion="18"
 9-->/Users/Asya/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-5.0.2/android/src/main/AndroidManifest.xml:5:5-58
@@ -13,5 +14,14 @@
 10-->/Users/Asya/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-5.0.2/android/src/main/AndroidManifest.xml:5:5-58
 11        tools:overrideLibrary="androidx.security" />
 11-->/Users/Asya/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-5.0.2/android/src/main/AndroidManifest.xml:5:15-56
+=======
+8-->C:\Users\ASUS\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_secure_storage-5.0.2\android\src\main\AndroidManifest.xml:5:5-58
+9        android:minSdkVersion="18"
+9-->C:\Users\ASUS\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_secure_storage-5.0.2\android\src\main\AndroidManifest.xml:5:5-58
+10        android:targetSdkVersion="31"
+10-->C:\Users\ASUS\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_secure_storage-5.0.2\android\src\main\AndroidManifest.xml:5:5-58
+11        tools:overrideLibrary="androidx.security" />
+11-->C:\Users\ASUS\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_secure_storage-5.0.2\android\src\main\AndroidManifest.xml:5:15-56
+>>>>>>> master
 12
 13</manifest>

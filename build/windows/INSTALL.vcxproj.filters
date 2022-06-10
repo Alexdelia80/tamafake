@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ASUS\tamafake\build\windows\CMakeFiles\0399067a9a1fa41eb732e39685570e9b\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{AB6E3579-E4EA-34C7-BCD2-630A5E6F19DE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

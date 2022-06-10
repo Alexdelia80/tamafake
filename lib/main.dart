@@ -3,6 +3,7 @@ import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
+import 'package:tamafake/screens/avatarchoice.dart';
 
 void main() {
   runApp(const MyApp());
