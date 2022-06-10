@@ -23,8 +23,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as Map; 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -68,8 +70,25 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 // MyButton('label', Navigator.pop(context)),
-              ],
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.teal,
+                 ),
+                 child: const Text('Load your progress'),
+                 onPressed:(){
+                  //implmentare il controllo di user id per l'autorizzazione e di conseguenza:
+                  // fetch dati
+                 }, 
+              ),
+            
+            Text(args.data),
+            Text(args.steps),
+            Text(args.calories),
+
+            ], 
             ),
+
           ),
         ),
         
@@ -114,6 +133,16 @@ class _HomePageState extends State<HomePage> {
               },
              
             ),
+///////////////////////////////////////////////////////////////
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Autorization'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> FetchPage()));
+              },
+            ),
+            ////////////////////////////////////////////////
           ],
         )),
       ),

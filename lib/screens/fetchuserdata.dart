@@ -1,23 +1,42 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:healthpoint/screens/avatarpage.dart';
 //import 'package:healthpoint/utils/strings.dart';
 //import 'package:healthpoint/models/analisi.dart';
 
-class FetchPage extends StatelessWidget {
+class Arguments{
+  dynamic data;
+  dynamic steps;
+  dynamic calories;
+
+  Arguments(this.data, this.steps, this.calories);
+}
+
+class FetchPage extends StatefulWidget {
   FetchPage({Key? key}) : super(key: key);
 
   static const route = '/fetchpage/';
   static const routename = 'FetchPage';
+
+  @override
+  State<FetchPage> createState() => _FetchPageState();
+}
+
+class _FetchPageState extends State<FetchPage> {
   Map<int?, dynamic> daysteps = {};
+
   List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
 
   // questi sono i valori forniti da fitbit per
-  // autorizzare la mia App
   String fitclientid = '238BYH';
+
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
+
   String redirecturi = 'example://fitbit/auth';
+
   String callbackurl = 'example';
+
   String? userId;
 
   @override
@@ -55,15 +74,30 @@ class FetchPage extends StatelessWidget {
                   clientSecret: fitclientsec,
                   type: 'steps',
                 );
+                FitbitHeartDataManager fitbitActivityDataManager =
+                    FitbitHeartDataManager(
+                  clientID: fitclientid,
+                  clientSecret: fitclientsec,
+                );
                 //Fetch data
                 final stepsData = await fitbitActivityTimeseriesDataManager
-                    .fetch(FitbitActivityTimeseriesAPIURL.dateRangeWithResource(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
+                    .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
+                  date: DateTime.now().subtract(Duration(days: 1)),
                   userID: '7ML2XV',
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
                 print('$stepsData');
+
+                final heartData = await fitbitActivityDataManager
+                    .fetch(FitbitHeartAPIURL.dayWithUserID(
+                  date: DateTime.now().subtract(Duration(days: 1)),
+                  userID: '7ML2XV',
+                )) as List<FitbitHeartData>;
+                //Navigator.pushNamed(context, '/HomePage/', arguments: {stepsData[0], heartData[0]});
+                // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
+                print(heartData);
+
+                Arguments(DateTime.now().subtract(Duration(days: 1)) as String, stepsData[0] as String, heartData[0] as String );
                 /*
                 final snackBar =
                     SnackBar(content: Text('day : ${stepsList[1]}'));
@@ -82,15 +116,15 @@ class FetchPage extends StatelessWidget {
                   clientSecret: fitclientsec,
                 );
 
-                final HeartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dateRangeWithUserID(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
+                final heartData = await fitbitActivityDataManager
+                    .fetch(FitbitHeartAPIURL.dayWithUserID(
+                  date: DateTime.now().subtract(Duration(days: 1)),
                   userID: '7ML2XV',
                 )) as List<FitbitHeartData>;
                 //Navigator.pushNamed(context, 'avatar', arguments: HeartData);
                 // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
-                print(HeartData);
+                print(heartData);
+                
               },
               child: const Text('Load Heart Data'),
             ),
@@ -108,6 +142,6 @@ class FetchPage extends StatelessWidget {
         ),
       ),
     );
-  } //build
-
+  } 
+ //build
 } //HomePage

@@ -3,11 +3,25 @@ import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
-import 'package:tamafake/screens/avatarchoice.dart';
+//import 'package:tamafake/screens/avatarchoice.dart';
+import 'package:tamafake/database/database.dart';
+import 'package:tamafake/repository/databaserepository.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-} //main
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final AppDatabase database =
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+  //This creates a new DatabaseRepository from the AppDatabase instance just initialized
+  final databaseRepository = DatabaseRepository(database: database);
+
+  runApp(ChangeNotifierProvider<DatabaseRepository>(
+    create: (context) => databaseRepository,
+    child: MyApp(),
+  ));
+} //main//main
+
 
 // login e fitbitter ok
 class MyApp extends StatelessWidget {
