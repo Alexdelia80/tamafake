@@ -1,34 +1,9 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-//import 'package:tamafake/screens/heartpage.dart';
-//import 'package:provider/provider.dart';
-//import 'package:healthpoint/screens/avatarpage.dart';
-//import 'package:healthpoint/utils/strings.dart';
-//import 'package:healthpoint/models/analisi.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
-/*
-import 'package:busy_day/database/entities/todo.dart';
-import 'package:busy_day/repository/databaseRepository.dart';
-import 'package:english_words/english_words.dart';
-import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
-*/
-/*
-class Arguments {
-/*
-  String? data;
-  String? steps;
-  String? calories;
- */
-  List<String> steps = [];
-  List<String> heart = [];
-  List<String> time = [];
-}*/
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -110,24 +85,9 @@ class _FetchPageState extends State<FetchPage> {
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
-                // final async {
-                // final wp = stepsData[0].value;
-                //No need to use a Consumer, we are just using a method of the DatabaseRepository
-                // UserTable(this.id, this.data, this.steps, this.calories);
                 await Provider.of<DatabaseRepository>(context, listen: false)
                     .insertUser(UserTable(fixedUID, calcDataString,
                         stepsData[0].value, heartData[0].caloriesCardio));
-                // };
-                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
-                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
-                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
-                //    stepsData[0] as String, heartData[0] as String);
-                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: {
-                //  stepsData[0].dateOfMonitoring,
-                //  heartData[0].caloriesCardio,
-                // });
               },
               child: const Text('Load all Data'),
             ),
@@ -146,8 +106,11 @@ class _FetchPageState extends State<FetchPage> {
       ),
     );
   } //build
-
 }
+
+
+
+/*
 
 class StepsClass extends ChangeNotifier {
   //For simplicity, a product is just a String.
@@ -166,3 +129,23 @@ class StepsClass extends ChangeNotifier {
   } //clearCart
 
 }//Cart //HomePage
+___________________________________________________________________
+// };
+                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
+                 // final async {
+                // final wp = stepsData[0].value;
+                //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                // UserTable(this.id, this.data, this.steps, this.calories);
+                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
+                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
+                //    stepsData[0] as String, heartData[0] as String);
+                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: {
+                //  stepsData[0].dateOfMonitoring,
+                //  heartData[0].caloriesCardio,
+                // });
+___________________________________________________________________
+
+
+*/
