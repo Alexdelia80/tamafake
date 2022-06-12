@@ -1,20 +1,12 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:healthpoint/screens/avatarpage.dart';
-//import 'package:healthpoint/utils/strings.dart';
-//import 'package:healthpoint/models/analisi.dart';
-
-class Arguments{
-  dynamic data;
-  dynamic steps;
-  dynamic calories;
-
-  Arguments(this.data, this.steps, this.calories);
-}
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class FetchPage extends StatefulWidget {
-  FetchPage({Key? key}) : super(key: key);
+  const FetchPage({Key? key}) : super(key: key);
 
   static const route = '/fetchpage/';
   static const routename = 'FetchPage';
@@ -24,20 +16,14 @@ class FetchPage extends StatefulWidget {
 }
 
 class _FetchPageState extends State<FetchPage> {
-  Map<int?, dynamic> daysteps = {};
-
-  List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
-
-  // questi sono i valori forniti da fitbit per
   String fitclientid = '238BYH';
-
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
-
   String redirecturi = 'example://fitbit/auth';
-
   String callbackurl = 'example';
-
   String? userId;
+  String fixedUID = '7ML2XV';
+  List<String> stepsData = [];
+  List<String> heartData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +49,7 @@ class _FetchPageState extends State<FetchPage> {
               },
               child: const Text('Tap to authorize'),
             ),
-            // ------------------------ LOAD STEPS DATA --------------------------
+            // ------------------------ LOAD Heart and Steps DATA --------------------------
             ElevatedButton(
               onPressed: () async {
                 //Instantiate a proper data manager
@@ -79,54 +65,31 @@ class _FetchPageState extends State<FetchPage> {
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
-                //Fetch data
+                // Fetch steps data
                 final stepsData = await fitbitActivityTimeseriesDataManager
                     .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                  date: DateTime.now().subtract(Duration(days: 1)),
-                  userID: '7ML2XV',
+                  date: DateTime.now().subtract(const Duration(days: 1)),
+                  userID: fixedUID,
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
-                print('$stepsData');
-
+                // Fetch heart data
+                final calcData =
+                    DateTime.now().subtract(const Duration(days: 1));
+                String calcDataString =
+                    DateFormat("yyyy-MM-dd hh:mm:ss").format(calcData);
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
-                  date: DateTime.now().subtract(Duration(days: 1)),
-                  userID: '7ML2XV',
+                  date: calcData,
+                  userID: fixedUID,
                 )) as List<FitbitHeartData>;
-                //Navigator.pushNamed(context, '/HomePage/', arguments: {stepsData[0], heartData[0]});
-                // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
-                print(heartData);
-
-                Arguments(DateTime.now().subtract(Duration(days: 1)) as String, stepsData[0] as String, heartData[0] as String );
-                /*
-                final snackBar =
-                    SnackBar(content: Text('day : ${stepsList[1]}'));
-                Text('day 1 you walked ${stepsData[0].value} steps!');
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-               */
+                print(stepsData[0].value);
+                print(heartData[0].caloriesCardio);
+                print(calcDataString);
+                await Provider.of<DatabaseRepository>(context, listen: false)
+                    .insertUser(UserTable(fixedUID, calcDataString,
+                        stepsData[0].value, heartData[0].caloriesCardio));
               },
-              child: const Text('Load Steps Data'),
-            ),
-            // ---------------------------- HEART DATA ------------------------------
-            ElevatedButton(
-              onPressed: () async {
-                FitbitHeartDataManager fitbitActivityDataManager =
-                    FitbitHeartDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                );
-
-                final heartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dayWithUserID(
-                  date: DateTime.now().subtract(Duration(days: 1)),
-                  userID: '7ML2XV',
-                )) as List<FitbitHeartData>;
-                //Navigator.pushNamed(context, 'avatar', arguments: HeartData);
-                // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
-                print(heartData);
-                
-              },
-              child: const Text('Load Heart Data'),
+              child: const Text('Load all Data'),
             ),
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
@@ -142,6 +105,41 @@ class _FetchPageState extends State<FetchPage> {
         ),
       ),
     );
-  } 
- //build
-} //HomePage
+  } //build
+}
+
+
+
+/*
+class StepsClass extends ChangeNotifier {
+  //For simplicity, a product is just a String.
+  List<String> steps = [];
+  void addSteps(String toAdd) {
+    steps.add(toAdd);
+    //Call the notifyListeners() method to alert that something happened.
+    notifyListeners();
+  } //addProduct
+  void clearSteps() {
+    steps.clear();
+    //Call the notifyListeners() method to alert that something happened.
+    notifyListeners();
+  } //clearCart
+}//Cart //HomePage
+___________________________________________________________________
+// };
+                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
+                 // final async {
+                // final wp = stepsData[0].value;
+                //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                // UserTable(this.id, this.data, this.steps, this.calories);
+                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
+                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
+                //    stepsData[0] as String, heartData[0] as String);
+                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: {
+                //  stepsData[0].dateOfMonitoring,
+                //  heartData[0].caloriesCardio,
+                // });
+___________________________________________________________________
+*/

@@ -3,15 +3,11 @@ import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tamafake/screens/authorizationpage.dart';
+import 'package:provider/provider.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-/*
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  static const route = '/home/';
-  static const routename = 'Homepage';
-*/
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -23,10 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
+  //final Arguments stepsArgs = Arguments();
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map; 
+    //if (ModalRoute.of(context)!.settings.arguments != null) {
+    //  final args = ModalRoute.of(context)!.settings.arguments as List;
+    //}
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -44,58 +42,98 @@ class _HomePageState extends State<HomePage> {
             ],
             backgroundColor: const Color.fromARGB(255, 20, 178, 218),
             title: const Center(child: Text('HomePage'))),
-        
-        body: Container(
-           
-          margin: const EdgeInsets.all(20),
-          //color: Color.fromARGB(255, 255, 255, 255),
-          width: 500,
-          height: 500,
+        body: Center(
+          child:
+              //We will show the todo table with a ListView.
+              //To do so, we use a Consumer of DatabaseRepository in order to rebuild the widget tree when
+              //entries are deleted or created.
+              Consumer<DatabaseRepository>(builder: (context, dbr, child) {
+            //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+            //and then populate the ListView accordingly.
+            //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
+            return FutureBuilder(
+              initialData: null,
+              future: dbr.findUser(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data as List<UserTable>;
+                  return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, userIndex) {
+                        final dataRecs = data[userIndex];
+                        return Card(
+                          elevation: 5,
+                          //Here we use a Dismissible widget to create a nicer UI.
+                          child: Dismissible(
+                            //Just create a dummy unique key
+                            key: UniqueKey(),
+                            //This is the background to show when the ListTile is swiped
+                            background: Container(color: Colors.red),
+                            //The ListTile is used to show the Todo entry
+                            child: ListTile(
+                              leading: const Icon(MdiIcons.note),
+                              title: Text(dataRecs.steps.toString()),
+                              subtitle: Text('ID: ${dataRecs.id}'),
+                              //If the ListTile is tapped, it is deleted
+                            ),
+                            //This method is called when the ListTile is dismissed
+                            onDismissed: (direction) async {
+                              //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                              await Provider.of<DatabaseRepository>(context,
+                                      listen: false)
+                                  .removeUser(dataRecs);
+                            },
+                          ),
+                        );
+                      });
+                } else {
+                  //A CircularProgressIndicator is shown while the list of Todo is loading.
+                  return const Text('il db è vuoto! Caricare i dati!');
+                  // CircularProgressIndicator();
+                } //else
+              }, //builder of FutureBuilder
+            );
+          }),
+        ),
+
+        /*
+        Center(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(0, 40, 0, 30),
+            height: 600,
+            child: Card(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+               ],
           
-          child: Align(
-            alignment: Alignment.center,
-            
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              
-              children: [ 
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                    child: Center(
-                        child: 
-                          CircleAvatar(
-                              backgroundImage: NetworkImage('https://www.woolha.com/media/2020/03/eevee.png'),
-                              radius: 50,)
-                  ),
-                ),
-                // MyButton('label', Navigator.pop(context)),
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.teal,
-                 ),
-                 child: const Text('Load your progress'),
-                 onPressed:(){
-                  //implmentare il controllo di user id per l'autorizzazione e di conseguenza:
-                  // fetch dati
-                 }, 
+            const Center(
+                child: CircleAvatar(
+          backgroundImage:
+              NetworkImage('https://www.woolha.com/media/2020/03/eevee.png'),
+          radius: 50,
+        )),
+        
+                  Text('${args[0].dateOfMonitoring}'),
+                  Text('${args[0].restingHeartRate}'),
+                  Text('${args[0].caloriesCardio}'),
+                  
               ),
-            
-            Text(args.data),
-            Text(args.steps),
-            Text(args.calories),
-
-            ], 
             ),
-
           ),
         ),
-        
+        */
+        /*
+        const Center(  
+            child: CircleAvatar(
+          backgroundImage:
+              NetworkImage('https://www.woolha.com/media/2020/03/eevee.png'),
+          radius: 50,
+        )          
+        ),
+        */
         backgroundColor: const Color.fromARGB(255, 179, 210, 236),
         drawer: Drawer(
-            backgroundColor: const Color.fromARGB(255, 179, 210, 236),
-
             child: ListView(
           children: <Widget>[
             const DrawerHeader(
@@ -113,14 +151,22 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(),
             ListTile(
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Shopping'),
+              onTap: () {
+                //print('Shopping');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const ShopPage()));
+              },
+            ),
+            const Divider(),
+            ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Authorization'),
               onTap: () {
-                print('Authorization');
-                Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AuthorizationPage()));
+                //print('Authorization');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FetchPage()));
               },
             ),
             const Divider(),
@@ -131,18 +177,7 @@ class _HomePageState extends State<HomePage> {
                 print('Log Out');
                 _toLoginPage(context);
               },
-             
-            ),
-///////////////////////////////////////////////////////////////
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('Autorization'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> FetchPage()));
-              },
-            ),
-            ////////////////////////////////////////////////
+            )
           ],
         )),
       ),
@@ -160,4 +195,46 @@ void _toLoginPage(BuildContext context) async {
   //Then pop the HomePage
   Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
   //Navigator.of(context).pushReplacementNamed(LoginPage.route);
-} //_toCalendarPage 
+} //_toCalendarPage
+
+// CODICE ELIMINATO:
+/*
+        Container(
+          margin: const EdgeInsets.all(20),
+          //color: Color.fromARGB(255, 255, 255, 255),
+          width: 500,
+          height: 500,
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // bottoni al centro della pagina
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.teal,
+                  ),
+                  child: const Text('Fetch User Data'),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => FetchPage()));
+                  },
+                ),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.teal,
+                  ),
+                  child: const Text('LogOut'),
+                  onPressed: () => _toLoginPage(context),
+                ),
+                // fine pulsanti da mettere nella barra laterale
+                // MyButton('label', Navigator.pop(context)),
+              ],
+            ),
+          ),
+        ),
+        */
+

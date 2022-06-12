@@ -86,7 +86,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `avatar` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL, FOREIGN KEY (`avatar_id`) REFERENCES `UserTable` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT, `data` TEXT, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, PRIMARY KEY (`data`))');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT, `data` TEXT, `steps` REAL, `calories` REAL, PRIMARY KEY (`data`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -212,8 +212,8 @@ class _$userDao extends userDao {
         mapper: (Map<String, Object?> row) => UserTable(
             row['id'] as String?,
             row['data'] as String?,
-            row['steps'] as int,
-            row['calories'] as int));
+            row['steps'] as double?,
+            row['calories'] as double?));
   }
 
   @override
