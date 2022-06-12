@@ -61,7 +61,9 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  TodoDao? _todoDaoInstance;
+  avatarDao? _avatarInstance;
+
+  userDao? _userInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
@@ -82,7 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Todo` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `avatar` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL, FOREIGN KEY (`avatar_id`) REFERENCES `UserTable` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT, `data` TEXT, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, PRIMARY KEY (`data`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -91,18 +95,36 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  TodoDao get todoDao {
-    return _todoDaoInstance ??= _$TodoDao(database, changeListener);
+  avatarDao get avatar {
+    return _avatarInstance ??= _$avatarDao(database, changeListener);
+  }
+
+  @override
+  userDao get user {
+    return _userInstance ??= _$userDao(database, changeListener);
   }
 }
 
-class _$TodoDao extends TodoDao {
-  _$TodoDao(this.database, this.changeListener)
+class _$avatarDao extends avatarDao {
+  _$avatarDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _todoInsertionAdapter = InsertionAdapter(database, 'Todo',
-            (Todo item) => <String, Object?>{'id': item.id, 'name': item.name}),
-        _todoDeletionAdapter = DeletionAdapter(database, 'Todo', ['id'],
-            (Todo item) => <String, Object?>{'id': item.id, 'name': item.name});
+        _avatarTableInsertionAdapter = InsertionAdapter(
+            database,
+            'avatar',
+            (AvatarTable item) =>
+                <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId}),
+        _avatarTableUpdateAdapter = UpdateAdapter(
+            database,
+            'avatar',
+            ['exp'],
+            (AvatarTable item) =>
+                <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId}),
+        _avatarTableDeletionAdapter = DeletionAdapter(
+            database,
+            'avatar',
+            ['exp'],
+            (AvatarTable item) =>
+                <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId});
 
   final sqflite.DatabaseExecutor database;
 
@@ -110,24 +132,102 @@ class _$TodoDao extends TodoDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Todo> _todoInsertionAdapter;
+  final InsertionAdapter<AvatarTable> _avatarTableInsertionAdapter;
 
-  final DeletionAdapter<Todo> _todoDeletionAdapter;
+  final UpdateAdapter<AvatarTable> _avatarTableUpdateAdapter;
+
+  final DeletionAdapter<AvatarTable> _avatarTableDeletionAdapter;
 
   @override
-  Future<List<Todo>> findAllTodos() async {
-    return _queryAdapter.queryList('SELECT * FROM Todo',
+  Future<List<AvatarTable>> findAvatar() async {
+    return _queryAdapter.queryList('SELECT * FROM AvatarTable',
         mapper: (Map<String, Object?> row) =>
-            Todo(row['id'] as int?, row['name'] as String));
+            AvatarTable(row['exp'] as int, row['avatar_id'] as String));
   }
 
   @override
-  Future<void> insertTodo(Todo todo) async {
-    await _todoInsertionAdapter.insert(todo, OnConflictStrategy.abort);
+  Future<void> insertAvatar(AvatarTable avatar) async {
+    await _avatarTableInsertionAdapter.insert(avatar, OnConflictStrategy.abort);
   }
 
   @override
-  Future<void> deleteTodo(Todo task) async {
-    await _todoDeletionAdapter.delete(task);
+  Future<void> updateAvatar(AvatarTable avatar) async {
+    await _avatarTableUpdateAdapter.update(avatar, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteAvatar(AvatarTable avatar) async {
+    await _avatarTableDeletionAdapter.delete(avatar);
+  }
+}
+
+class _$userDao extends userDao {
+  _$userDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _userTableInsertionAdapter = InsertionAdapter(
+            database,
+            'UserTable',
+            (UserTable item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'steps': item.steps,
+                  'calories': item.calories
+                }),
+        _userTableUpdateAdapter = UpdateAdapter(
+            database,
+            'UserTable',
+            ['data'],
+            (UserTable item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'steps': item.steps,
+                  'calories': item.calories
+                }),
+        _userTableDeletionAdapter = DeletionAdapter(
+            database,
+            'UserTable',
+            ['data'],
+            (UserTable item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'steps': item.steps,
+                  'calories': item.calories
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<UserTable> _userTableInsertionAdapter;
+
+  final UpdateAdapter<UserTable> _userTableUpdateAdapter;
+
+  final DeletionAdapter<UserTable> _userTableDeletionAdapter;
+
+  @override
+  Future<List<UserTable>> findUser() async {
+    return _queryAdapter.queryList('SELECT * FROM UserTable',
+        mapper: (Map<String, Object?> row) => UserTable(
+            row['id'] as String?,
+            row['data'] as String?,
+            row['steps'] as double?,
+            row['calories'] as double?));
+  }
+
+  @override
+  Future<void> insertUser(UserTable user) async {
+    await _userTableInsertionAdapter.insert(user, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateUser(UserTable user) async {
+    await _userTableUpdateAdapter.update(user, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteUser(UserTable user) async {
+    await _userTableDeletionAdapter.delete(user);
   }
 }

@@ -1,27 +1,54 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/heartpage.dart';
+//import 'package:tamafake/screens/heartpage.dart';
+//import 'package:provider/provider.dart';
 //import 'package:healthpoint/screens/avatarpage.dart';
 //import 'package:healthpoint/utils/strings.dart';
 //import 'package:healthpoint/models/analisi.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class FetchPage extends StatelessWidget {
-  FetchPage({Key? key}) : super(key: key);
+/*
+import 'package:busy_day/database/entities/todo.dart';
+import 'package:busy_day/repository/databaseRepository.dart';
+import 'package:english_words/english_words.dart';
+import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+*/
+/*
+class Arguments {
+/*
+  String? data;
+  String? steps;
+  String? calories;
+ */
+  List<String> steps = [];
+  List<String> heart = [];
+  List<String> time = [];
+}*/
+
+class FetchPage extends StatefulWidget {
+  const FetchPage({Key? key}) : super(key: key);
 
   static const route = '/fetchpage/';
   static const routename = 'FetchPage';
-  Map<int?, dynamic> daysteps = {};
-  List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
 
-  // questi sono i valori forniti da fitbit per
-  // autorizzare la mia App
+  @override
+  State<FetchPage> createState() => _FetchPageState();
+}
+
+class _FetchPageState extends State<FetchPage> {
   String fitclientid = '238BYH';
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
   String? userId;
-  dynamic stepsDataList = [];
-  final heartDataList = [];
+  String fixedUID = '7ML2XV';
+  List<String> stepsData = [];
+  List<String> heartData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +74,7 @@ class FetchPage extends StatelessWidget {
               },
               child: const Text('Tap to authorize'),
             ),
-            // ------------------------ LOAD STEPS DATA --------------------------
+            // ------------------------ LOAD Heart and Steps DATA --------------------------
             ElevatedButton(
               onPressed: () async {
                 //Instantiate a proper data manager
@@ -58,49 +85,51 @@ class FetchPage extends StatelessWidget {
                   clientSecret: fitclientsec,
                   type: 'steps',
                 );
-                //Fetch data
-                final stepsData = await fitbitActivityTimeseriesDataManager
-                    .fetch(FitbitActivityTimeseriesAPIURL.dateRangeWithResource(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
-                  userID: '7ML2XV',
-                  resource: fitbitActivityTimeseriesDataManager.type,
-                )) as List<FitbitActivityTimeseriesData>;
-                //Navigator.pushNamed(context, '/heartpage/', arguments: stepsData);
-                print('$stepsData');
-                /*
-                final snackBar =
-                    SnackBar(content: Text('day : ${stepsList[1]}'));
-                Text('day 1 you walked ${stepsData[0].value} steps!');
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-               */
-              },
-              child: const Text('Load Steps Data'),
-            ),
-            // ---------------------------- HEART DATA ------------------------------
-            ElevatedButton(
-              onPressed: () async {
                 FitbitHeartDataManager fitbitActivityDataManager =
                     FitbitHeartDataManager(
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
-
+                // Fetch steps data
+                final stepsData = await fitbitActivityTimeseriesDataManager
+                    .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
+                  date: DateTime.now().subtract(const Duration(days: 1)),
+                  userID: fixedUID,
+                  resource: fitbitActivityTimeseriesDataManager.type,
+                )) as List<FitbitActivityTimeseriesData>;
+                // Fetch heart data
+                final calcData =
+                    DateTime.now().subtract(const Duration(days: 1));
+                String calcDataString =
+                    DateFormat("yyyy-MM-dd hh:mm:ss").format(calcData);
                 final heartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dateRangeWithUserID(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
-                  userID: '7ML2XV',
+                    .fetch(FitbitHeartAPIURL.dayWithUserID(
+                  date: calcData,
+                  userID: fixedUID,
                 )) as List<FitbitHeartData>;
-                // ------------------------------------------------------------------
-                // vado alla pagina dei dati cardiaci e mostro i miei dati nel widget
-                Navigator.pushNamed(context, '/heartpage/',
-                    arguments: heartData);
-                // come si evince passo l'argomento HeartData
-                // -------------------------------------------------------------------
-                print(heartData);
+                print(stepsData[0].value);
+                print(heartData[0].caloriesCardio);
+                print(calcDataString);
+                // final async {
+                // final wp = stepsData[0].value;
+                //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                // UserTable(this.id, this.data, this.steps, this.calories);
+                await Provider.of<DatabaseRepository>(context, listen: false)
+                    .insertUser(UserTable(fixedUID, calcDataString,
+                        stepsData[0].value, heartData[0].caloriesCardio));
+                // };
+                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
+                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
+                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
+                //    stepsData[0] as String, heartData[0] as String);
+                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
+                //Navigator.pushNamed(context, '/homepage/', arguments: {
+                //  stepsData[0].dateOfMonitoring,
+                //  heartData[0].caloriesCardio,
+                // });
               },
-              child: const Text('Load Heart Data'),
+              child: const Text('Load all Data'),
             ),
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
@@ -118,4 +147,22 @@ class FetchPage extends StatelessWidget {
     );
   } //build
 
-} //HomePage
+}
+
+class StepsClass extends ChangeNotifier {
+  //For simplicity, a product is just a String.
+  List<String> steps = [];
+
+  void addSteps(String toAdd) {
+    steps.add(toAdd);
+    //Call the notifyListeners() method to alert that something happened.
+    notifyListeners();
+  } //addProduct
+
+  void clearSteps() {
+    steps.clear();
+    //Call the notifyListeners() method to alert that something happened.
+    notifyListeners();
+  } //clearCart
+
+}//Cart //HomePage
