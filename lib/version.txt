@@ -11,3 +11,9 @@ VERSION 1.0.2
 Aggiunta gestione dello stato con il database
 va completata l'implementazione da errore sulla
 tabella User
+
+VERSION 1.0.3   
+Risolto il problema di visualizzazione del database
+ma ci sono ancora problemi relativi alla ricerca
+di un record per data ed alla cancellazione
+di un record già inserito nella tabella
