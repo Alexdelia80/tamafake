@@ -17,7 +17,7 @@ class _HeartPageState extends State<HeartPage> {
     final message = ModalRoute.of(context)!.settings.arguments! as List;
 
     return Scaffold(
-      appBar: AppBar(title: Text('HeartPage')),
+      appBar: AppBar(title: const Text('HeartPage')),
       body: Center(
         child: SizedBox(
           width: 300,
@@ -29,8 +29,8 @@ class _HeartPageState extends State<HeartPage> {
                 border: TableBorder.all(),
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: [
-                  TableRow(
-                    decoration: const BoxDecoration(
+                  const TableRow(
+                    decoration: BoxDecoration(
                       color: Colors.pinkAccent,
                     ),
                     children: [
@@ -96,7 +96,7 @@ class _HeartPageState extends State<HeartPage> {
               /*'The day ${message[0].dateOfMonitoring}, you walked ${message[0].value} ${message[0].type} ')*/
 
               ElevatedButton(
-                child: Text('To Homepage'),
+                child: const Text('To Homepage'),
                 onPressed: () {
                   Navigator.pop(context);
                 },

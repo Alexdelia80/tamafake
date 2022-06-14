@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `avatar` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL, FOREIGN KEY (`avatar_id`) REFERENCES `UserTable` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT, `data` TEXT, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, PRIMARY KEY (`data`))');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT PRIMARY KEY AUTOINCREMENT, `data` TEXT, `steps` REAL, `calories` REAL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -110,18 +110,18 @@ class _$avatarDao extends avatarDao {
       : _queryAdapter = QueryAdapter(database),
         _avatarTableInsertionAdapter = InsertionAdapter(
             database,
-            'avatar',
+            'AvatarTable',
             (AvatarTable item) =>
                 <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId}),
         _avatarTableUpdateAdapter = UpdateAdapter(
             database,
-            'avatar',
+            'AvatarTable',
             ['exp'],
             (AvatarTable item) =>
                 <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId}),
         _avatarTableDeletionAdapter = DeletionAdapter(
             database,
-            'avatar',
+            'AvatarTable',
             ['exp'],
             (AvatarTable item) =>
                 <String, Object?>{'exp': item.exp, 'avatar_id': item.avatarId});
@@ -176,7 +176,7 @@ class _$userDao extends userDao {
         _userTableUpdateAdapter = UpdateAdapter(
             database,
             'UserTable',
-            ['data'],
+            ['id'],
             (UserTable item) => <String, Object?>{
                   'id': item.id,
                   'data': item.data,
@@ -186,7 +186,7 @@ class _$userDao extends userDao {
         _userTableDeletionAdapter = DeletionAdapter(
             database,
             'UserTable',
-            ['data'],
+            ['id'],
             (UserTable item) => <String, Object?>{
                   'id': item.id,
                   'data': item.data,
@@ -214,6 +214,17 @@ class _$userDao extends userDao {
             row['data'] as String?,
             row['steps'] as double?,
             row['calories'] as double?));
+  }
+
+  @override
+  Future<UserTable?> findRec(String data) async {
+    return _queryAdapter.query('SELECT * FROM UserTable WHERE data = ?1',
+        mapper: (Map<String, Object?> row) => UserTable(
+            row['id'] as String?,
+            row['data'] as String?,
+            row['steps'] as double?,
+            row['calories'] as double?),
+        arguments: [data]);
   }
 
   @override

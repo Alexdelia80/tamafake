@@ -19,12 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //final Arguments stepsArgs = Arguments();
   @override
   Widget build(BuildContext context) {
-    //if (ModalRoute.of(context)!.settings.arguments != null) {
-    //  final args = ModalRoute.of(context)!.settings.arguments as List;
-    //}
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -47,10 +43,10 @@ class _HomePageState extends State<HomePage> {
               //We will show the todo table with a ListView.
               //To do so, we use a Consumer of DatabaseRepository in order to rebuild the widget tree when
               //entries are deleted or created.
+              //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+              //and then populate the ListView accordingly.
+              //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
               Consumer<DatabaseRepository>(builder: (context, dbr, child) {
-            //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
-            //and then populate the ListView accordingly.
-            //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
             return FutureBuilder(
               initialData: null,
               future: dbr.findUser(),
@@ -72,8 +68,8 @@ class _HomePageState extends State<HomePage> {
                             //The ListTile is used to show the Todo entry
                             child: ListTile(
                               leading: const Icon(MdiIcons.note),
-                              title: Text(dataRecs.steps as String),
-                              subtitle: Text('ID: ${dataRecs.id}'),
+                              title: Text(dataRecs.steps.toString()),
+                              subtitle: Text('Data: ${dataRecs.data}'),
                               //If the ListTile is tapped, it is deleted
                             ),
                             //This method is called when the ListTile is dismissed
@@ -95,34 +91,6 @@ class _HomePageState extends State<HomePage> {
             );
           }),
         ),
-
-        /*
-        Center(
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(0, 40, 0, 30),
-            height: 600,
-            child: Card(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-               ],
-          
-            const Center(
-                child: CircleAvatar(
-          backgroundImage:
-              NetworkImage('https://www.woolha.com/media/2020/03/eevee.png'),
-          radius: 50,
-        )),
-        
-                  Text('${args[0].dateOfMonitoring}'),
-                  Text('${args[0].restingHeartRate}'),
-                  Text('${args[0].caloriesCardio}'),
-                  
-              ),
-            ),
-          ),
-        ),
-        */
         /*
         const Center(  
             child: CircleAvatar(

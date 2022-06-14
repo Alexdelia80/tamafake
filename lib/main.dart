@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         HomePage.route: (context) => const HomePage(),
         HeartPage.route: (context) => const HeartPage(),
         ShopPage.route: (context) => const ShopPage(),
-        FetchPage.route: (context) => FetchPage(),
+        FetchPage.route: (context) => const FetchPage(),
       },
     );
   } //build
