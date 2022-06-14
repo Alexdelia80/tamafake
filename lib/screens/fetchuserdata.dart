@@ -85,9 +85,17 @@ class _FetchPageState extends State<FetchPage> {
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
+                // cerco se il record esiste già nella tabella
+                final rec = await Provider.of<DatabaseRepository>(context,
+                        listen: false)
+                    .findRec(UserTable(fixedUID, calcDataString,
+                        stepsData[0].value, heartData[0].caloriesCardio));
+                print(rec);
+                // ------------------ qui scrivo i dati di ieri nel DB -----------------------
                 await Provider.of<DatabaseRepository>(context, listen: false)
                     .insertUser(UserTable(fixedUID, calcDataString,
                         stepsData[0].value, heartData[0].caloriesCardio));
+                Navigator.pushNamed(context, '/homepage/');
               },
               child: const Text('Load all Data'),
             ),

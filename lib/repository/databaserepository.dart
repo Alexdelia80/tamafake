@@ -55,4 +55,9 @@ class DatabaseRepository extends ChangeNotifier {
     await database.avatar.updateAvatar(avatar);
     notifyListeners();
   }
+
+  Future<UserTable?> findRec(UserTable userTable) async {
+    final results = await database.user.findRec('data');
+    return results;
+  }
 } //DatabaseRepository
