@@ -1,7 +1,6 @@
 {
     "logs": [
         {
-<<<<<<< HEAD
             "outputFile": "/Users/Asya/tamafake/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
@@ -13,19 +12,6 @@
                         "endLines": "7,16",
                         "endColumns": "12,12",
                         "endOffsets": "464,970"
-=======
-            "outputFile": "C:\\Users\\ASUS\\tamafake\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\ASUS\\tamafake\\android\\app\\src\\main\\res\\values-night\\styles.xml",
-                    "from": {
-                        "startLines": "3,14",
-                        "startColumns": "4,4",
-                        "startOffsets": "175,820",
-                        "endLines": "7,16",
-                        "endColumns": "12,12",
-                        "endOffsets": "471,986"
->>>>>>> master
                     },
                     "to": {
                         "startLines": "2,7",
