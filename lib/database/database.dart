@@ -7,12 +7,25 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:tamafake/database/entities/tables.dart';
 
-//The generated code will be in database.g.dart
-part 'database.g.dart';
+part 'database.g.dart'; // the generated code will be there
 
+@Database(version: 1, entities: [UserTable, AvatarTable])
+abstract class AppDatabase extends FloorDatabase {
+  //Add all the daos as getters here
+  userDao get user;
+  avatarDao get avatar;
+}//AppDatabase
+
+
+/*
 @Database(version: 1, entities: [AvatarTable, UserTable])
 abstract class AppDatabase extends FloorDatabase {
   //Add all the daos as getters here
   avatarDao get avatar;
   userDao get user;
+  Future<void> clearAllTables() async {
+    await database.execute('DELETE FROM user');
+    await database.execute('DELETE FROM avatar');
+  }
 }//AppDatabase
+*/

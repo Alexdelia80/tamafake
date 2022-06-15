@@ -5,7 +5,6 @@ import 'package:floor/floor.dart';
   tableName: 'UserTable',
   primaryKeys: ['data'],
 )
-
 @entity
 class UserTable {
   @primaryKey
@@ -19,12 +18,12 @@ class UserTable {
 
 @entity
 class UserTable {
-  @PrimaryKey(autoGenerate: true)
-  final String? id;
-  final String? data;
+  @primaryKey
+  final int? dataID;
+  final String? userID;
   final double? steps;
   final double? calories;
-  UserTable(this.id, this.data, this.steps, this.calories);
+  UserTable(this.dataID, this.userID, this.steps, this.calories);
 }
 
 /*

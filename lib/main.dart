@@ -14,7 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final AppDatabase database =
-      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      await $FloorAppDatabase.databaseBuilder('app_db.db').build();
   final databaseRepository = DatabaseRepository(database: database);
 
   runApp(ChangeNotifierProvider<DatabaseRepository>(

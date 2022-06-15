@@ -61,9 +61,9 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  avatarDao? _avatarInstance;
-
   userDao? _userInstance;
+
+  avatarDao? _avatarInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`dataID` INTEGER, `userID` TEXT, `steps` REAL, `calories` REAL, PRIMARY KEY (`dataID`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` TEXT PRIMARY KEY AUTOINCREMENT, `data` TEXT, `steps` REAL, `calories` REAL)');
+            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `avatar_id` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -95,13 +95,95 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  avatarDao get avatar {
-    return _avatarInstance ??= _$avatarDao(database, changeListener);
+  userDao get user {
+    return _userInstance ??= _$userDao(database, changeListener);
   }
 
   @override
-  userDao get user {
-    return _userInstance ??= _$userDao(database, changeListener);
+  avatarDao get avatar {
+    return _avatarInstance ??= _$avatarDao(database, changeListener);
+  }
+}
+
+class _$userDao extends userDao {
+  _$userDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _userTableInsertionAdapter = InsertionAdapter(
+            database,
+            'UserTable',
+            (UserTable item) => <String, Object?>{
+                  'dataID': item.dataID,
+                  'userID': item.userID,
+                  'steps': item.steps,
+                  'calories': item.calories
+                }),
+        _userTableUpdateAdapter = UpdateAdapter(
+            database,
+            'UserTable',
+            ['dataID'],
+            (UserTable item) => <String, Object?>{
+                  'dataID': item.dataID,
+                  'userID': item.userID,
+                  'steps': item.steps,
+                  'calories': item.calories
+                }),
+        _userTableDeletionAdapter = DeletionAdapter(
+            database,
+            'UserTable',
+            ['dataID'],
+            (UserTable item) => <String, Object?>{
+                  'dataID': item.dataID,
+                  'userID': item.userID,
+                  'steps': item.steps,
+                  'calories': item.calories
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<UserTable> _userTableInsertionAdapter;
+
+  final UpdateAdapter<UserTable> _userTableUpdateAdapter;
+
+  final DeletionAdapter<UserTable> _userTableDeletionAdapter;
+
+  @override
+  Future<List<UserTable>> findUser() async {
+    return _queryAdapter.queryList('SELECT * FROM UserTable',
+        mapper: (Map<String, Object?> row) => UserTable(
+            row['dataID'] as int?,
+            row['userID'] as String?,
+            row['steps'] as double?,
+            row['calories'] as double?));
+  }
+
+  @override
+  Future<UserTable?> findRec(String data) async {
+    return _queryAdapter.query('SELECT * FROM UserTable WHERE data = ?1',
+        mapper: (Map<String, Object?> row) => UserTable(
+            row['dataID'] as int?,
+            row['userID'] as String?,
+            row['steps'] as double?,
+            row['calories'] as double?),
+        arguments: [data]);
+  }
+
+  @override
+  Future<void> insertUser(UserTable user) async {
+    await _userTableInsertionAdapter.insert(user, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateUser(UserTable user) async {
+    await _userTableUpdateAdapter.update(user, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteUser(UserTable user) async {
+    await _userTableDeletionAdapter.delete(user);
   }
 }
 
@@ -158,87 +240,5 @@ class _$avatarDao extends avatarDao {
   @override
   Future<void> deleteAvatar(AvatarTable avatar) async {
     await _avatarTableDeletionAdapter.delete(avatar);
-  }
-}
-
-class _$userDao extends userDao {
-  _$userDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
-        _userTableInsertionAdapter = InsertionAdapter(
-            database,
-            'UserTable',
-            (UserTable item) => <String, Object?>{
-                  'id': item.id,
-                  'data': item.data,
-                  'steps': item.steps,
-                  'calories': item.calories
-                }),
-        _userTableUpdateAdapter = UpdateAdapter(
-            database,
-            'UserTable',
-            ['id'],
-            (UserTable item) => <String, Object?>{
-                  'id': item.id,
-                  'data': item.data,
-                  'steps': item.steps,
-                  'calories': item.calories
-                }),
-        _userTableDeletionAdapter = DeletionAdapter(
-            database,
-            'UserTable',
-            ['id'],
-            (UserTable item) => <String, Object?>{
-                  'id': item.id,
-                  'data': item.data,
-                  'steps': item.steps,
-                  'calories': item.calories
-                });
-
-  final sqflite.DatabaseExecutor database;
-
-  final StreamController<String> changeListener;
-
-  final QueryAdapter _queryAdapter;
-
-  final InsertionAdapter<UserTable> _userTableInsertionAdapter;
-
-  final UpdateAdapter<UserTable> _userTableUpdateAdapter;
-
-  final DeletionAdapter<UserTable> _userTableDeletionAdapter;
-
-  @override
-  Future<List<UserTable>> findUser() async {
-    return _queryAdapter.queryList('SELECT * FROM UserTable',
-        mapper: (Map<String, Object?> row) => UserTable(
-            row['id'] as String?,
-            row['data'] as String?,
-            row['steps'] as double?,
-            row['calories'] as double?));
-  }
-
-  @override
-  Future<UserTable?> findRec(String data) async {
-    return _queryAdapter.query('SELECT * FROM UserTable WHERE data = ?1',
-        mapper: (Map<String, Object?> row) => UserTable(
-            row['id'] as String?,
-            row['data'] as String?,
-            row['steps'] as double?,
-            row['calories'] as double?),
-        arguments: [data]);
-  }
-
-  @override
-  Future<void> insertUser(UserTable user) async {
-    await _userTableInsertionAdapter.insert(user, OnConflictStrategy.abort);
-  }
-
-  @override
-  Future<void> updateUser(UserTable user) async {
-    await _userTableUpdateAdapter.update(user, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> deleteUser(UserTable user) async {
-    await _userTableDeletionAdapter.delete(user);
   }
 }

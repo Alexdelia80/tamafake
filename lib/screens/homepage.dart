@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+//import 'package:tamafake/database/daos/tablesDao.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                             child: ListTile(
                               leading: const Icon(MdiIcons.note),
                               title: Text(dataRecs.steps.toString()),
-                              subtitle: Text('Data: ${dataRecs.data}'),
+                              subtitle: Text('Data: ${dataRecs.dataID}'),
                               //If the ListTile is tapped, it is deleted
                             ),
                             //This method is called when the ListTile is dismissed

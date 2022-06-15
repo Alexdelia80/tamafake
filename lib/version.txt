@@ -17,3 +17,9 @@ Risolto il problema di visualizzazione del database
 ma ci sono ancora problemi relativi alla ricerca
 di un record per data ed alla cancellazione
 di un record già inserito nella tabella
+
+VERSIONE 1.0.4
+Risolti tutti i problemi sul db anche relativi alla
+cancellazione dei record, dobbiamo solo gestire
+con un messaggio di errore all'untente, l'inserimento
+doppio di uno stesso record nella tabella dei dati UserTable

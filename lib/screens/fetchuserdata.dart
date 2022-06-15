@@ -1,9 +1,12 @@
 import 'package:fitbitter/fitbitter.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:tamafake/database/database.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -76,7 +79,8 @@ class _FetchPageState extends State<FetchPage> {
                 final calcData =
                     DateTime.now().subtract(const Duration(days: 1));
                 String calcDataString =
-                    DateFormat("yyyy-MM-dd hh:mm:ss").format(calcData);
+                    DateFormat("dd-MM-yyyy").format(calcData);
+                int dataID = int.parse(DateFormat("ddMMyyyy").format(calcData));
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
                   date: calcData,
@@ -84,17 +88,19 @@ class _FetchPageState extends State<FetchPage> {
                 )) as List<FitbitHeartData>;
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
-                print(calcDataString);
+                print(dataID);
                 // cerco se il record esiste già nella tabella
+                /*
                 final rec = await Provider.of<DatabaseRepository>(context,
                         listen: false)
                     .findRec(UserTable(fixedUID, calcDataString,
                         stepsData[0].value, heartData[0].caloriesCardio));
-                print(rec);
+                print(dataId);
+                */
                 // ------------------ qui scrivo i dati di ieri nel DB -----------------------
                 await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(fixedUID, calcDataString,
-                        stepsData[0].value, heartData[0].caloriesCardio));
+                    .insertUser(UserTable(dataID, userId, stepsData[0].value,
+                        heartData[0].caloriesCardio));
                 Navigator.pushNamed(context, '/homepage/');
               },
               child: const Text('Load all Data'),
@@ -108,6 +114,16 @@ class _FetchPageState extends State<FetchPage> {
                 );
               },
               child: const Text('Tap to unauthorize'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await FitbitConnector.unauthorize(
+                  clientID: fitclientid,
+                  clientSecret: fitclientsec,
+                );
+                // AppDatabase.clearAllTables();
+              },
+              child: const Text('Clear All Tables'),
             ),
           ],
         ),
