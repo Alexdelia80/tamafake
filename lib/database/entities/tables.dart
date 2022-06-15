@@ -7,7 +7,7 @@ import 'package:floor/floor.dart';
 )
 */
 
-@Entity(primaryKeys: ['data'])
+@Entity(primaryKeys: ['id', 'data'])
 class UserTable {
   final String? id;
   final String? data;

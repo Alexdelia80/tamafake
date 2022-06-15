@@ -33,11 +33,11 @@ abstract class userDao {
   @Update(onConflict: OnConflictStrategy.replace)
   Future<void> updateUser(UserTable user);
 
-  @Query('SELECT * FROM UserTable WHERE data = :data')
-  Future<UserTable?> findRec(String data);
+  @Query('SELECT data FROM UserTable WHERE data = :data')
+  Future<String?> findRec(String data);
 }
 
-/*
+/*Future<UserTable?>
 @dao
 abstract class DataDao {
   @Query('SELECT * FROM UserTable')

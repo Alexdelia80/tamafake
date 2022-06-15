@@ -56,7 +56,7 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<UserTable?> findRec(UserTable userTable) async {
+  Future<String?> findRec(UserTable userTable) async {
     final results = await database.user.findRec('data');
     return results;
   }
