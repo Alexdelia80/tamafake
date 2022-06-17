@@ -13,9 +13,10 @@ class ShopPage extends StatelessWidget {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
+          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 20, 178, 218),
           title: const Center(
-              child: Text('Shop')) //ext(ShopPage.routename),
+              child: Text('Shop')) 
           ),
       backgroundColor: const Color.fromARGB(255, 179, 210, 236),
       body: ListView(

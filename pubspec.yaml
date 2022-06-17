@@ -36,6 +36,7 @@ dependencies:
   provider:
   material_design_icons_flutter:
   floor: ^1.2.0
+  fluid_bottom_nav_bar: ^1.3.0
   
   
 

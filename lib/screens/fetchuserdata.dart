@@ -2,6 +2,7 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
+import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -52,6 +53,7 @@ class _FetchPageState extends State<FetchPage> {
             // ------------------------ LOAD Heart and Steps DATA --------------------------
             ElevatedButton(
               onPressed: () async {
+                
                 //Instantiate a proper data manager
                 FitbitActivityTimeseriesDataManager
                     fitbitActivityTimeseriesDataManager =
@@ -65,6 +67,8 @@ class _FetchPageState extends State<FetchPage> {
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
+                
+              
                 // Fetch steps data
                 final stepsData = await fitbitActivityTimeseriesDataManager
                     .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
@@ -72,11 +76,14 @@ class _FetchPageState extends State<FetchPage> {
                   userID: fixedUID,
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
+                
                 // Fetch heart data
+                
                 final calcData =
                     DateTime.now().subtract(const Duration(days: 1));
                 String calcDataString =
-                    DateFormat("yyyy-MM-dd hh:mm:ss").format(calcData);
+                   DateFormat("dd-MM-yyyy").format(calcData);
+                   int dataID = int.parse(DateFormat("ddMMyyyy").format(calcData));
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
                   date: calcData,
@@ -85,12 +92,17 @@ class _FetchPageState extends State<FetchPage> {
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
+               
                 await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(fixedUID, calcDataString,
-                        stepsData[0].value, heartData[0].caloriesCardio));
+                    .insertUser(UserTable(null, userId, calcDataString, stepsData[0].value,
+                        heartData[0].caloriesCardio));
+                
+                //final rec = await Provider.of<DatabaseRepository>(context, listen:false).findData(calcDataString);
+                //print(rec);
               },
-              child: const Text('Load all Data'),
+              child: const Text('Load your progress!'),
             ),
+            
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {

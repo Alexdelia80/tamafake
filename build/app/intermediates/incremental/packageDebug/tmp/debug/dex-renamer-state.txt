@@ -1,4 +1,4 @@
-#Sun Jun 12 19:11:12 CEST 2022
+#Fri Jun 17 13:31:00 CEST 2022
 base.0=C\:\\Users\\ASUS\\tamafake\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

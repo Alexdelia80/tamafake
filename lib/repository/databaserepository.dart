@@ -16,6 +16,11 @@ class DatabaseRepository extends ChangeNotifier{
     return results;
   }
 
+  Future<UserTable?> findData(String data) async{
+    final results = await database.user.findData(data); 
+    return results;
+  } 
+
   Future<List<AvatarTable>> findAvatar() async{
     final results = await database.avatar.findAvatar();
     return results;
@@ -47,14 +52,17 @@ class DatabaseRepository extends ChangeNotifier{
   
   //These methods wrap the updateUser() and updateAvatar methods of the DAO. 
   //Then, it notifies the listeners that something changed.
+  
+  /*
    Future<void> updateUser(UserTable user) async{
     await database.user.updateUser(user);
-    notifyListeners();
-  }
+    notifyListeners();  
+  } */
 
+/*
    Future<void> updateAvatar(AvatarTable avatar) async{
     await database.avatar.updateAvatar(avatar);
     notifyListeners();
-  }
+  }*/
   
 }//DatabaseRepository

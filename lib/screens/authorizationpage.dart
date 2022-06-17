@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:tamafake/screens/homepage.dart';
-
 //import 'package:healthpoint/screens/avatarpage.dart';
 //import 'package:healthpoint/utils/strings.dart';
 //import 'package:healthpoint/models/analisi.dart';
@@ -16,8 +15,7 @@ class AuthorizationPage extends StatelessWidget {
   Map<int?, dynamic> daysteps = {};
   List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
 
-  // questi sono i valori forniti da fitbit per
-  // autorizzare la mia App
+  // Valori forniti da fitbit per autorizzare la mia App
   String fitclientid = '238BYH';
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
