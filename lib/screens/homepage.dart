@@ -104,6 +104,12 @@ class _HomePageState extends State<HomePage> {
           }
           break;
       }
+
+       AnimatedSwitcher(
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeIn,
+        duration: Duration(milliseconds: 500),
+      );
     });
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/database/daos/tablesDao.dart';
+import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -32,6 +33,22 @@ class _FetchPageState extends State<FetchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(FetchPage.routename),
+        leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                    icon: const Icon(Icons.arrow_back_sharp),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip);
+              },
+            ),
       ),
       body: Center(
         child: Column(
