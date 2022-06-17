@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   fitbitter: ^1.1.1
-  get: 4.6.1
+  get: ^4.6.1
   flutter_login: 
   shared_preferences: 
   floor: ^1.2.0

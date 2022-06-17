@@ -4,6 +4,7 @@ import 'package:tamafake/repository/databaserepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -72,6 +73,17 @@ class _FetchPageState extends State<FetchPage> {
                   userID: fixedUID,
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
+
+                // aggiorno il portafoglio
+                final sp = await SharedPreferences.getInstance();
+                // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
+                final money = stepsData[0].value ~/ (500); //divisione intera
+                //prendo il valore attuale del portafoglio con get
+                int? att_portafoglio = sp.getInt('portafoglio');
+                // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                final agg_portafoglio = att_portafoglio + money;
+                sp.setInt('portafoglio', agg_portafoglio);
+
                 // Fetch heart data
                 final calcData =
                     DateTime.now().subtract(const Duration(days: 1));
@@ -85,6 +97,8 @@ class _FetchPageState extends State<FetchPage> {
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
+
+                //Calcolo per le calorie
 
                 // ------------------ qui scrivo i dati di ieri nel DB -----------------------
                 await Provider.of<DatabaseRepository>(context, listen: false)
