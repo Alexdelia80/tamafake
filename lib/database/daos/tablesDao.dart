@@ -4,40 +4,39 @@ import 'package:tamafake/database/entities/tables.dart';
 import 'package:floor/floor.dart';
 
 @dao
-abstract class avatarDao {
-  // gestisci l'inizializzazione a 0 dell'exp
+abstract class UserDao {
+  @Query('SELECT * FROM UserTable')
+  Future<List<UserTable>> findUser();
+
+  @Query('DELETE FROM UserTable')
+  Future<void> deleteAllUser();
+
+  @insert
+  Future<void> insertUser(UserTable user);
+  
+  @delete
+  Future<void> deleteUser(UserTable user) ;
+
+}
+
+@dao
+abstract class AvatarDao {
+  
   @Query('SELECT * FROM AvatarTable')
   Future<List<AvatarTable>> findAvatar();
 
-  @insert //lo usiamo per inizializzarla
+  @Query('DELETE FROM AvatarTable')
+  Future<void> deleteAllAvatar();
+
+  @insert 
   Future<void> insertAvatar(AvatarTable avatar);
 
   @delete
   Future<void> deleteAvatar(AvatarTable avatar);
-
-  @Update(onConflict: OnConflictStrategy.replace)
-  Future<void> updateAvatar(AvatarTable avatar);
+ 
 }
 
-@dao
-abstract class userDao {
-  @Query('SELECT * FROM UserTable')
-  Future<List<UserTable>> findUser();
-
-  @insert //lo usiamo per inizializzarla
-  Future<void> insertUser(UserTable user);
-
-  @delete
-  Future<void> deleteUser(UserTable user);
-
-  @Update(onConflict: OnConflictStrategy.replace)
-  Future<void> updateUser(UserTable user);
-
-  @Query('SELECT data FROM UserTable WHERE data = :data')
-  Future<String?> findRec(String data);
-}
-
-/*Future<UserTable?>
+/*
 @dao
 abstract class DataDao {
   @Query('SELECT * FROM UserTable')

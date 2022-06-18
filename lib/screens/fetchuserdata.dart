@@ -66,6 +66,7 @@ class _FetchPageState extends State<FetchPage> {
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
+
                 // Fetch steps data
                 final stepsData = await fitbitActivityTimeseriesDataManager
                     .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
@@ -74,21 +75,27 @@ class _FetchPageState extends State<FetchPage> {
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
 
-                // aggiorno il portafoglio
                 final sp = await SharedPreferences.getInstance();
-                // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
-                final money = stepsData[0].value ~/ (500); //divisione intera
-                //prendo il valore attuale del portafoglio con get
-                int? att_portafoglio = sp.getInt('portafoglio');
-                // aggiorno il valore del portafoglio che inserirò all'interno di sp
-                final agg_portafoglio = att_portafoglio + money;
-                sp.setInt('portafoglio', agg_portafoglio);
+                if (sp.getInt('portafoglio') == null) {
+                  sp.setInt('portafoglio', 0);
+                } else {
+                  // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
+                  final money = stepsData[0].value! ~/ 500; //divisione intera
+                  //prendo il valore attuale del portafoglio con get
+                  final int? attPortafoglio = sp.getInt('portafoglio');
+                  // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                  final int aggPortafoglio = attPortafoglio! + money;
+                  sp.setInt('portafoglio', aggPortafoglio);
+                  print(aggPortafoglio);
+                }
 
                 // Fetch heart data
                 final calcData =
                     DateTime.now().subtract(const Duration(days: 1));
                 String calcDataString =
                     DateFormat("yyyy-MM-dd hh:mm:ss").format(calcData);
+                int dataINT =
+                    int.parse(DateFormat("ddMMyyyy").format(calcData));
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
                   date: calcData,
@@ -102,16 +109,9 @@ class _FetchPageState extends State<FetchPage> {
 
                 // ------------------ qui scrivo i dati di ieri nel DB -----------------------
                 await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(fixedUID, calcDataString,
-                        stepsData[0].value, heartData[0].caloriesCardio));
+                    .insertUser(UserTable(dataINT, userId, stepsData[0].value,
+                        heartData[0].caloriesCardio));
                 Navigator.pushNamed(context, '/homepage/');
-
-                // cerco se il record esiste già nella tabella
-                final rec = await Provider.of<DatabaseRepository>(context,
-                        listen: false)
-                    .findRec(UserTable(fixedUID, calcDataString,
-                        stepsData[0].value, heartData[0].caloriesCardio));
-                print(rec);
               },
               child: const Text('Load all Data'),
             ),
@@ -131,8 +131,6 @@ class _FetchPageState extends State<FetchPage> {
     );
   } //build
 }
-
-
 
 /*
 class StepsClass extends ChangeNotifier {

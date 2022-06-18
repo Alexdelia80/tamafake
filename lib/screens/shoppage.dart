@@ -76,6 +76,19 @@ class _ShopPageState extends State<ShopPage> {
       if (portafoglio! >= valore) {
         portafoglio = portafoglio - valore;
         sp.setInt('portafoglio', portafoglio);
+        //vedo da console il valore del portafoglio:
+        print(portafoglio);
+
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            //AlertDialog Title
+            title: const Text('YEP!!'),
+            //AlertDialog description'
+            content: const Text('You bought Eevee some food :)'),
+          ),
+        ); //show
+
       } else {
         //Mi richiama il Dialogo di allerta che non abbiamo abbastanza soldi, bisogna cambiare i testi
         showDialog<String>(

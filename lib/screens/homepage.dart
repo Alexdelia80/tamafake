@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                             child: ListTile(
                               leading: const Icon(MdiIcons.note),
                               title: Text(dataRecs.steps.toString()),
-                              subtitle: Text('ID: ${dataRecs.id}'),
+                              subtitle: Text('ID: ${dataRecs.userId}'),
                               //If the ListTile is tapped, it is deleted
                             ),
                             //This method is called when the ListTile is dismissed
