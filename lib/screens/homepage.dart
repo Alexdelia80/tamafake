@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart'; 
+import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -25,6 +25,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Widget? _child;
+
   String fitclientid = '238BYH';
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
@@ -33,6 +35,12 @@ class _HomePageState extends State<HomePage> {
   String fixedUID = '7ML2XV';
   List<String> stepsData = [];
   List<String> heartData = [];
+
+  @override
+  void initState() {
+    _child = HomePage();
+    super.initState();
+  }
 
   @override
   Widget build(context) {
@@ -44,14 +52,11 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.all(20),
             width: 500,
             height: 500,
-
             child: Align(
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 children: [
-                  
                   IconRoundedProgressBar(
                     icon: Padding(
                         padding: EdgeInsets.all(8), child: Icon(Icons.person)),
@@ -60,7 +65,6 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(6),
                     percent: 50,
                   ),
-                  
                   Padding(
                     padding: const EdgeInsets.only(top: 50),
                     child: Center(
@@ -71,11 +75,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  
                   Padding(padding: EdgeInsets.all(40)),
                   ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 230, 67, 121)),
-                    elevation: MaterialStateProperty.all<double>(1.5)), 
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 230, 67, 121)),
+                        elevation: MaterialStateProperty.all<double>(1.5)),
                     onPressed: () async {
                       //Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
@@ -100,6 +105,22 @@ class _HomePageState extends State<HomePage> {
                         resource: fitbitActivityTimeseriesDataManager.type,
                       )) as List<FitbitActivityTimeseriesData>;
 
+                      // Portafoglio
+                      final sp = await SharedPreferences.getInstance();
+                      if (sp.getInt('portafoglio') == null) {
+                        sp.setInt('portafoglio', 0);
+                      } else {
+                        // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
+                        final money =
+                            stepsData[0].value! ~/ 500; // Divisione intera
+                        // Prendo il valore attuale del portafoglio con get
+                        final int? attPortafoglio = sp.getInt('portafoglio');
+                        // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+                        final int aggPortafoglio = attPortafoglio! + money;
+                        sp.setInt('portafoglio', aggPortafoglio);
+                        print(aggPortafoglio);
+                      }
+
                       // Fetch heart data
                       final calcData =
                           DateTime.now().subtract(const Duration(days: 1));
@@ -121,17 +142,14 @@ class _HomePageState extends State<HomePage> {
                               listen: false)
                           .insertUser(UserTable(dataINT, userId,
                               stepsData[0].value, heartData[0].caloriesCardio));
-
-                      //final rec = await Provider.of<DatabaseRepository>(context, listen:false).findData(calcDataString);
-                      //print(rec);
                     },
-                    child: const Text('LOAD YOUR PROGRESS!', style: TextStyle(fontSize:18)),
+                    child: const Text('LOAD YOUR PROGRESS!',
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ],
               ),
             ),
           ),
-          
           bottomNavigationBar: FluidNavBar(
             icons: [
               FluidNavBarIcon(icon: Icons.home),
@@ -141,6 +159,11 @@ class _HomePageState extends State<HomePage> {
               FluidNavBarIcon(icon: Icons.logout),
             ],
             onChange: _handleNavigationChange,
+            /*scaleFactor: 1.5,
+            defaultIndex: 0,
+            itemBuilder:(icon, item) => Semantics(
+            label: icon.extras!["label"],
+            child: item,), */
             style: FluidNavBarStyle(
                 barBackgroundColor: Color.fromARGB(255, 64, 163, 212),
                 iconBackgroundColor: Colors.white,
@@ -155,6 +178,7 @@ class _HomePageState extends State<HomePage> {
       switch (index) {
         case 0:
           {
+            _child:
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomePage()));
           }
@@ -162,6 +186,7 @@ class _HomePageState extends State<HomePage> {
           break;
         case 1:
           {
+            _child:
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ShopPage()));
           }
@@ -169,6 +194,7 @@ class _HomePageState extends State<HomePage> {
           break;
         case 2:
           {
+            _child:
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -178,21 +204,24 @@ class _HomePageState extends State<HomePage> {
           break;
         case 3:
           {
+            _child:
+            _child:
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const FetchPage()));
           }
           break;
         case 4:
           {
+            _child:
             _toLoginPage(context);
           }
           break;
       }
-
-      AnimatedSwitcher(
+      _child = AnimatedSwitcher(
         switchInCurve: Curves.easeOut,
         switchOutCurve: Curves.easeIn,
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 100),
+        child: _child,
       );
     });
   }
