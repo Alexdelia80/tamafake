@@ -40,32 +40,32 @@ class ShopPage extends StatelessWidget {
         children: [
           ListTile(
             leading: Icon(Icons.local_pizza),
-            title: Text('Pizza'), 
-            trailing: Text('20 €'),
+            title: Text('Pizza', style: TextStyle(fontSize:20) ), 
+            trailing: Text('20 €', style: TextStyle(fontSize:20)),
             onTap: () {
                 print('Buy Pizza!');
               },
           ),
           ListTile(
             leading: Icon(Icons.icecream),
-            title: Text('Ice Cream'),
-            trailing: Text('15 €'),
+            title: Text('Ice Cream', style: TextStyle(fontSize:20) ),
+            trailing: Text('15 €',style: TextStyle(fontSize:20) ),
             onTap: () {
                 print('Buy Ice Cream!');
               },
           ),
           ListTile(
             leading: Icon(Icons.apple),
-            title: Text('Apple'),
-            trailing: Text('5 €'),
+            title: Text('Apple', style: TextStyle(fontSize:20) ),
+            trailing: Text('5 €', style: TextStyle(fontSize:20)),
             onTap: () {
                 print('Buy Apple!');
               },
           ),
           ListTile(
             leading: Icon(MdiIcons.bottleSoda),
-            title: Text('Water'),
-            trailing: Text('2 €'),
+            title: Text('Water', style: TextStyle(fontSize:20) ),
+            trailing: Text('2 €', style: TextStyle(fontSize:20) ),
             onTap: () {
                 print('Buy Water!');
               },

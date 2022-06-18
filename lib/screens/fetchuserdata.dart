@@ -100,22 +100,21 @@ class _FetchPageState extends State<FetchPage> {
                     DateTime.now().subtract(const Duration(days: 1));
                 String calcDataString =
                    DateFormat("dd-MM-yyyy").format(calcData);
-                   int dataID = int.parse(DateFormat("ddMMyyyy").format(calcData));
+                   int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
                   date: calcData,
                   userID: fixedUID,
                 )) as List<FitbitHeartData>;
+               
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
                
                 await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(null, userId, calcDataString, stepsData[0].value,
+                    .insertUser(UserTable(dataINT, userId, stepsData[0].value,
                         heartData[0].caloriesCardio));
                 
-                //final rec = await Provider.of<DatabaseRepository>(context, listen:false).findData(calcDataString);
-                //print(rec);
               },
               child: const Text('Load your progress!'),
             ),

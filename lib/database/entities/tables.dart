@@ -3,29 +3,27 @@ import 'package:floor/floor.dart';
 @entity
 class UserTable {
   
-  @PrimaryKey(autoGenerate: true)
-  final int? id;
+  @PrimaryKey()
+  final int? data;
   
   final String? userId;
-
-  final String? data;
 
   final double? steps;
 
   final double? calories;
 
-  UserTable(this.id, this.userId, this.data,this.steps, this.calories);
+  UserTable(this.data, this.userId, this.steps, this.calories);
 }
 
 @entity
 class AvatarTable {
   
-  @PrimaryKey(autoGenerate: true)
-  final int? id;
+  @PrimaryKey()
+  final int? exp;
 
   final String? userId;
 
-  final int? exp;
+  final int? level;
 
-  AvatarTable(this.id,this.userId, this.exp);
+  AvatarTable(this.exp, this.userId, this.level);
 }

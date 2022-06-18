@@ -13,7 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final AppDatabase database =
-      await $FloorAppDatabase.databaseBuilder('app_db.db').build();
+      await $FloorAppDatabase.databaseBuilder('application_database.db').build();
   final databaseRepository = DatabaseRepository(database: database);
 
   runApp(ChangeNotifierProvider<DatabaseRepository>(

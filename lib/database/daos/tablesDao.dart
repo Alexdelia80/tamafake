@@ -4,27 +4,12 @@ import 'package:tamafake/database/entities/tables.dart';
 import 'package:floor/floor.dart';
 
 @dao
-abstract class AvatarDao {
-  
-  @Query('SELECT * FROM AvatarTable')
-  Future<List<AvatarTable>> findAvatar();
-
-  @insert 
-  Future<void> insertAvatar(AvatarTable avatar);
-
-  @delete
-  Future<void> deleteAvatar(AvatarTable avatar);
-
- 
-}
-
-@dao
 abstract class UserDao {
   @Query('SELECT * FROM UserTable')
   Future<List<UserTable>> findUser();
 
   @Query('DELETE FROM UserTable')
-  Future<void> deleteAllUsers();
+  Future<void> deleteAllUser();
 
   @insert
   Future<void> insertUser(UserTable user);
@@ -32,8 +17,23 @@ abstract class UserDao {
   @delete
   Future<void> deleteUser(UserTable user) ;
 
-  @Query('SELECT * FROM UserTable WHERE data = :data')
-  Future<UserTable?> findData(String data);
+}
+
+@dao
+abstract class AvatarDao {
+  
+  @Query('SELECT * FROM AvatarTable')
+  Future<List<AvatarTable>> findAvatar();
+
+  @Query('DELETE FROM AvatarTable')
+  Future<void> deleteAllAvatar();
+
+  @insert 
+  Future<void> insertAvatar(AvatarTable avatar);
+
+  @delete
+  Future<void> deleteAvatar(AvatarTable avatar);
+ 
 }
 
 /*

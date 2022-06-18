@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `data` TEXT, `steps` REAL, `calories` REAL)');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`data` INTEGER, `userId` TEXT, `steps` REAL, `calories` REAL, PRIMARY KEY (`data`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `exp` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER, `userId` TEXT, `level` INTEGER, PRIMARY KEY (`exp`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -112,20 +112,18 @@ class _$UserDao extends UserDao {
             database,
             'UserTable',
             (UserTable item) => <String, Object?>{
-                  'id': item.id,
-                  'userId': item.userId,
                   'data': item.data,
+                  'userId': item.userId,
                   'steps': item.steps,
                   'calories': item.calories
                 }),
         _userTableDeletionAdapter = DeletionAdapter(
             database,
             'UserTable',
-            ['id'],
+            ['data'],
             (UserTable item) => <String, Object?>{
-                  'id': item.id,
-                  'userId': item.userId,
                   'data': item.data,
+                  'userId': item.userId,
                   'steps': item.steps,
                   'calories': item.calories
                 });
@@ -144,28 +142,15 @@ class _$UserDao extends UserDao {
   Future<List<UserTable>> findUser() async {
     return _queryAdapter.queryList('SELECT * FROM UserTable',
         mapper: (Map<String, Object?> row) => UserTable(
-            row['id'] as int?,
+            row['data'] as int?,
             row['userId'] as String?,
-            row['data'] as String?,
             row['steps'] as double?,
             row['calories'] as double?));
   }
 
   @override
-  Future<void> deleteAllUsers() async {
+  Future<void> deleteAllUser() async {
     await _queryAdapter.queryNoReturn('DELETE FROM UserTable');
-  }
-
-  @override
-  Future<UserTable?> findData(String data) async {
-    return _queryAdapter.query('SELECT * FROM UserTable WHERE data = ?1',
-        mapper: (Map<String, Object?> row) => UserTable(
-            row['id'] as int?,
-            row['userId'] as String?,
-            row['data'] as String?,
-            row['steps'] as double?,
-            row['calories'] as double?),
-        arguments: [data]);
   }
 
   @override
@@ -186,18 +171,18 @@ class _$AvatarDao extends AvatarDao {
             database,
             'AvatarTable',
             (AvatarTable item) => <String, Object?>{
-                  'id': item.id,
+                  'exp': item.exp,
                   'userId': item.userId,
-                  'exp': item.exp
+                  'level': item.level
                 }),
         _avatarTableDeletionAdapter = DeletionAdapter(
             database,
             'AvatarTable',
-            ['id'],
+            ['exp'],
             (AvatarTable item) => <String, Object?>{
-                  'id': item.id,
+                  'exp': item.exp,
                   'userId': item.userId,
-                  'exp': item.exp
+                  'level': item.level
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -213,8 +198,13 @@ class _$AvatarDao extends AvatarDao {
   @override
   Future<List<AvatarTable>> findAvatar() async {
     return _queryAdapter.queryList('SELECT * FROM AvatarTable',
-        mapper: (Map<String, Object?> row) => AvatarTable(
-            row['id'] as int?, row['userId'] as String?, row['exp'] as int?));
+        mapper: (Map<String, Object?> row) => AvatarTable(row['exp'] as int?,
+            row['userId'] as String?, row['level'] as int?));
+  }
+
+  @override
+  Future<void> deleteAllAvatar() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM AvatarTable');
   }
 
   @override
