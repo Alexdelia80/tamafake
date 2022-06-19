@@ -1,7 +1,6 @@
 import 'package:tamafake/database/database.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:flutter/material.dart';
-//import 'package:tamafake/database/daos/tablesDao.dart';
 
 class DatabaseRepository extends ChangeNotifier {
   //The state of the database is just the AppDatabase
@@ -16,8 +15,8 @@ class DatabaseRepository extends ChangeNotifier {
     return results;
   }
 
-  Future<UserTable?> findRec(UserTable userTable) async {
-    final results = await database.user.findRec('data');
+  Future<List<UserTable>> findData(data) async {
+    final results = await database.user.findData(data);
     return results;
   }
 
@@ -49,16 +48,4 @@ class DatabaseRepository extends ChangeNotifier {
     await database.avatar.deleteAvatar(avatar);
     notifyListeners();
   }
-
-  //These methods wrap the updateUser() and updateAvatar methods of the DAO.
-  //Then, it notifies the listeners that something changed.
-  Future<void> updateUser(UserTable user) async {
-    await database.user.updateUser(user);
-    notifyListeners();
-  }
-
-  Future<void> updateAvatar(AvatarTable avatar) async {
-    await database.avatar.updateAvatar(avatar);
-    notifyListeners();
-  }
-} //DatabaseRepository
+}

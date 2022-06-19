@@ -4,6 +4,8 @@ import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/heartpage.dart';
+import 'package:tamafake/screens/progresspage.dart';
+import 'package:tamafake/screens/assistancepage.dart';
 import 'package:tamafake/database/database.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         HeartPage.route: (context) => const HeartPage(),
         ShopPage.route: (context) => const ShopPage(),
         FetchPage.route: (context) => const FetchPage(),
+        AssistancePage.route: (context) => const AssistancePage(),
+        ProgressPage.route: (context) => const ProgressPage(),
       },
     );
   } //build

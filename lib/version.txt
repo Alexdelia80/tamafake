@@ -19,7 +19,11 @@ di un record per data ed alla cancellazione
 di un record già inserito nella tabella
 
 VERSIONE 1.0.4
-Risolti tutti i problemi sul db anche relativi alla
-cancellazione dei record, dobbiamo solo gestire
+Risolti tutti i problemi di cancellazione dobbiamo solo gestire
 con un messaggio di errore all'untente, l'inserimento
 doppio di uno stesso record nella tabella dei dati UserTable
+
+VERSIONE 1.0.5
+Risolto il conflitto delle date sul db.
+Generato il messaggio di errore per l'utente.
+

@@ -1,51 +1,29 @@
 import 'package:floor/floor.dart';
 
-/*
-@Entity(
-  tableName: 'UserTable',
-  primaryKeys: ['data'],
-)
 @entity
 class UserTable {
-  @primaryKey
+  @PrimaryKey(autoGenerate: true)
+  final int? id;
+
+  final String? userId;
+
   final String? data;
-  final String? id;
-  final double? steps;
-  final double? calories;
-  UserTable(this.id, this.data, this.steps, this.calories);
-}
-*/
 
-@entity
-class UserTable {
-  @primaryKey
-  final int? dataID;
-  final String? userID;
   final double? steps;
-  final double? calories;
-  UserTable(this.dataID, this.userID, this.steps, this.calories);
-}
 
-/*
-@Entity(
-  tableName: 'avatar',
-  foreignKeys: [
-    ForeignKey(
-      childColumns: ['avatar_id'],
-      parentColumns: ['id'],
-      entity: UserTable,
-    )
-  ],
-)
-*/
+  final double? calories;
+
+  UserTable(this.id, this.userId, this.data, this.steps, this.calories);
+}
 
 @entity
 class AvatarTable {
   @PrimaryKey(autoGenerate: true)
-  final int exp;
+  final int? id;
 
-  @ColumnInfo(name: 'avatar_id')
-  final String avatarId;
+  final String? userId;
 
-  AvatarTable(this.exp, this.avatarId);
+  final int? exp;
+
+  AvatarTable(this.id, this.userId, this.exp);
 }

@@ -7,15 +7,15 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:tamafake/database/entities/tables.dart';
 
-part 'database.g.dart'; // the generated code will be there
+//The generated code will be in database.g.dart
+part 'database.g.dart';
 
 @Database(version: 1, entities: [UserTable, AvatarTable])
 abstract class AppDatabase extends FloorDatabase {
   //Add all the daos as getters here
-  userDao get user;
-  avatarDao get avatar;
-}//AppDatabase
-
+  UserDao get user;
+  AvatarDao get avatar;
+} //AppDatabase
 
 /*
 @Database(version: 1, entities: [AvatarTable, UserTable])

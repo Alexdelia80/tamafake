@@ -1,12 +1,12 @@
 import 'package:fitbitter/fitbitter.dart';
-import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:tamafake/database/entities/tables.dart';
+//import 'package:tamafake/database/daos/tablesDao.dart';
+import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tamafake/database/database.dart';
-import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -34,6 +34,22 @@ class _FetchPageState extends State<FetchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(FetchPage.routename),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.arrow_back_sharp),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip:
+                    MaterialLocalizations.of(context).openAppDrawerTooltip);
+          },
+        ),
       ),
       body: Center(
         child: Column(
@@ -68,6 +84,7 @@ class _FetchPageState extends State<FetchPage> {
                   clientID: fitclientid,
                   clientSecret: fitclientsec,
                 );
+
                 // Fetch steps data
                 final stepsData = await fitbitActivityTimeseriesDataManager
                     .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
@@ -75,12 +92,14 @@ class _FetchPageState extends State<FetchPage> {
                   userID: fixedUID,
                   resource: fitbitActivityTimeseriesDataManager.type,
                 )) as List<FitbitActivityTimeseriesData>;
-                // Fetch heart data
+
+                // conversione della data in int e stringa
                 final calcData =
                     DateTime.now().subtract(const Duration(days: 1));
                 String calcDataString =
                     DateFormat("dd-MM-yyyy").format(calcData);
                 int dataID = int.parse(DateFormat("ddMMyyyy").format(calcData));
+                // ----------------------------- fetch heart data ------------------------------------
                 final heartData = await fitbitActivityDataManager
                     .fetch(FitbitHeartAPIURL.dayWithUserID(
                   date: calcData,
@@ -88,23 +107,43 @@ class _FetchPageState extends State<FetchPage> {
                 )) as List<FitbitHeartData>;
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
-                print(dataID);
-                // cerco se il record esiste già nella tabella
-                /*
-                final rec = await Provider.of<DatabaseRepository>(context,
+                print(calcDataString);
+                //----------------------------  NUOVO CODICE -----------------------------------------
+                // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
+                final listtable = await Provider.of<DatabaseRepository>(context,
                         listen: false)
-                    .findRec(UserTable(fixedUID, calcDataString,
-                        stepsData[0].value, heartData[0].caloriesCardio));
-                print(dataId);
-                */
-                // ------------------ qui scrivo i dati di ieri nel DB -----------------------
-                await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(dataID, userId, stepsData[0].value,
-                        heartData[0].caloriesCardio));
-                Navigator.pushNamed(context, '/homepage/');
+                    .findUser();
+                final indice = listtable.length - 1;
+                int? lastdata = listtable[indice].id;
+                print(listtable);
+                print(indice);
+                print(lastdata);
+                if (lastdata != dataID) {
+                  // ------------------------------ scrivo i dati sul DB Principale ------------------
+                  await Provider.of<DatabaseRepository>(context, listen: false)
+                      .insertUser(UserTable(dataID, fixedUID, calcDataString,
+                          stepsData[0].value, heartData[0].caloriesCardio));
+                  //---------------------------------carico i dati nel portafoglio----------------------
+                  final sp = await SharedPreferences.getInstance();
+                  if (sp.getInt('portafoglio') == null) {
+                    sp.setInt('portafoglio', 0);
+                  } else {
+                    // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
+                    final money = stepsData[0].value! ~/ 500; //divisione intera
+                    //prendo il valore attuale del portafoglio con get
+                    final int? attPortafoglio = sp.getInt('portafoglio');
+                    // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                    final int aggPortafoglio = attPortafoglio! + money;
+                    sp.setInt('portafoglio', aggPortafoglio);
+                    //print(aggPortafoglio);
+                  }
+                } else {
+                  print('stai cercando di caricare due volte gli stessi dati!');
+                }
               },
-              child: const Text('Load all Data'),
+              child: const Text('Load your progress!'),
             ),
+            // ---------------------------------- FINE NUOVO CODICE --------------------------------
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {
@@ -115,22 +154,13 @@ class _FetchPageState extends State<FetchPage> {
               },
               child: const Text('Tap to unauthorize'),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                );
-                // AppDatabase.clearAllTables();
-              },
-              child: const Text('Clear All Tables'),
-            ),
           ],
         ),
       ),
     );
   } //build
 }
+
 
 
 
