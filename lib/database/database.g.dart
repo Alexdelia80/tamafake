@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`data` INTEGER, `userId` TEXT, `steps` REAL, `calories` REAL, PRIMARY KEY (`data`))');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`data` INTEGER NOT NULL, `userId` TEXT, `steps` REAL, `calories` REAL, PRIMARY KEY (`data`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER, `userId` TEXT, `level` INTEGER, PRIMARY KEY (`exp`))');
+            'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER NOT NULL, `userId` TEXT, `level` INTEGER, PRIMARY KEY (`exp`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -142,7 +142,7 @@ class _$UserDao extends UserDao {
   Future<List<UserTable>> findUser() async {
     return _queryAdapter.queryList('SELECT * FROM UserTable',
         mapper: (Map<String, Object?> row) => UserTable(
-            row['data'] as int?,
+            row['data'] as int,
             row['userId'] as String?,
             row['steps'] as double?,
             row['calories'] as double?));
@@ -151,6 +151,17 @@ class _$UserDao extends UserDao {
   @override
   Future<void> deleteAllUser() async {
     await _queryAdapter.queryNoReturn('DELETE FROM UserTable');
+  }
+
+  @override
+  Future<List<UserTable>> findData(int data) async {
+    return _queryAdapter.queryList('SELECT * FROM UserTable WHERE data = ?1',
+        mapper: (Map<String, Object?> row) => UserTable(
+            row['data'] as int,
+            row['userId'] as String?,
+            row['steps'] as double?,
+            row['calories'] as double?),
+        arguments: [data]);
   }
 
   @override
@@ -198,13 +209,18 @@ class _$AvatarDao extends AvatarDao {
   @override
   Future<List<AvatarTable>> findAvatar() async {
     return _queryAdapter.queryList('SELECT * FROM AvatarTable',
-        mapper: (Map<String, Object?> row) => AvatarTable(row['exp'] as int?,
-            row['userId'] as String?, row['level'] as int?));
+        mapper: (Map<String, Object?> row) => AvatarTable(
+            row['exp'] as int, row['userId'] as String?, row['level'] as int?));
   }
 
   @override
   Future<void> deleteAllAvatar() async {
     await _queryAdapter.queryNoReturn('DELETE FROM AvatarTable');
+  }
+
+  @override
+  Future<int?> selectExp() async {
+    await _queryAdapter.queryNoReturn('SELECT MAX(exp) FROM AvatarTable');
   }
 
   @override

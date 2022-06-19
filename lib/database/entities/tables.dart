@@ -2,9 +2,10 @@ import 'package:floor/floor.dart';
 
 @entity
 class UserTable {
+  
   @PrimaryKey()
-  final int? data;
-
+  final int data;
+  
   final String? userId;
 
   final double? steps;
@@ -16,8 +17,9 @@ class UserTable {
 
 @entity
 class AvatarTable {
+  
   @PrimaryKey()
-  final int? exp;
+  final int exp;
 
   final String? userId;
 

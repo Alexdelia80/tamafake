@@ -3,7 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/screens/homepage.dart';
+import 'package:provider/provider.dart';
+import '../repository/databaseRepository.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:tamafake/screens/fetchuserdata.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -16,89 +21,82 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  // definisco i valori dei cibi
+  // Punteggio cibi (esperienza)
   final int valPizza = 20;
-
   final int valIce = 15;
-
   final int valApple = 5;
-
   final int valWater = 2;
 
-  //abbiamo detto che sono 2 euri
   @override
   Widget build(BuildContext context) {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 20, 178, 218),
-          title: const Center(child: Text('Shop')) //ext(ShopPage.routename),
-          ),
+        backgroundColor: const Color.fromARGB(255, 20, 178, 218),
+        title: const Center(child: Text('Shop')),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.arrow_back_sharp),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip:
+                    MaterialLocalizations.of(context).openAppDrawerTooltip);
+          },
+        ),
+      ),
       backgroundColor: const Color.fromARGB(255, 179, 210, 236),
       body: ListView(
         children: [
           ListTile(
             leading: Icon(Icons.local_pizza),
-            title: Text('Pizza'),
-            trailing: Text('20 €'),
+            title: Text('Pizza', style: TextStyle(fontSize: 18)),
+            trailing: Text('20 €', style: TextStyle(fontSize: 18)),
             onTap: () => _subtract(valPizza, context),
           ),
           ListTile(
             leading: Icon(Icons.icecream),
-            title: Text('Ice Cream'),
-            trailing: Text('15 €'),
+            title: Text('Ice Cream', style: TextStyle(fontSize: 18)),
+            trailing: Text('15 €', style: TextStyle(fontSize: 18)),
             onTap: () => _subtract(valIce, context),
           ),
           ListTile(
             leading: Icon(Icons.apple),
-            title: Text('Apple'),
-            trailing: Text('5 €'),
+            title: Text('Apple', style: TextStyle(fontSize: 18)),
+            trailing: Text('5 €', style: TextStyle(fontSize: 18)),
             onTap: () => _subtract(valApple, context),
           ),
           ListTile(
             leading: Icon(MdiIcons.bottleSoda),
-            title: Text('Water'),
-            trailing: Text('2 €'),
+            title: Text('Water', style: TextStyle(fontSize: 18)),
+            trailing: Text('2 €', style: TextStyle(fontSize: 18)),
             onTap: () => _subtract(valWater, context),
-            // _subtract($val_water,context);
           ),
         ],
       ),
     );
-    //classe
   }
 
-//Funzione che sottrai i soldi del cibo dal portafoglio
+  // Funzione che sottrai i soldi del cibo dal portafoglio
   void _subtract(int valore, context) async {
     final sp = await SharedPreferences.getInstance();
     setState(() {
       int? portafoglio = sp.getInt('portafoglio');
-      if (portafoglio! >= valore) {
-        portafoglio = portafoglio - valore;
-        sp.setInt('portafoglio', portafoglio);
-        //vedo da console il valore del portafoglio:
-        print(portafoglio);
-
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            //AlertDialog Title
-            title: const Text('YEP!!'),
-            //AlertDialog description'
-            content: const Text('You bought Eevee some food :)'),
-          ),
-        ); //show
-
-      } else {
-        //Mi richiama il Dialogo di allerta che non abbiamo abbastanza soldi, bisogna cambiare i testi
+      if (portafoglio == null) {
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
             //AlertDialog Title
             title: const Text('Attention!'),
-            //AlertDialog description'
+            //AlertDialog description
             content: const Text(
-                'Warning: you do not have enough money to buy this item.'),
+                'Warning: you do not have money, you need to load your progress'),
             actions: <Widget>[
               //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
               TextButton(
@@ -113,9 +111,71 @@ class _ShopPageState extends State<ShopPage> {
               ),
             ],
           ),
-        ); //showDialog
+        );
+      } else {
+        if (portafoglio >= (valore)) {
+          portafoglio = portafoglio - valore;
+          sp.setInt('portafoglio', portafoglio);
+          // Vedo da console il valore del portafoglio:
+          print(portafoglio);
+
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              //AlertDialog Title
+              title: const Text('YEP!!!'),
+              //AlertDialog description'
+              content: const Text('You bought Eevee some food!'),
+            ),
+          ); // Show
+
+/*
+          //Aggiorno l'esperienza
+          String userID = '7ML2XV';
+          // controllare che exp sia diversa da null altrimenti la poniamo a 0
+          final exp = Provider.of<DatabaseRepository>(context, listen: false)
+              .selectExp();
+          if (exp == null) {
+            final exp = 0; //inizializzo a 0 l'esperienza
+          }
+          // poi la aggiorniamo con i punti presi dal cibo
+          final newexp = exp + valore;
+          // calcoliamo il livello (raggiungi 100 di esperienza ci si alza di 1 livello)
+          final level = exp! ~/ 100;
+          //facciamo insert della exp aggiornata, di userID (che dobbiamo definire all'inizio) e del level calcolato
+          Provider.of<DatabaseRepository>(context, listen: false)
+              .insertAvatar(AvatarTable(newexp, userID, level));
+          
+*/
+        } else {
+          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi, bisogna cambiare i testi
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              //AlertDialog Title
+              title: const Text('Attention!'),
+              //AlertDialog description
+              content: const Text(
+                  'Warning: you do not have enough money to buy this item'),
+              actions: <Widget>[
+                //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
+                TextButton(
+                  //onPressed: () => Navigator.pop(context, 'Cancel'),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage())),
+                  child: const Text('Home'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ); //showDialog
+        } //
       }
-      ; //else
     }); // setState
   } //_subtract
   //ShopPage
@@ -126,7 +186,6 @@ class _ShopPageState extends State<ShopPage> {
   WIDGET CHE DOPO AVER PREMUTO AVVIA UN'ALLERTA
 class MyStatelessWidget extends StatelessWidget {
   const MyStatelessWidget({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return TextButton(
