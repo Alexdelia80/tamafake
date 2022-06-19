@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+//import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
+//import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
+//import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  /*
                   IconRoundedProgressBar(
                     icon: Padding(
                         padding: EdgeInsets.all(8), child: Icon(Icons.person)),
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.symmetric(vertical: 30),
                     borderRadius: BorderRadius.circular(6),
                     percent: 50,
-                  ),
+                  ), */
                   Padding(
                     padding: const EdgeInsets.only(top: 50),
                     child: Center(
@@ -109,6 +110,14 @@ class _HomePageState extends State<HomePage> {
                       final sp = await SharedPreferences.getInstance();
                       if (sp.getInt('portafoglio') == null) {
                         sp.setInt('portafoglio', 0);
+                        final money =
+                            stepsData[0].value! ~/ 500; // Divisione intera
+                        // Prendo il valore attuale del portafoglio con get
+                        final int? attPortafoglio = sp.getInt('portafoglio');
+                        // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+                        final int aggPortafoglio = attPortafoglio! + money;
+                        sp.setInt('portafoglio', aggPortafoglio);
+                        print(aggPortafoglio);
                       } else {
                         // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
                         final money =
@@ -205,7 +214,6 @@ class _HomePageState extends State<HomePage> {
         case 3:
           {
             _child:
-            _child:
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const FetchPage()));
           }
@@ -213,7 +221,30 @@ class _HomePageState extends State<HomePage> {
         case 4:
           {
             _child:
-            _toLoginPage(context);
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                //AlertDialog Title
+                title: const Text('Are you sure you want to leave us? Eevee is sad about this'),
+                actions: <Widget>[
+                  //Qui si può far scegliere all'utente se fare il log out oppure di rimanere nella home
+                  TextButton(
+                    //onPressed: () => Navigator.pop(context, 'Cancel'),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage())),
+                    child: const Text('Stay'),
+                  ),
+                  TextButton(
+                    onPressed: () => _toLoginPage(context),
+                    child: const Text('Log Out'),
+                  ),
+                ],
+              ),
+            ); //showD
+
+            //_toLoginPage(context);
           }
           break;
       }
