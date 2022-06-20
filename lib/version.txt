@@ -26,4 +26,5 @@ doppio di uno stesso record nella tabella dei dati UserTable
 VERSIONE 1.0.5
 Risolto il conflitto delle date sul db.
 Generato il messaggio di errore per l'utente.
+1.0.5.1 : fissato l'errore sulla tabella del db vuota.
 

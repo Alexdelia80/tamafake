@@ -108,18 +108,44 @@ class _FetchPageState extends State<FetchPage> {
                 print(stepsData[0].value);
                 print(heartData[0].caloriesCardio);
                 print(calcDataString);
-                //----------------------------  NUOVO CODICE -----------------------------------------
+                //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
                 // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
                 final listtable = await Provider.of<DatabaseRepository>(context,
                         listen: false)
                     .findUser();
-                final indice = listtable.length - 1;
-                int? lastdata = listtable[indice].id;
-                print(listtable);
-                print(indice);
-                print(lastdata);
-                if (lastdata != dataID) {
-                  // ------------------------------ scrivo i dati sul DB Principale ------------------
+                if (listtable.isNotEmpty) {
+                  int? indice = listtable.length - 1;
+                  int? lastdata = listtable[indice].id;
+                  print(listtable);
+                  print(indice);
+                  print(lastdata);
+                  if (lastdata != dataID || lastdata == null) {
+                    // ------------------------------ scrivo i dati sul DB Principale ------------------
+                    await Provider.of<DatabaseRepository>(context,
+                            listen: false)
+                        .insertUser(UserTable(dataID, fixedUID, calcDataString,
+                            stepsData[0].value, heartData[0].caloriesCardio));
+                    //---------------------------------carico i dati nel portafoglio----------------------
+                    final sp = await SharedPreferences.getInstance();
+                    if (sp.getInt('portafoglio') == null) {
+                      sp.setInt('portafoglio', 0);
+                    } else {
+                      // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
+                      final money =
+                          stepsData[0].value! ~/ 500; //divisione intera
+                      //prendo il valore attuale del portafoglio con get
+                      final int? attPortafoglio = sp.getInt('portafoglio');
+                      // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                      final int aggPortafoglio = attPortafoglio! + money;
+                      sp.setInt('portafoglio', aggPortafoglio);
+                      //print(aggPortafoglio);
+                    }
+                  } else {
+                    print(
+                        'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
+                  }
+                } else {
+                  // ------ SE LA TABELLA E' VUOTA SCRIVO I DATI PER LA PRIMA VOLTA -------
                   await Provider.of<DatabaseRepository>(context, listen: false)
                       .insertUser(UserTable(dataID, fixedUID, calcDataString,
                           stepsData[0].value, heartData[0].caloriesCardio));
@@ -137,13 +163,11 @@ class _FetchPageState extends State<FetchPage> {
                     sp.setInt('portafoglio', aggPortafoglio);
                     //print(aggPortafoglio);
                   }
-                } else {
-                  print('stai cercando di caricare due volte gli stessi dati!');
                 }
               },
               child: const Text('Load your progress!'),
             ),
-            // ---------------------------------- FINE NUOVO CODICE --------------------------------
+            // ---------------------------------- END CODICE CONFLITTO --------------------------------
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {
@@ -160,9 +184,6 @@ class _FetchPageState extends State<FetchPage> {
     );
   } //build
 }
-
-
-
 
 /*
 
