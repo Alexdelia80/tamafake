@@ -5,6 +5,7 @@ import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/heartpage.dart';
 import 'package:tamafake/screens/progresspage.dart';
+import 'package:tamafake/screens/authorizationpage.dart';
 import 'package:tamafake/screens/assistancepage.dart';
 import 'package:tamafake/database/database.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
@@ -30,18 +31,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //This specifies the app entrypoint
-      initialRoute: LoginPage.route,
-      //This maps names to the set of routes within the app
-      routes: {
-        LoginPage.route: (context) => const LoginPage(),
-        HomePage.route: (context) => const HomePage(),
-        HeartPage.route: (context) => const HeartPage(),
-        ShopPage.route: (context) => const ShopPage(),
-        FetchPage.route: (context) => const FetchPage(),
-        AssistancePage.route: (context) => const AssistancePage(),
-        ProgressPage.route: (context) => const ProgressPage(),
-      },
-    );
+        //This specifies the app entrypoint
+        initialRoute: LoginPage.route,
+        //This maps names to the set of routes within the app
+        routes: {
+          LoginPage.route: (context) => const LoginPage(),
+          HomePage.route: (context) => const HomePage(),
+          HeartPage.route: (context) => const HeartPage(),
+          ShopPage.route: (context) => const ShopPage(),
+          FetchPage.route: (context) => const FetchPage(),
+          AssistancePage.route: (context) => const AssistancePage(),
+          ProgressPage.route: (context) => const ProgressPage(),
+          AuthorizationPage.route: (context) => AuthorizationPage(),
+        });
   } //build
 } //MyApp

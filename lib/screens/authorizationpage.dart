@@ -2,18 +2,11 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//import 'package:tamafake/screens/homepage.dart';
-//import 'package:healthpoint/screens/avatarpage.dart';
-//import 'package:healthpoint/utils/strings.dart';
-//import 'package:healthpoint/models/analisi.dart';
-
 class AuthorizationPage extends StatelessWidget {
   AuthorizationPage({Key? key}) : super(key: key);
 
   static const route = '/auth/';
   static const routename = 'AuthorizationPage';
-  Map<int?, dynamic> daysteps = {};
-  List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
 
   // Valori forniti da fitbit per autorizzare la mia App
   String fitclientid = '238BYH';

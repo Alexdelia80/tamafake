@@ -70,7 +70,7 @@ class _ProgressState extends State<ProgressPage> {
                             child: ListTile(
                               leading: const Icon(MdiIcons.note),
                               title: Text(dataRecs.steps.toString()),
-                              subtitle: Text('Data: ${dataRecs.id}'),
+                              subtitle: Text('Data: ${dataRecs.data}'),
                               //If the ListTile is tapped, it is deleted
                             ),
                             //This method is called when the ListTile is dismissed

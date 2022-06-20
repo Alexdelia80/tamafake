@@ -115,7 +115,7 @@ class _FetchPageState extends State<FetchPage> {
                     .findUser();
                 if (listtable.isNotEmpty) {
                   int? indice = listtable.length - 1;
-                  int? lastdata = listtable[indice].id;
+                  int? lastdata = listtable[indice].data;
                   print(listtable);
                   print(indice);
                   print(lastdata);
@@ -123,23 +123,35 @@ class _FetchPageState extends State<FetchPage> {
                     // ------------------------------ scrivo i dati sul DB Principale ------------------
                     await Provider.of<DatabaseRepository>(context,
                             listen: false)
-                        .insertUser(UserTable(dataID, fixedUID, calcDataString,
+                        .insertUser(UserTable(dataID, fixedUID,
                             stepsData[0].value, heartData[0].caloriesCardio));
                     //---------------------------------carico i dati nel portafoglio----------------------
+
+                    // Portafoglio
                     final sp = await SharedPreferences.getInstance();
                     if (sp.getInt('portafoglio') == null) {
                       sp.setInt('portafoglio', 0);
-                    } else {
-                      // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
                       final money =
-                          stepsData[0].value! ~/ 500; //divisione intera
-                      //prendo il valore attuale del portafoglio con get
+                          stepsData[0].value! ~/ 500; // Divisione intera
+                      // Prendo il valore attuale del portafoglio con get
                       final int? attPortafoglio = sp.getInt('portafoglio');
-                      // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                      // Aggiorno il valore del portafoglio che inserirò all'interno di sp
                       final int aggPortafoglio = attPortafoglio! + money;
                       sp.setInt('portafoglio', aggPortafoglio);
-                      //print(aggPortafoglio);
+                      print(aggPortafoglio);
+                    } else {
+                      // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
+                      final money =
+                          stepsData[0].value! ~/ 500; // Divisione intera
+                      // Prendo il valore attuale del portafoglio con get
+                      final int? attPortafoglio = sp.getInt('portafoglio');
+                      // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+                      final int aggPortafoglio = attPortafoglio! + money;
+                      sp.setInt('portafoglio', aggPortafoglio);
+                      print(aggPortafoglio);
                     }
+                    // fine portafoglio
+
                   } else {
                     print(
                         'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
@@ -147,22 +159,35 @@ class _FetchPageState extends State<FetchPage> {
                 } else {
                   // ------ SE LA TABELLA E' VUOTA SCRIVO I DATI PER LA PRIMA VOLTA -------
                   await Provider.of<DatabaseRepository>(context, listen: false)
-                      .insertUser(UserTable(dataID, fixedUID, calcDataString,
+                      .insertUser(UserTable(dataID, fixedUID,
                           stepsData[0].value, heartData[0].caloriesCardio));
                   //---------------------------------carico i dati nel portafoglio----------------------
+
+                  // Portafoglio
                   final sp = await SharedPreferences.getInstance();
                   if (sp.getInt('portafoglio') == null) {
                     sp.setInt('portafoglio', 0);
-                  } else {
-                    // calcolo i soldi che mi servono (considerando 2 euro per 1000 step)
-                    final money = stepsData[0].value! ~/ 500; //divisione intera
-                    //prendo il valore attuale del portafoglio con get
+                    final money =
+                        stepsData[0].value! ~/ 500; // Divisione intera
+                    // Prendo il valore attuale del portafoglio con get
                     final int? attPortafoglio = sp.getInt('portafoglio');
-                    // aggiorno il valore del portafoglio che inserirò all'interno di sp
+                    // Aggiorno il valore del portafoglio che inserirò all'interno di sp
                     final int aggPortafoglio = attPortafoglio! + money;
                     sp.setInt('portafoglio', aggPortafoglio);
-                    //print(aggPortafoglio);
+                    print(aggPortafoglio);
+                  } else {
+                    // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
+                    final money =
+                        stepsData[0].value! ~/ 500; // Divisione intera
+                    // Prendo il valore attuale del portafoglio con get
+                    final int? attPortafoglio = sp.getInt('portafoglio');
+                    // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+                    final int aggPortafoglio = attPortafoglio! + money;
+                    sp.setInt('portafoglio', aggPortafoglio);
+                    print(aggPortafoglio);
                   }
+                  // fine portafoglio
+
                 }
               },
               child: const Text('Load your progress!'),

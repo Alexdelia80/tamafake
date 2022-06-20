@@ -28,3 +28,8 @@ Risolto il conflitto delle date sul db.
 Generato il messaggio di errore per l'utente.
 1.0.5.1 : fissato l'errore sulla tabella del db vuota.
 
+VERSIONE 1.0.5.1 e 1.0.5.2
+Gestito il conflitto del db nella home page
+visto che la fetch page sarà eliminata e sostituita
+dalla authorization page.
+Prove di implementazione della progress bar
