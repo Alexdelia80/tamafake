@@ -1,31 +1,55 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-//import 'package:healthpoint/screens/avatarpage.dart';
-//import 'package:healthpoint/utils/strings.dart';
-//import 'package:healthpoint/models/analisi.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:tamafake/database/daos/tablesDao.dart';
+import 'package:tamafake/screens/homepage.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class FetchPage extends StatelessWidget {
-  FetchPage({Key? key}) : super(key: key);
+class FetchPage extends StatefulWidget {
+  const FetchPage({Key? key}) : super(key: key);
 
   static const route = '/fetchpage/';
   static const routename = 'FetchPage';
-  Map<int?, dynamic> daysteps = {};
-  List<double?> stepsList = [0, 0, 0, 0, 0, 0, 0];
 
-  // questi sono i valori forniti da fitbit per
-  // autorizzare la mia App
+  @override
+  State<FetchPage> createState() => _FetchPageState();
+}
+
+class _FetchPageState extends State<FetchPage> {
   String fitclientid = '238BYH';
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
-  String? userId;
+  String? userID;
+  String fixedUID = '7ML2XV';
+  List<String> stepsData = [];
+  List<String> heartData = [];
 
   @override
   Widget build(BuildContext context) {
-    print('${FetchPage.routename} built');
+    print('Authorization');
     return Scaffold(
       appBar: AppBar(
-        title: const Text(FetchPage.routename),
+        backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+        title: const Text('Authorization'),
+        leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                    icon: const Icon(Icons.arrow_back_sharp),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip);
+              },
+            ),
       ),
       body: Center(
         child: Column(
@@ -43,57 +67,8 @@ class FetchPage extends StatelessWidget {
                     callbackUrlScheme: callbackurl);
               },
               child: const Text('Tap to authorize'),
-            ),
-            // ------------------------ LOAD STEPS DATA --------------------------
-            ElevatedButton(
-              onPressed: () async {
-                //Instantiate a proper data manager
-                FitbitActivityTimeseriesDataManager
-                    fitbitActivityTimeseriesDataManager =
-                    FitbitActivityTimeseriesDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                  type: 'steps',
-                );
-                //Fetch data
-                final stepsData = await fitbitActivityTimeseriesDataManager
-                    .fetch(FitbitActivityTimeseriesAPIURL.dateRangeWithResource(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
-                  userID: '7ML2XV',
-                  resource: fitbitActivityTimeseriesDataManager.type,
-                )) as List<FitbitActivityTimeseriesData>;
-                print('$stepsData');
-                /*
-                final snackBar =
-                    SnackBar(content: Text('day : ${stepsList[1]}'));
-                Text('day 1 you walked ${stepsData[0].value} steps!');
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-               */
-              },
-              child: const Text('Load Steps Data'),
-            ),
-            // ---------------------------- HEART DATA ------------------------------
-            ElevatedButton(
-              onPressed: () async {
-                FitbitHeartDataManager fitbitActivityDataManager =
-                    FitbitHeartDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                );
-
-                final HeartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dateRangeWithUserID(
-                  startDate: DateTime.parse('2022-05-16'),
-                  endDate: DateTime.parse('2022-05-21'),
-                  userID: '7ML2XV',
-                )) as List<FitbitHeartData>;
-                //Navigator.pushNamed(context, 'avatar', arguments: HeartData);
-                // Navigator.push(  context, MaterialPageRoute(builder: (_) => AvatarPage()));
-                print(HeartData);
-              },
-              child: const Text('Load Heart Data'),
-            ),
+            ),            
+            
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {
@@ -109,5 +84,4 @@ class FetchPage extends StatelessWidget {
       ),
     );
   } //build
-
-} //HomePage
+}

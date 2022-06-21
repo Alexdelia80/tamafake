@@ -30,11 +30,16 @@ dependencies:
   flutter:
     sdk: flutter
   fitbitter: ^1.1.1
-  get: 4.6.1
+  get: ^4.6.1
   flutter_login: 
   shared_preferences: 
+  provider:
+  material_design_icons_flutter:
   floor: ^1.2.0
+  fluid_bottom_nav_bar: ^1.3.0
+
   
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -45,7 +50,7 @@ dev_dependencies:
     sdk: flutter
   floor_generator: ^1.2.0
   build_runner: ^2.1.2
-  material_design_icons_flutter: 
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

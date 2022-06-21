@@ -55,7 +55,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'login_flow',
+      //logo: AssetImage('assets/ecorp-lightblue.png'),
+      title: 'TAMAfake',
+      theme: LoginTheme(primaryColor:Color(0xFF75B7E1) , logoWidth: 1.5),
       onLogin: _loginUser,
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,
