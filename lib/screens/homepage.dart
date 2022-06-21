@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/progress.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -8,11 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
-import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:fitbitter/fitbitter.dart';
 import 'package:intl/intl.dart';
 import 'package:tamafake/screens/navbar.dart';
-import 'package:tamafake/screens/progress.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,8 +30,6 @@ class _HomePageState extends State<HomePage> {
   String fixedUID = '7ML2XV';
   List<String> stepsData = [];
   List<String> heartData = [];
-
-  final progress = PassProgress().passaggioProgress();
 
   @override
   Widget build(context) {
