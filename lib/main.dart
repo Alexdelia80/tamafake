@@ -5,6 +5,7 @@ import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/heartpage.dart';
 import 'package:tamafake/screens/progresspage.dart';
+import 'package:tamafake/screens/plotpage.dart';
 import 'package:tamafake/screens/authorizationpage.dart';
 import 'package:tamafake/screens/assistancepage.dart';
 import 'package:tamafake/database/database.dart';
@@ -28,21 +29,25 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        //This specifies the app entrypoint
-        initialRoute: LoginPage.route,
-        //This maps names to the set of routes within the app
-        routes: {
-          LoginPage.route: (context) => const LoginPage(),
-          HomePage.route: (context) => const HomePage(),
-          HeartPage.route: (context) => const HeartPage(),
-          ShopPage.route: (context) => const ShopPage(),
-          FetchPage.route: (context) => const FetchPage(),
-          AssistancePage.route: (context) => const AssistancePage(),
-          ProgressPage.route: (context) => const ProgressPage(),
-          AuthorizationPage.route: (context) => AuthorizationPage(),
-        });
+    return ChangeNotifierProvider<Portafogliochange>(
+        create: (context) => Portafogliochange(null, null),
+        child: MaterialApp(
+            //This specifies the app entrypoint
+            initialRoute: LoginPage.route,
+            //This maps names to the set of routes within the app
+            routes: {
+              LoginPage.route: (context) => const LoginPage(),
+              HomePage.route: (context) => const HomePage(),
+              HeartPage.route: (context) => const HeartPage(),
+              ShopPage.route: (context) => const ShopPage(),
+              FetchPage.route: (context) => const FetchPage(),
+              AssistancePage.route: (context) => const AssistancePage(),
+              ProgressPage.route: (context) => const ProgressPage(),
+              AuthorizationPage.route: (context) => AuthorizationPage(),
+              PlotPage.route: (context) => const PlotPage(),
+            }));
   } //build
 } //MyApp

@@ -33,3 +33,11 @@ Gestito il conflitto del db nella home page
 visto che la fetch page sarà eliminata e sostituita
 dalla authorization page.
 Prove di implementazione della progress bar
+
+VERSIONE 1.1
+Implementata la progress bar
+gestione del portafoglio senza errori,
+manca la modifica del valore in tempo reale
+sulla shop page.
+Inizio implementazione della parte grafica.
+Gestione del livello di esperienza dell'avatar.
