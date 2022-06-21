@@ -54,14 +54,5 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<UserTable>> findData(data) async {
-    final results = await database.user.findData(data);
-    return results;
-  }
-
-  Future<int?> selectExp(AvatarTable avatar) async {
-    final results = await database.avatar.selectExp();
-    return results;
-  }
 
 } //DatabaseRepository

@@ -32,8 +32,8 @@ class _ShopPageState extends State<ShopPage> {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 20, 178, 218),
-        title: const Center(child: Text('Shop')),
+        backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+        title: Center(child: const Center(child: Text('Shop'))),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -56,28 +56,46 @@ class _ShopPageState extends State<ShopPage> {
         children: [
           ListTile(
             leading: Icon(Icons.local_pizza),
-            title: Text('Pizza', style: TextStyle(fontSize: 18)),
-            trailing: Text('20 €', style: TextStyle(fontSize: 18)),
+            title: Text('Pizza', style: TextStyle(fontSize: 22)),
+            trailing: Text('20 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valPizza, context),
           ),
           ListTile(
             leading: Icon(Icons.icecream),
-            title: Text('Ice Cream', style: TextStyle(fontSize: 18)),
-            trailing: Text('15 €', style: TextStyle(fontSize: 18)),
+            title: Text('Ice Cream', style: TextStyle(fontSize: 22)),
+            trailing: Text('15 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valIce, context),
           ),
           ListTile(
             leading: Icon(Icons.apple),
-            title: Text('Apple', style: TextStyle(fontSize: 18)),
-            trailing: Text('5 €', style: TextStyle(fontSize: 18)),
+            title: Text('Apple', style: TextStyle(fontSize: 22)),
+            trailing: Text('5 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valApple, context),
           ),
           ListTile(
             leading: Icon(MdiIcons.bottleSoda),
-            title: Text('Water', style: TextStyle(fontSize: 18)),
-            trailing: Text('2 €', style: TextStyle(fontSize: 18)),
+            title: Text('Water', style: TextStyle(fontSize: 22)),
+            trailing: Text('2 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valWater, context),
           ),
+          FutureBuilder(
+            future: SharedPreferences.getInstance(),
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                final sp = snapshot.data as SharedPreferences;
+                if (sp.getInt('portafoglio') == null) {
+                  sp.setInt('portafoglio', 0);
+                  final portafoglio = sp.getInt('portafoglio');
+                  return Text('$portafoglio');
+                } else {
+                  final portafoglio = sp.getInt('portafoglio');
+                  return Text('$portafoglio');
+                }
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
+          )
         ],
       ),
     );
@@ -86,7 +104,7 @@ class _ShopPageState extends State<ShopPage> {
   // Funzione che sottrai i soldi del cibo dal portafoglio
   void _subtract(int valore, context) async {
     final sp = await SharedPreferences.getInstance();
-    setState(() {
+    setState(() async {
       int? portafoglio = sp.getInt('portafoglio');
       if (portafoglio == null) {
         showDialog<String>(
@@ -129,24 +147,55 @@ class _ShopPageState extends State<ShopPage> {
             ),
           ); // Show
 
-/*
-          //Aggiorno l'esperienza
           String userID = '7ML2XV';
-          // controllare che exp sia diversa da null altrimenti la poniamo a 0
-          final exp = Provider.of<DatabaseRepository>(context, listen: false)
-              .selectExp();
-          if (exp == null) {
-            final exp = 0; //inizializzo a 0 l'esperienza
+
+          final listavatar =
+              await Provider.of<DatabaseRepository>(context, listen: false)
+                  .findAvatar();
+          if (listavatar.isNotEmpty) {
+            int indice = listavatar.length - 1;
+            int lastexp = listavatar[indice].exp;
+            final newexp = lastexp + valore;
+            final newlevel = newexp ~/ 100 + 1;
+            Provider.of<DatabaseRepository>(context, listen: false)
+                .insertAvatar(AvatarTable(newexp, userID, newlevel));
+
+            // aggiorno il progresso
+            final sp = await SharedPreferences.getInstance();
+            if (sp.getDouble('progress') == null) {
+              sp.setDouble('progress', 0);
+              //calcolo progress
+              final progress = (newexp - (newlevel - 1) * 100) / 100;
+              sp.setDouble('progress', progress);
+            } else {
+              final progress = (newexp - (newlevel - 1) * 100) / 100;
+              sp.setDouble('progress', progress);
+            }
           }
-          // poi la aggiorniamo con i punti presi dal cibo
-          final newexp = exp + valore;
-          // calcoliamo il livello (raggiungi 100 di esperienza ci si alza di 1 livello)
-          final level = exp! ~/ 100;
-          //facciamo insert della exp aggiornata, di userID (che dobbiamo definire all'inizio) e del level calcolato
-          Provider.of<DatabaseRepository>(context, listen: false)
-              .insertAvatar(AvatarTable(newexp, userID, level));
-          
-*/
+          //AvatarTable vuota:
+          else {
+            final int lastexp = 0;
+            final int level = 1;
+            //inizializziamo la prima riga dell'avatar
+            await Provider.of<DatabaseRepository>(context, listen: false)
+                .insertAvatar(AvatarTable(lastexp, userID, level));
+            final newexp = lastexp + valore;
+            final newlevel = newexp ~/ 100 + 1;
+            Provider.of<DatabaseRepository>(context, listen: false)
+                .insertAvatar(AvatarTable(newexp, userID, newlevel));
+
+            // aggiorno il progresso
+            final sp = await SharedPreferences.getInstance();
+            if (sp.getDouble('progress') == null) {
+              sp.setDouble('progress', 0);
+              //calcolo progress
+              final progress = (newexp - (newlevel - 1) * 100) / 100;
+              sp.setDouble('progress', progress);
+            } else {
+              final progress = (newexp - (newlevel - 1) * 100) / 100;
+              sp.setDouble('progress', progress);
+            }
+          }
         } else {
           // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi, bisogna cambiare i testi
           showDialog<String>(
@@ -181,7 +230,6 @@ class _ShopPageState extends State<ShopPage> {
   //ShopPage
 }
 
-  
 /* 
   WIDGET CHE DOPO AVER PREMUTO AVVIA UN'ALLERTA
 class MyStatelessWidget extends StatelessWidget {

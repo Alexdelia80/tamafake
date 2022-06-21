@@ -15,6 +15,7 @@ class AssistancePage extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Color.fromARGB(255, 234, 251, 255),
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 230, 67, 121),
             leading: Builder(
               builder: (BuildContext context) {
                 return IconButton(
@@ -32,7 +33,6 @@ class AssistancePage extends StatelessWidget {
               },
             ),
             centerTitle: true,
-            backgroundColor: const Color.fromARGB(255, 20, 178, 218),
             title: const Center(child: Text('Assistance'))),
         body: Container(
           child: Column(

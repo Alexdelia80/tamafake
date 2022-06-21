@@ -29,10 +29,11 @@ class _FetchPageState extends State<FetchPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('${FetchPage.routename} built');
+    print('Authorization');
     return Scaffold(
       appBar: AppBar(
-        title: const Text(FetchPage.routename),
+        backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+        title: const Text('Authorization'),
         leading: Builder(
               builder: (BuildContext context) {
                 return IconButton(
@@ -66,59 +67,7 @@ class _FetchPageState extends State<FetchPage> {
                     callbackUrlScheme: callbackurl);
               },
               child: const Text('Tap to authorize'),
-            ),
-            // ------------------------ LOAD Heart and Steps DATA --------------------------
-            ElevatedButton(
-              onPressed: () async {
-                
-                //Instantiate a proper data manager
-                FitbitActivityTimeseriesDataManager
-                    fitbitActivityTimeseriesDataManager =
-                    FitbitActivityTimeseriesDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                  type: 'steps',
-                );
-                FitbitHeartDataManager fitbitActivityDataManager =
-                    FitbitHeartDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                );
-                
-              
-                // Fetch steps data
-                final stepsData = await fitbitActivityTimeseriesDataManager
-                    .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                  date: DateTime.now().subtract(const Duration(days: 1)),
-                  userID: fixedUID,
-                  resource: fitbitActivityTimeseriesDataManager.type,
-                )) as List<FitbitActivityTimeseriesData>;
-                
-               
-                final calcData =
-                    DateTime.now().subtract(const Duration(days: 1));
-                String calcDataString =
-                   DateFormat("dd-MM-yyyy").format(calcData);
-                   int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
-                
-                // Fetch heart data
-                final heartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dayWithUserID(
-                  date: calcData,
-                  userID: fixedUID,
-                )) as List<FitbitHeartData>;
-               
-                print(stepsData[0].value);
-                print(heartData[0].caloriesCardio);
-                print(calcDataString);
-               
-                await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(dataINT, userID, stepsData[0].value,
-                        heartData[0].caloriesCardio));
-                
-              },
-              child: const Text('Load your progress!'),
-            ),
+            ),            
             
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
@@ -136,39 +85,3 @@ class _FetchPageState extends State<FetchPage> {
     );
   } //build
 }
-
-
-
-/*
-class StepsClass extends ChangeNotifier {
-  //For simplicity, a product is just a String.
-  List<String> steps = [];
-  void addSteps(String toAdd) {
-    steps.add(toAdd);
-    //Call the notifyListeners() method to alert that something happened.
-    notifyListeners();
-  } //addProduct
-  void clearSteps() {
-    steps.clear();
-    //Call the notifyListeners() method to alert that something happened.
-    notifyListeners();
-  } //clearCart
-}//Cart //HomePage
-___________________________________________________________________
-// };
-                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
-                 // final async {
-                // final wp = stepsData[0].value;
-                //No need to use a Consumer, we are just using a method of the DatabaseRepository
-                // UserTable(this.id, this.data, this.steps, this.calories);
-                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
-                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
-                //    stepsData[0] as String, heartData[0] as String);
-                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: {
-                //  stepsData[0].dateOfMonitoring,
-                //  heartData[0].caloriesCardio,
-                // });
-___________________________________________________________________
-*/

@@ -154,17 +154,6 @@ class _$UserDao extends UserDao {
   }
 
   @override
-  Future<List<UserTable>> findData(int data) async {
-    return _queryAdapter.queryList('SELECT * FROM UserTable WHERE data = ?1',
-        mapper: (Map<String, Object?> row) => UserTable(
-            row['data'] as int,
-            row['userId'] as String?,
-            row['steps'] as double?,
-            row['calories'] as double?),
-        arguments: [data]);
-  }
-
-  @override
   Future<void> insertUser(UserTable user) async {
     await _userTableInsertionAdapter.insert(user, OnConflictStrategy.abort);
   }
@@ -216,11 +205,6 @@ class _$AvatarDao extends AvatarDao {
   @override
   Future<void> deleteAllAvatar() async {
     await _queryAdapter.queryNoReturn('DELETE FROM AvatarTable');
-  }
-
-  @override
-  Future<int?> selectExp() async {
-    await _queryAdapter.queryNoReturn('SELECT MAX(exp) FROM AvatarTable');
   }
 
   @override
