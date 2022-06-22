@@ -44,15 +44,13 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cleanUser(UserTable user) async {
+  Future<void> cleanUser() async {
     await database.user.deleteAllUser();
     notifyListeners();
   }
 
-  Future<void> cleanAvatar(AvatarTable avatar) async {
+  Future<void> cleanAvatar() async {
     await database.avatar.deleteAllAvatar();
     notifyListeners();
   }
-
-
 } //DatabaseRepository

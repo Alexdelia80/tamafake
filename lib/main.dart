@@ -12,9 +12,8 @@ import 'dart:async';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final AppDatabase database = await $FloorAppDatabase
-      .databaseBuilder('database_application.db')
-      .build();
+  final AppDatabase database =
+      await $FloorAppDatabase.databaseBuilder('database_app.db').build();
   final databaseRepository = DatabaseRepository(database: database);
 
   runApp(ChangeNotifierProvider<DatabaseRepository>(
