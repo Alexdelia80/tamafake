@@ -43,6 +43,17 @@ class NavBar extends StatelessWidget {
                 }),
             Divider(),
             ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Authorization', style: TextStyle(
+                    fontSize: 18,
+                  )),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const FetchPage()));
+              },
+            ),
+            Divider(),
+            ListTile(
               leading: Icon(Icons.call),
               title: Text('Assistance', style: TextStyle(
                     fontSize: 18,
@@ -52,17 +63,6 @@ class NavBar extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const AssistancePage()));
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Authorization', style: TextStyle(
-                    fontSize: 18,
-                  )),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const FetchPage()));
               },
             ),
             Divider(),

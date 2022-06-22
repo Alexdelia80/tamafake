@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                       if (sp.getDouble('progress') == null) {
                         sp.setDouble('progress', 0);
                         final progress = sp.getDouble('progress');
-                        
+
                         print('Progresso:$progress');
                         return SizedBox(
                           height: 20,
@@ -121,16 +121,14 @@ class _HomePageState extends State<HomePage> {
                     // Fetch steps data
                     final stepsData = await fitbitActivityTimeseriesDataManager
                         .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                      date: DateTime.now().subtract(const Duration(days: 4)),
+                      date: DateTime.now().subtract(const Duration(days: 1)),
                       userID: fixedUID,
                       resource: fitbitActivityTimeseriesDataManager.type,
                     )) as List<FitbitActivityTimeseriesData>;
 
                     // Fetch heart data
                     final calcData =
-                        DateTime.now().subtract(const Duration(days: 4));
-                    String calcDataString =
-                        DateFormat("dd-MM-yyyy").format(calcData);
+                        DateTime.now().subtract(const Duration(days: 1));
                     int dataINT =
                         int.parse(DateFormat("ddMMyyyy").format(calcData));
 
@@ -143,7 +141,7 @@ class _HomePageState extends State<HomePage> {
 
                     print(stepsData[0].value);
                     print(heartData[0].caloriesCardio);
-                    print(calcDataString);
+                    print(dataINT);
 
                     //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
                     // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
@@ -235,76 +233,6 @@ class _HomePageState extends State<HomePage> {
         drawer: NavBar(),
       ),
     );
-  }
-
-  void _handleNavigationChange(int index) {
-    setState(() {
-      switch (index) {
-        case 0:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
-          }
-
-          break;
-        case 1:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ShopPage()));
-          }
-
-          break;
-        case 2:
-          {
-            _child:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AssistancePage()));
-          }
-
-          break;
-        case 3:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FetchPage()));
-          }
-          break;
-        case 4:
-          {
-            _child:
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                //AlertDialog Title
-                title: const Text(
-                    'Are you sure you want to leave us? Eevee is sad about this'),
-                actions: <Widget>[
-                  //Qui si può far scegliere all'utente se fare il log out oppure di rimanere nella home
-                  TextButton(
-                    //onPressed: () => Navigator.pop(context, 'Cancel'),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage())),
-                    child: const Text('Stay'),
-                  ),
-                  TextButton(
-                    onPressed: () => _toLoginPage(context),
-                    child: const Text('Log Out'),
-                  ),
-                ],
-              ),
-            ); //showD
-
-            //_toLoginPage(context);
-          }
-          break;
-      }
-    });
   }
 } //HomePage
 
