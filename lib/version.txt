@@ -34,7 +34,7 @@ visto che la fetch page sarà eliminata e sostituita
 dalla authorization page.
 Prove di implementazione della progress bar
 
-VERSIONE 1.1
+VERSIONE 1.1.0
 Implementata la progress bar
 gestione del portafoglio senza errori,
 manca la modifica del valore in tempo reale

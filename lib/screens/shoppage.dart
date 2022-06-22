@@ -264,7 +264,13 @@ class Portafogliochange extends ChangeNotifier {
         ); //showDialog
       } //
     }
-  } // setState
+  }
+
+  @override
+  void notifyListeners() {
+    // TODO: implement notifyListeners
+    super.notifyListeners();
+  }
 } //_subtract
-  //ShopPage
+
 
