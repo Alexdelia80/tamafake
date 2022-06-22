@@ -6,6 +6,7 @@ import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -35,21 +36,21 @@ class _FetchPageState extends State<FetchPage> {
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
         title: const Text('Authorization'),
         leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                    icon: const Icon(Icons.arrow_back_sharp),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+          builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.arrow_back_sharp),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
 
-                      Scaffold.of(context).openDrawer();
-                    },
-                    tooltip:
-                        MaterialLocalizations.of(context).openAppDrawerTooltip);
-              },
-            ),
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip:
+                    MaterialLocalizations.of(context).openAppDrawerTooltip);
+          },
+        ),
       ),
       body: Center(
         child: Column(
@@ -58,6 +59,7 @@ class _FetchPageState extends State<FetchPage> {
             // ------------------------ Autorizza il caricamento ------------------
             ElevatedButton(
               onPressed: () async {
+                final sp = await SharedPreferences.getInstance();
                 // Authorize the app
                 String? userId = await FitbitConnector.authorize(
                     context: context,
@@ -65,16 +67,48 @@ class _FetchPageState extends State<FetchPage> {
                     clientSecret: fitclientsec,
                     redirectUri: redirecturi,
                     callbackUrlScheme: callbackurl);
+                sp.setString('AuthorizationCheck', userId!);
               },
               child: const Text('Tap to authorize'),
-            ),            
-            
+            ),
+
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    //AlertDialog Title
+                    title: const Text('Attention!'),
+                    //AlertDialog description
+                    content: const Text(
+                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () async {
+                          FitbitConnector.unauthorize(
+                              clientID: fitclientid,
+                              clientSecret: fitclientsec);
+                          //eliminiamo tutto il database.
+                          await Provider.of<DatabaseRepository>(context,
+                                  listen: false)
+                              .cleanAvatar();
+                          await Provider.of<DatabaseRepository>(context,
+                                  listen: false)
+                              .cleanUser();
+                          final  sp = await SharedPreferences.getInstance();
+                          await sp.remove('portafoglio');
+                          await sp.remove('progress');
+                          await sp.remove('AuthorizationCheck');
+                        },
+                        child: const Text('Delete all'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Stay'),
+                        child: const Text('Stay'),
+                      ),
+                    ],
+                  ),
                 );
               },
               child: const Text('Tap to unauthorize'),

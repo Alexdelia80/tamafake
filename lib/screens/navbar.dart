@@ -52,7 +52,7 @@ class NavBar extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const FetchPage()));
               },
             ),
-            Divider(),
+             Divider(),
             ListTile(
               leading: Icon(Icons.call),
               title: Text('Assistance', style: TextStyle(

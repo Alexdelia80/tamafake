@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #Wed Jun 22 10:44:57 CEST 2022
+=======
+#Wed Jun 22 15:52:41 CEST 2022
+>>>>>>> asyabrendolan
 base.0=/Users/Asya/tamafake/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
