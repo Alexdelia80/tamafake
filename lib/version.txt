@@ -41,3 +41,16 @@ manca la modifica del valore in tempo reale
 sulla shop page.
 Inizio implementazione della parte grafica.
 Gestione del livello di esperienza dell'avatar.
+
+VERSIONE 2.0.0
+Merge con le branch di asya e asja,
+completamento della parte grafica e della logica
+generale del programma. Implementazione del regolamento,
+aggiustamenti generali del codice tra cui:
+- Sistemazione dei progressi sulla home page
+- Sistemazione dello shop e del portafoglio
+- Aggiunta della regulation page
+- Sistemazione della grafica e degli alert
+- Sistemazione del drawer
+- Inserimento dei loghi e modifica della login page
+- Aggiunta dell'immagine degli avatar nella side bar

@@ -32,3 +32,17 @@ abstract class AvatarDao {
   @delete
   Future<void> deleteAvatar(AvatarTable avatar);
 }
+
+/*
+@dao
+abstract class DataDao {
+  @Query('SELECT * FROM UserTable')
+  Future<List<DataTable>> findUser();
+  @insert //lo usiamo per inizializzarla
+  Future<void> insertUser(DataTable data);
+  @delete
+  Future<void> deleteUser(DataTable data);
+  @Update(onConflict: OnConflictStrategy.replace)
+  Future<void> updateUser(DataTable data);
+}
+*/

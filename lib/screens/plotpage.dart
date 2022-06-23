@@ -28,28 +28,6 @@ class _PlotPageState extends State<PlotPage> {
       color: Colors.blue,
       data: [0, 0.2, 0.4, 0.6, 0.8, 1],
     ),
-    /*
-    Feature(
-      title: "Kotlin",
-      color: Colors.black,
-      data: [1, 0.8, 0.6, 0.7, 0.3, 0.1],
-    ),
-    Feature(
-      title: "Java",
-      color: Colors.orange,
-      data: [0.4, 0.2, 0.9, 0.5, 0.6, 0.4],
-    ),
-    Feature(
-      title: "React Native",
-      color: Colors.red,
-      data: [0.5, 0.2, 0, 0.3, 1, 1.3],
-    ),
-    Feature(
-      title: "Swift",
-      color: Colors.green,
-      data: [0.25, 0.6, 1, 0.5, 0.8, 1, 4],
-    ),
-    */
   ];
 
   @override

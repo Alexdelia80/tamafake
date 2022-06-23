@@ -16,16 +16,3 @@ abstract class AppDatabase extends FloorDatabase {
   UserDao get user;
   AvatarDao get avatar;
 } //AppDatabase
-
-/*
-@Database(version: 1, entities: [AvatarTable, UserTable])
-abstract class AppDatabase extends FloorDatabase {
-  //Add all the daos as getters here
-  avatarDao get avatar;
-  userDao get user;
-  Future<void> clearAllTables() async {
-    await database.execute('DELETE FROM user');
-    await database.execute('DELETE FROM avatar');
-  }
-}//AppDatabase
-*/

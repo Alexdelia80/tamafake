@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/assistancepage.dart';
@@ -28,15 +27,15 @@ class _HomePageState extends State<HomePage> {
   String callbackurl = 'example';
   String? userID;
   String fixedUID = '7ML2XV';
-  List<String> stepsData = [];
-  List<String> heartData = [];
 
   @override
   Widget build(context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('TamaFAKE'),
+          centerTitle: true,
+          title: const Text('TAMA-fit',
+              style: TextStyle(fontFamily: 'Lobster', fontSize: 30)),
           backgroundColor: Color.fromARGB(255, 230, 67, 121),
         ),
         backgroundColor: Color(0xFF75B7E1),
@@ -50,6 +49,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Progress Bar
                 FutureBuilder(
                   future: SharedPreferences.getInstance(),
                   builder: ((context, snapshot) {
@@ -65,10 +65,10 @@ class _HomePageState extends State<HomePage> {
                           width: 300,
                           child: LinearProgressIndicator(
                               value: progress,
-                              color: Colors.lime,
-                              backgroundColor: Colors.greenAccent),
+                              color: Color.fromARGB(255, 67, 129, 230),
+                              backgroundColor:
+                                  Color.fromARGB(255, 135, 169, 197)),
                         );
-                        //return Text('$portafoglio');
                       } else {
                         final progress = sp.getDouble('progress');
                         print('Progresso:$progress');
@@ -78,8 +78,9 @@ class _HomePageState extends State<HomePage> {
                           width: 300,
                           child: LinearProgressIndicator(
                               value: progress,
-                              color: Colors.lime,
-                              backgroundColor: Colors.greenAccent),
+                              color: Color.fromARGB(255, 67, 129, 230),
+                              backgroundColor:
+                                  Color.fromARGB(255, 135, 169, 197)),
                         );
                       }
                     } else {
@@ -87,7 +88,8 @@ class _HomePageState extends State<HomePage> {
                     }
                   }),
                 ),
-                Padding(
+                // Icon
+                const Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: Center(
                     child: CircleAvatar(
@@ -98,133 +100,188 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(40)),
+                // Load your progress
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           Color.fromARGB(255, 230, 67, 121)),
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
-                    //Instantiate a proper data manager
-                    FitbitActivityTimeseriesDataManager
-                        fitbitActivityTimeseriesDataManager =
-                        FitbitActivityTimeseriesDataManager(
-                      clientID: fitclientid,
-                      clientSecret: fitclientsec,
-                      type: 'steps',
-                    );
-                    FitbitHeartDataManager fitbitActivityDataManager =
-                        FitbitHeartDataManager(
-                      clientID: fitclientid,
-                      clientSecret: fitclientsec,
-                    );
+                    //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
+                    final sp = await SharedPreferences.getInstance();
+                    if (sp.getString('AuthorizationCheck') != null) {
+                      // Instantiate a proper data manager
+                      FitbitActivityTimeseriesDataManager
+                          fitbitActivityTimeseriesDataManager =
+                          FitbitActivityTimeseriesDataManager(
+                        clientID: fitclientid,
+                        clientSecret: fitclientsec,
+                        type: 'steps',
+                      );
+                      FitbitHeartDataManager fitbitActivityDataManager =
+                          FitbitHeartDataManager(
+                        clientID: fitclientid,
+                        clientSecret: fitclientsec,
+                      );
 
-                    // Fetch steps data
-                    final stepsData = await fitbitActivityTimeseriesDataManager
-                        .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                      date: DateTime.now().subtract(const Duration(days: 4)),
-                      userID: fixedUID,
-                      resource: fitbitActivityTimeseriesDataManager.type,
-                    )) as List<FitbitActivityTimeseriesData>;
+                      // Fetch Steps data
+                      final stepsData =
+                          await fitbitActivityTimeseriesDataManager.fetch(
+                              FitbitActivityTimeseriesAPIURL.dayWithResource(
+                        date: DateTime.now().subtract(const Duration(days: 1)),
+                        userID: fixedUID,
+                        resource: fitbitActivityTimeseriesDataManager.type,
+                      )) as List<FitbitActivityTimeseriesData>;
 
-                    // Fetch heart data
-                    final calcData =
-                        DateTime.now().subtract(const Duration(days: 4));
-                    String calcDataString =
-                        DateFormat("dd-MM-yyyy").format(calcData);
-                    int dataINT =
-                        int.parse(DateFormat("ddMMyyyy").format(calcData));
+                      // Fetch Heart data
+                      final calcData =
+                          DateTime.now().subtract(const Duration(days: 1));
+                      int dataINT =
+                          int.parse(DateFormat("ddMMyyyy").format(calcData));
 
-                    // ----------------------------- fetch heart data ------------------------------------
-                    final heartData = await fitbitActivityDataManager
-                        .fetch(FitbitHeartAPIURL.dayWithUserID(
-                      date: calcData,
-                      userID: fixedUID,
-                    )) as List<FitbitHeartData>;
+                      final heartData = await fitbitActivityDataManager
+                          .fetch(FitbitHeartAPIURL.dayWithUserID(
+                        date: calcData,
+                        userID: fixedUID,
+                      )) as List<FitbitHeartData>;
 
-                    print(stepsData[0].value);
-                    print(heartData[0].caloriesCardio);
-                    print(calcDataString);
+                      print(stepsData[0].value);
+                      print(heartData[0].caloriesFatBurn);
+                      print(dataINT);
 
-                    //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
-                    // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
-                    final listtable = await Provider.of<DatabaseRepository>(
-                            context,
-                            listen: false)
-                        .findUser();
-                    // Se la tabella non è vuota:
-                    if (listtable.isNotEmpty) {
-                      int? indice = listtable.length - 1;
-                      int? lastdata = listtable[indice].data;
-                      print(listtable);
-                      print(indice);
-                      print(lastdata);
-                      //Controllo che la data non sia già presente nel database
-                      if (lastdata != dataINT || lastdata == null) {
-                        // ------------------------------ scrivo i dati sul DB Principale ------------------
+                      //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
+                      // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
+                      final listtable = await Provider.of<DatabaseRepository>(
+                              context,
+                              listen: false)
+                          .findUser();
+                      // Se la tabella non è vuota:
+                      if (listtable.isNotEmpty) {
+                        int? indice = listtable.length - 1;
+                        int? lastdata = listtable[indice].data;
+                        print(listtable);
+                        print(indice);
+                        print(lastdata);
+                        //Controllo che la data non sia già presente nel database
+                        if (lastdata != dataINT || lastdata == null) {
+                          // Scrivo i dati nel database
+                          await Provider.of<DatabaseRepository>(context,
+                                  listen: false)
+                              .insertUser(UserTable(
+                                  dataINT,
+                                  fixedUID,
+                                  stepsData[0].value,
+                                  heartData[0].caloriesFatBurn));
+                          final steps = stepsData[0].value;
+                          final calorie = heartData[0].caloriesFatBurn;
+
+                          //Alert per avvisare l'utente che i dati sono stati caricati
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => SimpleDialog(
+                                    //AlertDialog Title
+                                    backgroundColor:
+                                        Color.fromARGB(255, 230, 67, 121),
+                                    title: Text(
+                                        'Your Progress:' +
+                                            '\n' +
+                                            'Steps: $steps' +
+                                            '\n' +
+                                            'Calories: $calorie' +
+                                            '\n',
+                                        style: TextStyle(color: Colors.white)),
+                                  ));
+                          // ----- aggiorno il portafoglio --------
+                          _returnMoney(stepsData[0].value);
+                        }
+                        // La data è già presente del database
+                        else {
+                          print(
+                              'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
+                          //Alert per avvisare che i dati non possono essere caricati due volte lo stesso giorno
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  const SimpleDialog(
+                                    //AlertDialog Title
+                                    backgroundColor:
+                                        Color.fromARGB(255, 230, 67, 121),
+                                    title: Text(
+                                        "Don't get smart with us!" +
+                                            "\n" +
+                                            "You can't upload your progress twice!" +
+                                            "\n",
+                                        style: TextStyle(color: Colors.white)),
+                                  ));
+
+                          //alert
+                        }
+                      } else {
+                        // ------ SE LA TABELLA E' VUOTA SCRIVO I DATI PER LA PRIMA VOLTA -------
                         await Provider.of<DatabaseRepository>(context,
                                 listen: false)
                             .insertUser(UserTable(
                                 dataINT,
                                 fixedUID,
                                 stepsData[0].value,
-                                heartData[0].caloriesCardio));
-                        final sp = await SharedPreferences.getInstance();
-                        if (sp.getInt('portafoglio') == null) {
-                          sp.setInt('portafoglio', 0);
-                          final money =
-                              stepsData[0].value! ~/ 500; // Divisione intera
-                          // Prendo il valore attuale del portafoglio con get
-                          final int? attPortafoglio = sp.getInt('portafoglio');
-                          // Aggiorno il valore del portafoglio che inserirò all'interno di sp
-                          final int aggPortafoglio = attPortafoglio! + money;
-                          sp.setInt('portafoglio', aggPortafoglio);
-                          print(aggPortafoglio);
-                        } else {
-                          // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
-                          final money =
-                              stepsData[0].value! ~/ 500; // Divisione intera
-                          // Prendo il valore attuale del portafoglio con get
-                          final int? attPortafoglio = sp.getInt('portafoglio');
-                          // Aggiorno il valore del portafoglio che inserirò all'interno di sp
-                          final int aggPortafoglio = attPortafoglio! + money;
-                          sp.setInt('portafoglio', aggPortafoglio);
-                          print(aggPortafoglio);
-                        }
-                      } else {
-                        print(
-                            'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
-                        //alert
+                                heartData[0].caloriesFatBurn));
+                        final steps = stepsData[0].value;
+                        final calorie = heartData[0].caloriesFatBurn;
+
+                        //Alert per avvisare l'utente che i dati sono stati caricati
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => SimpleDialog(
+                                  //AlertDialog Title
+                                  backgroundColor:
+                                      Color.fromARGB(255, 230, 67, 121),
+                                  title: Text(
+                                      'Your Progress:' +
+                                          '\n' +
+                                          '\n' +
+                                          'Steps: $steps' +
+                                          '\n' +
+                                          'Calories: $calorie' +
+                                          '\n',
+                                      style: TextStyle(color: Colors.white)),
+                                ));
+                        // ----- aggiorno il portafoglio --------
+                        _returnMoney(stepsData[0].value);
                       }
                     } else {
-                      // ------ SE LA TABELLA E' VUOTA SCRIVO I DATI PER LA PRIMA VOLTA -------
-                      await Provider.of<DatabaseRepository>(context,
-                              listen: false)
-                          .insertUser(UserTable(dataINT, fixedUID,
-                              stepsData[0].value, heartData[0].caloriesCardio));
-                      final sp = await SharedPreferences.getInstance();
-                      if (sp.getInt('portafoglio') == null) {
-                        sp.setInt('portafoglio', 0);
-                        final money =
-                            stepsData[0].value! ~/ 500; // Divisione intera
-                        // Prendo il valore attuale del portafoglio con get
-                        final int? attPortafoglio = sp.getInt('portafoglio');
-                        // Aggiorno il valore del portafoglio che inserirò all'interno di sp
-                        final int aggPortafoglio = attPortafoglio! + money;
-                        sp.setInt('portafoglio', aggPortafoglio);
-                        print(aggPortafoglio);
-                      } else {
-                        // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
-                        final money =
-                            stepsData[0].value! ~/ 500; // Divisione intera
-                        // Prendo il valore attuale del portafoglio con get
-                        final int? attPortafoglio = sp.getInt('portafoglio');
-                        // Aggiorno il valore del portafoglio che inserirò all'interno di sp
-                        final int aggPortafoglio = attPortafoglio! + money;
-                        sp.setInt('portafoglio', aggPortafoglio);
-                        print(aggPortafoglio);
-                      }
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          //AlertDialog Title
+                          title: const Text('Attention!',
+                              style: TextStyle(color: Colors.white)),
+                          backgroundColor: Color.fromARGB(255, 230, 67, 121),
+
+                          //AlertDialog description
+                          content: const Text(
+                              'You have to authorize the app first!',
+                              style: TextStyle(color: Colors.white)),
+                          actions: <Widget>[
+                            //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
+                            TextButton(
+                              //onPressed: () => Navigator.pop(context, 'Cancel'),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const FetchPage())),
+                              child: const Text('Authorize',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      );
                     }
-                  },
+                  }, //onPressed
                   child: const Text('LOAD YOUR PROGRESS!',
                       style: TextStyle(fontSize: 18)),
                 ),
@@ -232,79 +289,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        drawer: NavBar(),
+        drawer: const NavBar(),
       ),
     );
-  }
-
-  void _handleNavigationChange(int index) {
-    setState(() {
-      switch (index) {
-        case 0:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
-          }
-
-          break;
-        case 1:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ShopPage()));
-          }
-
-          break;
-        case 2:
-          {
-            _child:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AssistancePage()));
-          }
-
-          break;
-        case 3:
-          {
-            _child:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FetchPage()));
-          }
-          break;
-        case 4:
-          {
-            _child:
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                //AlertDialog Title
-                title: const Text(
-                    'Are you sure you want to leave us? Eevee is sad about this'),
-                actions: <Widget>[
-                  //Qui si può far scegliere all'utente se fare il log out oppure di rimanere nella home
-                  TextButton(
-                    //onPressed: () => Navigator.pop(context, 'Cancel'),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage())),
-                    child: const Text('Stay'),
-                  ),
-                  TextButton(
-                    onPressed: () => _toLoginPage(context),
-                    child: const Text('Log Out'),
-                  ),
-                ],
-              ),
-            ); //showD
-
-            //_toLoginPage(context);
-          }
-          break;
-      }
-    });
   }
 } //HomePage
 
@@ -319,3 +306,43 @@ void _toLoginPage(BuildContext context) async {
   Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
   //Navigator.of(context).pushReplacementNamed(LoginPage.route);
 } //_toCalendarPage
+
+Future<int?> _returnLevel(context) async {
+  //Estrappolo il livello
+  final listavatar =
+      await Provider.of<DatabaseRepository>(context, listen: false)
+          .findAvatar();
+  if (listavatar.isNotEmpty) {
+    final int indice = listavatar.length - 1;
+    int? level = listavatar[indice].level;
+    return level;
+  } else {
+    int? level = 1;
+    return level;
+  }
+}
+
+Future<int?> _returnMoney(value) async {
+  final sp = await SharedPreferences.getInstance();
+  if (sp.getInt('portafoglio') == null) {
+    sp.setInt('portafoglio', 0);
+    final int money = (value ~/ 200); // Divisione intera
+    // Prendo il valore attuale del portafoglio con get
+    final int? attPortafoglio = sp.getInt('portafoglio');
+    // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+    final int aggPortafoglio = attPortafoglio! + money;
+    sp.setInt('portafoglio', aggPortafoglio);
+    print('Il valore del tuo portafoglio è: $aggPortafoglio');
+    return aggPortafoglio;
+  } else {
+    // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
+    final int money = (value ~/ 200); // Divisione intera
+    // Prendo il valore attuale del portafoglio con get
+    final int? attPortafoglio = sp.getInt('portafoglio');
+    // Aggiorno il valore del portafoglio che inserirò all'interno di sp
+    final int aggPortafoglio = attPortafoglio! + money;
+    sp.setInt('portafoglio', aggPortafoglio);
+    print('Il valore del tuo portafoglio è: $aggPortafoglio');
+    return aggPortafoglio;
+  }
+}
