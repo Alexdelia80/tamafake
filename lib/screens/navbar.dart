@@ -5,6 +5,8 @@ import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
+import 'package:tamafake/screens/regulation.dart';
+
 
 class NavBar extends StatelessWidget {
   @override
@@ -50,6 +52,19 @@ class NavBar extends StatelessWidget {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const FetchPage()));
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.rule),
+              title: Text('Regulation', style: TextStyle(
+                    fontSize: 18,
+                  )),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegulationPage()));
               },
             ),
              Divider(),
