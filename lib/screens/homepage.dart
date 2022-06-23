@@ -35,7 +35,8 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('TamaFAKE', style: TextStyle(fontFamily: 'Lobster')),
+          centerTitle: true,
+          title: const Text('TAMA-fit',style: TextStyle(fontFamily: 'Lobster', fontSize: 30)),
           backgroundColor: Color.fromARGB(255, 230, 67, 121),
         ),
         backgroundColor: Color(0xFF75B7E1),
@@ -178,7 +179,8 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
-                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n'),
+                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
+                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white)),
                                   ));
                           
                           // Aggiorno il portafoglio
@@ -217,8 +219,9 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
+                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
                                     title: Text(
-                                        "Don't get smart with us!" + "\n" + "You can't upload your progress twice!" + "\n"),
+                                        "Don't get smart with us!" + "\n" + "You can't upload your progress twice!" + "\n", style: TextStyle(color: Colors.white)),
                                   ));
 
                           //alert
@@ -240,7 +243,8 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
-                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n'),
+                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
+                                    title: Text('Your Progress:' + '\n' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white) ),
                                   ));
 
                         final sp = await SharedPreferences.getInstance();
@@ -271,10 +275,12 @@ class _HomePageState extends State<HomePage> {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           //AlertDialog Title
-                          title: const Text('Attention!'),
+                          title: const Text('Attention!',style: TextStyle(color: Colors.white )),
+                          backgroundColor:Color.fromARGB(255, 230, 67, 121),
+
                           //AlertDialog description
                           content: const Text(
-                              'You have to authorize the app first!'),
+                              'You have to authorize the app first!', style: TextStyle(color: Colors.white)),
                           actions: <Widget>[
                             //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
                             TextButton(
@@ -283,11 +289,11 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const FetchPage())),
-                              child: const Text('Authorize'),
+                              child: const Text('Authorize', style: TextStyle(color: Colors.white) ),
                             ),
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK'),
+                              child: const Text('OK', style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ),

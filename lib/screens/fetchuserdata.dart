@@ -32,10 +32,11 @@ class _FetchPageState extends State<FetchPage> {
   Widget build(BuildContext context) {
     print('Authorization');
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 179, 210, 236),
+      backgroundColor:Color(0xFF75B7E1),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-        title: const Text('Authorization'),
+        centerTitle: true,
+        title: const Text('Authorization', style: TextStyle(fontSize: 25)),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -54,8 +55,6 @@ class _FetchPageState extends State<FetchPage> {
         ),
       ),
       body: Center(
-
-        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -72,7 +71,11 @@ class _FetchPageState extends State<FetchPage> {
                     callbackUrlScheme: callbackurl);
                 sp.setString('AuthorizationCheck', userId!);
               },
-              child: const Text('Tap to authorize'),
+              child: const Text('AUTHORIZE'),
+              style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(255, 230, 67, 121)),
+                      elevation: MaterialStateProperty.all<double>(1.5)),
             ),
 
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
@@ -82,10 +85,11 @@ class _FetchPageState extends State<FetchPage> {
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     //AlertDialog Title
-                    title: const Text('Attention!'),
+                    backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+                    title: const Text('Attention!', style: TextStyle(color: Colors.white) ),
                     //AlertDialog description
                     content: const Text(
-                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?'),
+                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?', style: TextStyle(color: Colors.white)),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () async {
@@ -104,17 +108,21 @@ class _FetchPageState extends State<FetchPage> {
                           await sp.remove('progress');
                           await sp.remove('AuthorizationCheck');
                         },
-                        child: const Text('Delete all'),
+                        child: const Text('Delete all', style: TextStyle(color: Colors.white) ),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Stay'),
-                        child: const Text('Stay'),
+                        child: const Text('Stay', style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   ),
                 );
               },
-              child: const Text('Tap to unauthorize'),
+              child: const Text('UNAUTHORIZE'),
+              style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(255, 230, 67, 121)),
+                      elevation: MaterialStateProperty.all<double>(1.5)),
             ),
           ],
         ),

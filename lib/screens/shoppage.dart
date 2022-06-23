@@ -1,5 +1,3 @@
-//import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,8 +5,6 @@ import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
 import '../repository/databaseRepository.dart';
-import 'package:tamafake/database/entities/tables.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -40,7 +36,8 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-        title: Center(child: const Center(child: Text('Shop'))),
+        centerTitle: true,
+        title:  Text('Shop', style: TextStyle(fontSize: 25)),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -58,45 +55,58 @@ class _ShopPageState extends State<ShopPage> {
           },
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 179, 210, 236),
+      backgroundColor:Color(0xFF75B7E1),
       body: ListView(
         children: [
+          Divider(),
           ListTile(
-            leading: Icon(Icons.local_pizza),
-            title: Text('Pizza', style: TextStyle(fontSize: 22)),
+            leading: Icon(Icons.local_pizza, size: 30),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Pizza', style: TextStyle(fontSize: 23)),
             trailing: Text('20 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valPizza, context),
           ),
+          Divider(),
           ListTile(
-            leading: Icon(Icons.icecream),
-            title: Text('Gourmet Ice Cream', style: TextStyle(fontSize: 22)),
+            leading: Icon(Icons.icecream, size: 30 ),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Gourmet Ice Cream', style: TextStyle(fontSize: 23)),
             trailing: Text('15 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valIce, context),
           ),
+          Divider(),
           ListTile(
-            leading: Icon(MdiIcons.fish),
-            title: Text('Fish', style: TextStyle(fontSize: 22)),
+            leading: Icon(MdiIcons.fish, size: 30),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Fish', style: TextStyle(fontSize: 23)),
             trailing: Text('10 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valFish, context),
           ),
+          Divider(),
           ListTile(
-            leading: Icon(Icons.apple),
-            title: Text('Apple', style: TextStyle(fontSize: 22)),
+            leading: Icon(Icons.apple, size: 30),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Apple', style: TextStyle(fontSize: 23)),
             trailing: Text('5 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valApple, context),
           ),
+          Divider(),
           ListTile(
-            leading: Icon(MdiIcons.baguette),
-            title: Text('Bread', style: TextStyle(fontSize: 22)),
+            leading: Icon(MdiIcons.baguette, size: 30),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Bread', style: TextStyle(fontSize: 23)),
             trailing: Text('3 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valBread, context),
           ),
+          Divider(),
           ListTile(
-            leading: Icon(MdiIcons.bottleSoda),
-            title: Text('Water', style: TextStyle(fontSize: 22)),
+            leading: Icon(MdiIcons.bottleSoda, size: 30),
+            iconColor:Color.fromARGB(255, 230, 67, 121),
+            title: Text('Water', style: TextStyle(fontSize: 23)),
             trailing: Text('1 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valWater, context),
           ),
+          Divider(),
 
           // Stampo il portafoglio nella schermata di shop
           FutureBuilder(
@@ -109,18 +119,18 @@ class _ShopPageState extends State<ShopPage> {
                   final portafoglio = sp.getInt('portafoglio');
                   return Align(
                     alignment: Alignment.center,
-                    child: Text(
+                    child: Text( 
                       'Money: $portafoglio',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 22),
                     ),
                   );
                 } else {
                   final portafoglio = sp.getInt('portafoglio');
                   return Align(
-                    alignment: Alignment.center,
-                    child: Text(
+                    alignment: Alignment.bottomCenter,
+                    child: Text( '\n' + '\n' + 
                       'Money: $portafoglio',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 25),
                     ),
                   );
                 }
@@ -144,21 +154,22 @@ class _ShopPageState extends State<ShopPage> {
           context: context,
           builder: (BuildContext context) => AlertDialog(
             //AlertDialog Title
+            backgroundColor:Color.fromARGB(255, 230, 67, 121),
             title: const Text('Attention!'),
             //AlertDialog description
             content: const Text(
-                'Warning: you do not have money, you need to load your progress'),
+                'You do not have money, you need to load your progress first!', style: TextStyle(color: Colors.white)),
             actions: <Widget>[
               //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
               TextButton(
                 //onPressed: () => Navigator.pop(context, 'Cancel'),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const HomePage())),
-                child: const Text('Home'),
+                child: const Text('Home', style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
+                child: const Text('OK',style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -174,24 +185,26 @@ class _ShopPageState extends State<ShopPage> {
             context: context,
             builder: (BuildContext context) => AlertDialog(
               //AlertDialog Title
-              title: const Text('YEP!!!'),
+              backgroundColor:Color.fromARGB(255, 230, 67, 121),
+              title: const Text('YEP YOU ARE A GOOD TRAINER!!!', style: TextStyle(color: Colors.white)),
               //AlertDialog description'
-              content: const Text('You bought Eevee some food!'),
+              content: const Text('You bought Eevee some food!', style: TextStyle(color: Colors.white)),
             ),
           ); // Show
 
           //aggiorna tabella avatar con la funzione
           addAvatar(context, valore);
         } else {
-          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi, bisogna cambiare i testi
+          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               //AlertDialog Title
-              title: const Text('Attention!'),
+              backgroundColor:Color.fromARGB(255, 230, 67, 121),
+              title: const Text('Attention!', style: TextStyle(color: Colors.white ) ),
               //AlertDialog description
               content: const Text(
-                  'Warning: you do not have enough money to buy this item'),
+                  'You do not have enough money to buy this item', style: TextStyle(color: Colors.white ) ),
               actions: <Widget>[
                 //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
                 TextButton(
@@ -200,11 +213,11 @@ class _ShopPageState extends State<ShopPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const HomePage())),
-                  child: const Text('Home'),
+                  child: const Text('Home', style: TextStyle(color: Colors.white ) ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
+                  child: const Text('OK', style: TextStyle(color: Colors.white ) ),
                 ),
               ],
             ),
@@ -268,33 +281,3 @@ void addAvatar(context, int valore) async {
     }
   }
 }
-
-/* 
-  WIDGET CHE DOPO AVER PREMUTO AVVIA UN'ALLERTA
-class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: const Text('AlertDialog description'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      ),
-      child: const Text('Show Dialog'),
-    );
-  }
-}
-*/

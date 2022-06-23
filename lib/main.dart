@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
+import 'package:tamafake/screens/regulation.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/assistancepage.dart';
 import 'package:tamafake/database/database.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+
+import 'package:tamafake/screens/trainingpage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +39,8 @@ class MyApp extends StatelessWidget {
         ShopPage.route: (context) => const ShopPage(),
         FetchPage.route: (context) => const FetchPage(),
         AssistancePage.route: (context) => const AssistancePage(),
+        RegulationPage.route: (context) => const RegulationPage(),
+        TrainingPage.route: (context) => const TrainingPage(),
       },
     );
   } //build
