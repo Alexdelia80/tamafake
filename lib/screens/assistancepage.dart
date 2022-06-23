@@ -13,8 +13,9 @@ class AssistancePage extends StatelessWidget {
     print('${AssistancePage.routename} built');
     return MaterialApp(
       home: Scaffold(
-backgroundColor: const Color.fromARGB(255, 179, 210, 236),        appBar: AppBar(
-           backgroundColor: Color.fromARGB(255, 230, 67, 121),
+        backgroundColor: Color.fromARGB(255, 234, 251, 255),
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 230, 67, 121),
             leading: Builder(
               builder: (BuildContext context) {
                 return IconButton(

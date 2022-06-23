@@ -7,6 +7,8 @@ import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/shoppage.dart';
 
 class NavBar extends StatelessWidget {
+  const NavBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -17,9 +19,9 @@ class NavBar extends StatelessWidget {
             UserAccountsDrawerHeader(
               decoration:
                   BoxDecoration(color: Color.fromARGB(255, 230, 67, 121)),
-              accountName: Text('Eevee',
+              accountName: Text('Ash Ketchum',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                   )),
               accountEmail: Text('bug@expert.com',
                   style: TextStyle(
@@ -27,7 +29,7 @@ class NavBar extends StatelessWidget {
                   )),
               currentAccountPicture: CircleAvatar(
                   child: ClipOval(
-                      //child: Image.asset('', width: 90, height: 90, fit: BoxFit.cover),
+                      child: Image.asset('assets/ash.png', width: 90, height: 90, fit: BoxFit.cover),
                       )),
             ),
             ListTile(
@@ -43,6 +45,17 @@ class NavBar extends StatelessWidget {
                 }),
             Divider(),
             ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Authorization', style: TextStyle(
+                    fontSize: 18,
+                  )),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const FetchPage()));
+              },
+            ),
+             Divider(),
+            ListTile(
               leading: Icon(Icons.call),
               title: Text('Assistance', style: TextStyle(
                     fontSize: 18,
@@ -52,17 +65,6 @@ class NavBar extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const AssistancePage()));
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Authorization', style: TextStyle(
-                    fontSize: 18,
-                  )),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const FetchPage()));
               },
             ),
             Divider(),

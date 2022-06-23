@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +27,11 @@ class _LoginPageState extends State<LoginPage> {
     final sp = await SharedPreferences.getInstance();
     if (sp.getString('username') != null) {
       //If 'username is set, push the HomePage
-      _toHomePage(context);
+      if (sp.getString('AuthorizationCheck') != null) {
+        _toHomePage(context);
+      } else {
+        _toAutorizationPage(context);
+      }
     } //if
   } //_checkLogin
 
@@ -57,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     return FlutterLogin(
       //logo: AssetImage('assets/ecorp-lightblue.png'),
       title: 'TAMAfake',
-      theme: LoginTheme(primaryColor:Color(0xFF75B7E1) , logoWidth: 1.5),
+      theme: LoginTheme(primaryColor: Color(0xFF75B7E1), logoWidth: 1.5),
       onLogin: _loginUser,
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,
@@ -70,5 +75,9 @@ class _LoginPageState extends State<LoginPage> {
   void _toHomePage(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(HomePage.route);
   } //_toHomePage
+
+void _toAutorizationPage(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(FetchPage.route);
+  }
 
 } // LoginScreen

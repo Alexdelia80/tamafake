@@ -13,27 +13,26 @@ abstract class UserDao {
 
   @insert
   Future<void> insertUser(UserTable user);
-  
+
   @delete
-  Future<void> deleteUser(UserTable user) ;
+  Future<void> deleteUser(UserTable user);
 
 }
 
 @dao
 abstract class AvatarDao {
-  
   @Query('SELECT * FROM AvatarTable')
   Future<List<AvatarTable>> findAvatar();
 
   @Query('DELETE FROM AvatarTable')
   Future<void> deleteAllAvatar();
 
-  @insert 
+  @insert
   Future<void> insertAvatar(AvatarTable avatar);
 
   @delete
   Future<void> deleteAvatar(AvatarTable avatar);
- 
+
 }
 
 /*

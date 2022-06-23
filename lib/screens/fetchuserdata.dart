@@ -6,6 +6,7 @@ import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchPage extends StatefulWidget {
   const FetchPage({Key? key}) : super(key: key);
@@ -22,35 +23,35 @@ class _FetchPageState extends State<FetchPage> {
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
-  String? userId;
+  String? userID;
   String fixedUID = '7ML2XV';
   List<String> stepsData = [];
   List<String> heartData = [];
 
   @override
   Widget build(BuildContext context) {
-    print('${FetchPage.routename} built');
+    print('Authorization');
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 179, 210, 236),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 230, 67, 121),
-        title: const Text(FetchPage.routename),
+        backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+        title: const Text('Authorization'),
         leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                    icon: const Icon(Icons.arrow_back_sharp),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+          builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.arrow_back_sharp),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
 
-                      Scaffold.of(context).openDrawer();
-                    },
-                    tooltip:
-                        MaterialLocalizations.of(context).openAppDrawerTooltip);
-              },
-            ),
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip:
+                    MaterialLocalizations.of(context).openAppDrawerTooltip);
+          },
+        ),
       ),
       body: Center(
 
@@ -61,6 +62,7 @@ class _FetchPageState extends State<FetchPage> {
             // ------------------------ Autorizza il caricamento ------------------
             ElevatedButton(
               onPressed: () async {
+                final sp = await SharedPreferences.getInstance();
                 // Authorize the app
                 String? userId = await FitbitConnector.authorize(
                     context: context,
@@ -68,67 +70,48 @@ class _FetchPageState extends State<FetchPage> {
                     clientSecret: fitclientsec,
                     redirectUri: redirecturi,
                     callbackUrlScheme: callbackurl);
+                sp.setString('AuthorizationCheck', userId!);
               },
               child: const Text('Tap to authorize'),
             ),
-            // ------------------------ LOAD Heart and Steps DATA --------------------------
-            ElevatedButton(
-              onPressed: () async {
-                
-                //Instantiate a proper data manager
-                FitbitActivityTimeseriesDataManager
-                    fitbitActivityTimeseriesDataManager =
-                    FitbitActivityTimeseriesDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                  type: 'steps',
-                );
-                FitbitHeartDataManager fitbitActivityDataManager =
-                    FitbitHeartDataManager(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
-                );
-                
-              
-                // Fetch steps data
-                final stepsData = await fitbitActivityTimeseriesDataManager
-                    .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                  date: DateTime.now().subtract(const Duration(days: 1)),
-                  userID: fixedUID,
-                  resource: fitbitActivityTimeseriesDataManager.type,
-                )) as List<FitbitActivityTimeseriesData>;
-                
-                // Fetch heart data
-                
-                final calcData =
-                    DateTime.now().subtract(const Duration(days: 1));
-                String calcDataString =
-                   DateFormat("dd-MM-yyyy").format(calcData);
-                   int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
-                final heartData = await fitbitActivityDataManager
-                    .fetch(FitbitHeartAPIURL.dayWithUserID(
-                  date: calcData,
-                  userID: fixedUID,
-                )) as List<FitbitHeartData>;
-               
-                print(stepsData[0].value);
-                print(heartData[0].caloriesCardio);
-                print(calcDataString);
-               
-                await Provider.of<DatabaseRepository>(context, listen: false)
-                    .insertUser(UserTable(dataINT, userId, stepsData[0].value,
-                        heartData[0].caloriesCardio));
-                
-              },
-              child: const Text('Load your progress!'),
-            ),
-            
+
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
             ElevatedButton(
               onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: fitclientid,
-                  clientSecret: fitclientsec,
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    //AlertDialog Title
+                    title: const Text('Attention!'),
+                    //AlertDialog description
+                    content: const Text(
+                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () async {
+                          FitbitConnector.unauthorize(
+                              clientID: fitclientid,
+                              clientSecret: fitclientsec);
+                          //eliminiamo tutto il database.
+                          await Provider.of<DatabaseRepository>(context,
+                                  listen: false)
+                              .cleanAvatar();
+                          await Provider.of<DatabaseRepository>(context,
+                                  listen: false)
+                              .cleanUser();
+                          final  sp = await SharedPreferences.getInstance();
+                          await sp.remove('portafoglio');
+                          await sp.remove('progress');
+                          await sp.remove('AuthorizationCheck');
+                        },
+                        child: const Text('Delete all'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Stay'),
+                        child: const Text('Stay'),
+                      ),
+                    ],
+                  ),
                 );
               },
               child: const Text('Tap to unauthorize'),
@@ -139,39 +122,3 @@ class _FetchPageState extends State<FetchPage> {
     );
   } //build
 }
-
-
-
-/*
-class StepsClass extends ChangeNotifier {
-  //For simplicity, a product is just a String.
-  List<String> steps = [];
-  void addSteps(String toAdd) {
-    steps.add(toAdd);
-    //Call the notifyListeners() method to alert that something happened.
-    notifyListeners();
-  } //addProduct
-  void clearSteps() {
-    steps.clear();
-    //Call the notifyListeners() method to alert that something happened.
-    notifyListeners();
-  } //clearCart
-}//Cart //HomePage
-___________________________________________________________________
-// };
-                // ---------------------- PASSAGGIO PARAMETRI A AVATAR ---------------------
-                 // final async {
-                // final wp = stepsData[0].value;
-                //No need to use a Consumer, we are just using a method of the DatabaseRepository
-                // UserTable(this.id, this.data, this.steps, this.calories);
-                //Provider.of<StepsClass>(context, listen: false).addSteps(stepsData[0].value as String);
-                // Arguments(DateTime.now().subtract(Duration(days: 1)) as String,
-                //    stepsData[0] as String, heartData[0] as String);
-                //Arguments(DateTime.now().subtract(const Duration(days: 1)), stepsData, heartData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: stepsData);
-                //Navigator.pushNamed(context, '/homepage/', arguments: {
-                //  stepsData[0].dateOfMonitoring,
-                //  heartData[0].caloriesCardio,
-                // });
-___________________________________________________________________
-*/

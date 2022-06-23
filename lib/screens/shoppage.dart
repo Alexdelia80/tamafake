@@ -1,7 +1,14 @@
+//import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/screens/homepage.dart';
+import 'package:provider/provider.dart';
+import '../repository/databaseRepository.dart';
+import 'package:tamafake/database/entities/tables.dart';
+import 'package:tamafake/screens/fetchuserdata.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -14,19 +21,26 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // Punteggio cibi (esperienza)
   final int valPizza = 20;
   final int valIce = 15;
+  final int valFish = 10;
   final int valApple = 5;
-  final int valWater = 2;
+  final int valBread = 2;
+  final int valWater = 1;
 
   @override
   Widget build(BuildContext context) {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 230, 67, 121),
-        title: const Center(child: Text('Shop')),
+        backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+        title: Center(child: const Center(child: Text('Shop'))),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -49,27 +63,71 @@ class _ShopPageState extends State<ShopPage> {
         children: [
           ListTile(
             leading: Icon(Icons.local_pizza),
-            title: Text('Pizza', style: TextStyle(fontSize: 18)),
-            trailing: Text('20 €', style: TextStyle(fontSize: 18)),
+            title: Text('Pizza', style: TextStyle(fontSize: 22)),
+            trailing: Text('20 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valPizza, context),
           ),
           ListTile(
             leading: Icon(Icons.icecream),
-            title: Text('Ice Cream', style: TextStyle(fontSize: 18)),
-            trailing: Text('15 €', style: TextStyle(fontSize: 18) ),
+            title: Text('Gourmet Ice Cream', style: TextStyle(fontSize: 22)),
+            trailing: Text('15 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valIce, context),
           ),
           ListTile(
+            leading: Icon(MdiIcons.fish),
+            title: Text('Fish', style: TextStyle(fontSize: 22)),
+            trailing: Text('10 €', style: TextStyle(fontSize: 22)),
+            onTap: () => _subtract(valFish, context),
+          ),
+          ListTile(
             leading: Icon(Icons.apple),
-            title: Text('Apple', style: TextStyle(fontSize: 18) ),
-            trailing: Text('5 €', style: TextStyle(fontSize: 18)),
+            title: Text('Apple', style: TextStyle(fontSize: 22)),
+            trailing: Text('5 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valApple, context),
           ),
           ListTile(
+            leading: Icon(MdiIcons.baguette),
+            title: Text('Bread', style: TextStyle(fontSize: 22)),
+            trailing: Text('3 €', style: TextStyle(fontSize: 22)),
+            onTap: () => _subtract(valBread, context),
+          ),
+          ListTile(
             leading: Icon(MdiIcons.bottleSoda),
-            title: Text('Water', style: TextStyle(fontSize: 18)),
-            trailing: Text('2 €', style: TextStyle(fontSize: 18)),
+            title: Text('Water', style: TextStyle(fontSize: 22)),
+            trailing: Text('1 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valWater, context),
+          ),
+
+          // Stampo il portafoglio nella schermata di shop
+          FutureBuilder(
+            future: SharedPreferences.getInstance(),
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                final sp = snapshot.data as SharedPreferences;
+                if (sp.getInt('portafoglio') == null) {
+                  sp.setInt('portafoglio', 0);
+                  final portafoglio = sp.getInt('portafoglio');
+                  return Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Money: $portafoglio',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                } else {
+                  final portafoglio = sp.getInt('portafoglio');
+                  return Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Money: $portafoglio',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
           ),
         ],
       ),
@@ -81,24 +139,7 @@ class _ShopPageState extends State<ShopPage> {
     final sp = await SharedPreferences.getInstance();
     setState(() {
       int? portafoglio = sp.getInt('portafoglio');
-      if (portafoglio! >=(valore)) {
-        portafoglio = portafoglio - valore;
-        sp.setInt('portafoglio', portafoglio);
-        // Vedo da console il valore del portafoglio:
-        print(portafoglio);
-
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            //AlertDialog Title
-            title: const Text('YEP!!!'),
-            //AlertDialog description'
-            content: const Text('You bought Eevee some food!'),
-          ),
-        ); // Show
-
-      } else {
-        // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi, bisogna cambiare i testi
+      if (portafoglio == null) {
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -106,7 +147,7 @@ class _ShopPageState extends State<ShopPage> {
             title: const Text('Attention!'),
             //AlertDialog description
             content: const Text(
-                'Warning: you do not have enough money to buy this item'),
+                'Warning: you do not have money, you need to load your progress'),
             actions: <Widget>[
               //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
               TextButton(
@@ -121,14 +162,113 @@ class _ShopPageState extends State<ShopPage> {
               ),
             ],
           ),
-        ); //showDialog
-      } //else
+        );
+      } else {
+        if (portafoglio >= (valore)) {
+          portafoglio = portafoglio - valore;
+          sp.setInt('portafoglio', portafoglio);
+          // Vedo da console il valore del portafoglio:
+          print('Money: $portafoglio');
+
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              //AlertDialog Title
+              title: const Text('YEP!!!'),
+              //AlertDialog description'
+              content: const Text('You bought Eevee some food!'),
+            ),
+          ); // Show
+
+          //aggiorna tabella avatar con la funzione
+          addAvatar(context, valore);
+        } else {
+          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi, bisogna cambiare i testi
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              //AlertDialog Title
+              title: const Text('Attention!'),
+              //AlertDialog description
+              content: const Text(
+                  'Warning: you do not have enough money to buy this item'),
+              actions: <Widget>[
+                //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
+                TextButton(
+                  //onPressed: () => Navigator.pop(context, 'Cancel'),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage())),
+                  child: const Text('Home'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ); //showDialog
+        } //
+      }
     }); // setState
   } //_subtract
   //ShopPage
 }
 
-  
+void addAvatar(context, int valore) async {
+  String userID = '7ML2XV';
+  final listavatar =
+      await Provider.of<DatabaseRepository>(context, listen: false)
+          .findAvatar();
+  if (listavatar.isNotEmpty) {
+    final int indice = listavatar.length - 1;
+    int lastexp = listavatar[indice].exp;
+    final newexp = lastexp + valore;
+    final newlevel = newexp ~/ 100 + 1;
+    print('level: $newlevel');
+    Provider.of<DatabaseRepository>(context, listen: false)
+        .insertAvatar(AvatarTable(newexp, userID, newlevel));
+
+    // aggiorno il progresso
+    final sp = await SharedPreferences.getInstance();
+    if (sp.getDouble('progress') == null) {
+      sp.setDouble('progress', 0);
+      //calcolo progress
+      final progress = (newexp - (newlevel - 1) * 100) / 100;
+      sp.setDouble('progress', progress);
+    } else {
+      final progress = (newexp - (newlevel - 1) * 100) / 100;
+      sp.setDouble('progress', progress);
+    }
+  }
+  //AvatarTable vuota:
+  else {
+    final int lastexp = 0;
+    final int level = 1;
+    //inizializziamo la prima riga dell'avatar
+    await Provider.of<DatabaseRepository>(context, listen: false)
+        .insertAvatar(AvatarTable(lastexp, userID, level));
+    final newexp = lastexp + valore;
+    final newlevel = newexp ~/ 100 + 1;
+    print('level: $newlevel');
+    await Provider.of<DatabaseRepository>(context, listen: false)
+        .insertAvatar(AvatarTable(newexp, userID, newlevel));
+
+    // aggiorno il progresso
+    final sp = await SharedPreferences.getInstance();
+    if (sp.getDouble('progress') == null) {
+      sp.setDouble('progress', 0);
+      //calcolo progress
+      final progress = (newexp - (newlevel - 1) * 100) / 100;
+      sp.setDouble('progress', progress);
+    } else {
+      final progress = (newexp - (newlevel - 1) * 100) / 100;
+      sp.setDouble('progress', progress);
+    }
+  }
+}
+
 /* 
   WIDGET CHE DOPO AVER PREMUTO AVVIA UN'ALLERTA
 class MyStatelessWidget extends StatelessWidget {
