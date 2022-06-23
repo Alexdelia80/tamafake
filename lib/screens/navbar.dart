@@ -9,6 +9,8 @@ import 'package:tamafake/screens/regulation.dart';
 
 
 class NavBar extends StatelessWidget {
+  const NavBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -19,9 +21,9 @@ class NavBar extends StatelessWidget {
             UserAccountsDrawerHeader(
               decoration:
                   BoxDecoration(color: Color.fromARGB(255, 230, 67, 121)),
-              accountName: Text('Eevee',
+              accountName: Text('Ash Ketchum',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                   )),
               accountEmail: Text('bug@expert.com',
                   style: TextStyle(
@@ -29,7 +31,7 @@ class NavBar extends StatelessWidget {
                   )),
               currentAccountPicture: CircleAvatar(
                   child: ClipOval(
-                      //child: Image.asset('', width: 90, height: 90, fit: BoxFit.cover),
+                      child: Image.asset('assets/ash.png', width: 90, height: 90, fit: BoxFit.cover),
                       )),
             ),
             ListTile(

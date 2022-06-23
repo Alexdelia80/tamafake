@@ -139,32 +139,7 @@ class _ShopPageState extends State<ShopPage> {
     final sp = await SharedPreferences.getInstance();
     setState(() {
       int? portafoglio = sp.getInt('portafoglio');
-      if (portafoglio == null) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            //AlertDialog Title
-            title: const Text('Attention!'),
-            //AlertDialog description
-            content: const Text(
-                'Warning: you do not have money, you need to load your progress'),
-            actions: <Widget>[
-              //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
-              TextButton(
-                //onPressed: () => Navigator.pop(context, 'Cancel'),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomePage())),
-                child: const Text('Home'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      } else {
-        if (portafoglio >= (valore)) {
+        if (portafoglio! >= (valore)) {
           portafoglio = portafoglio - valore;
           sp.setInt('portafoglio', portafoglio);
           // Vedo da console il valore del portafoglio:
@@ -211,7 +186,7 @@ class _ShopPageState extends State<ShopPage> {
           ); //showDialog
         } //
       }
-    }); // setState
+    ); // setState
   } //_subtract
   //ShopPage
 }

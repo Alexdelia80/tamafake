@@ -32,6 +32,7 @@ class _FetchPageState extends State<FetchPage> {
   Widget build(BuildContext context) {
     print('Authorization');
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 179, 210, 236),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
         title: const Text('Authorization'),
@@ -53,6 +54,8 @@ class _FetchPageState extends State<FetchPage> {
         ),
       ),
       body: Center(
+
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

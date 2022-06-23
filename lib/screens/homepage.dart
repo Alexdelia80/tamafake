@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/fetchuserdata.dart';
 import 'package:tamafake/screens/loginpage.dart';
-import 'package:tamafake/screens/assistancepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:tamafake/database/entities/tables.dart';
@@ -10,6 +8,7 @@ import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:fitbitter/fitbitter.dart';
 import 'package:intl/intl.dart';
 import 'package:tamafake/screens/navbar.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('TamaFAKE'),
+          title: const Text('TamaFAKE', style: TextStyle(fontFamily: 'Lobster')),
           backgroundColor: Color.fromARGB(255, 230, 67, 121),
         ),
         backgroundColor: Color(0xFF75B7E1),
@@ -50,6 +49,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Progress Bar
                 FutureBuilder(
                   future: SharedPreferences.getInstance(),
                   builder: ((context, snapshot) {
@@ -65,8 +65,8 @@ class _HomePageState extends State<HomePage> {
                           width: 300,
                           child: LinearProgressIndicator(
                               value: progress,
-                              color: Colors.lime,
-                              backgroundColor: Colors.greenAccent),
+                              color: Color.fromARGB(255, 67, 129, 230),
+                              backgroundColor: Color.fromARGB(255, 135, 169, 197)),
                         );
                       } else {
                         final progress = sp.getDouble('progress');
@@ -77,8 +77,8 @@ class _HomePageState extends State<HomePage> {
                           width: 300,
                           child: LinearProgressIndicator(
                               value: progress,
-                              color: Colors.lime,
-                              backgroundColor: Colors.greenAccent),
+                              color: Color.fromARGB(255, 67, 129, 230),
+                              backgroundColor: Color.fromARGB(255, 135, 169, 197)),
                         );
                       }
                     } else {
@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   }),
                 ),
+                // Icon 
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: Center(
@@ -97,16 +98,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(40)),
+                // Load your progress
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           Color.fromARGB(255, 230, 67, 121)),
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
-                    //Controllo che l'autorizzazione ci sia, altrimenti facciamo un alert
+                    //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
                     final sp = await SharedPreferences.getInstance();
                     if (sp.getString('AuthorizationCheck') != null) {
-                      //Instantiate a proper data manager
+                      
+                      // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
                           FitbitActivityTimeseriesDataManager(
@@ -120,22 +123,20 @@ class _HomePageState extends State<HomePage> {
                         clientSecret: fitclientsec,
                       );
 
-                      // Fetch steps data
-                      final stepsData =
-                          await fitbitActivityTimeseriesDataManager.fetch(
-                              FitbitActivityTimeseriesAPIURL.dayWithResource(
-                        date: DateTime.now().subtract(const Duration(days: 1)),
-                        userID: fixedUID,
-                        resource: fitbitActivityTimeseriesDataManager.type,
-                      )) as List<FitbitActivityTimeseriesData>;
+                    // Fetch Steps data
+                    final stepsData = await fitbitActivityTimeseriesDataManager
+                        .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
+                      date: DateTime.now().subtract(const Duration(days: 1)),
+                      userID: fixedUID,
+                      resource: fitbitActivityTimeseriesDataManager.type,
+                    )) as List<FitbitActivityTimeseriesData>;
 
-                      // Fetch heart data
+                      // Fetch Heart data
                       final calcData =
                           DateTime.now().subtract(const Duration(days: 1));
                       int dataINT =
                           int.parse(DateFormat("ddMMyyyy").format(calcData));
 
-                      // ----------------------------- fetch heart data ------------------------------------
                       final heartData = await fitbitActivityDataManager
                           .fetch(FitbitHeartAPIURL.dayWithUserID(
                         date: calcData,
@@ -161,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                         print(lastdata);
                         //Controllo che la data non sia già presente nel database
                         if (lastdata != dataINT || lastdata == null) {
-                          // ------------------------------ scrivo i dati sul DB Principale ------------------
+                          // Scrivo i dati nel database
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
                               .insertUser(UserTable(
@@ -172,15 +173,15 @@ class _HomePageState extends State<HomePage> {
                           final steps = stepsData[0].value;
                           final calorie = heartData[0].caloriesCardio;
 
-                          //Alert per avvisare quanti dati sono caricati
+                          //Alert per avvisare l'utente che i dati sono stati caricati
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
-                                    title: Text('Your Progress:'),
-                                    //title: Text('Your Progress:' + '\n'+'Steps: $steps' +'\n' 'Calories: $calorie' ),
+                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n'),
                                   ));
-
+                          
+                          // Aggiorno il portafoglio
                           final sp = await SharedPreferences.getInstance();
                           if (sp.getInt('portafoglio') == null) {
                             sp.setInt('portafoglio', 0);
@@ -205,18 +206,19 @@ class _HomePageState extends State<HomePage> {
                             sp.setInt('portafoglio', aggPortafoglio);
                             print(aggPortafoglio);
                           }
-
-                          //Simple Dialog per avvisare che sono stati caricati i dati
-                        } else {
+                        } 
+                        
+                        // La data è già presente del database
+                        else {
                           print(
                               'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
-                          //Alert per avvisare quanti dati non possono essere caricati due volte
+                          //Alert per avvisare che i dati non possono essere caricati due volte lo stesso giorno
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
                                     title: Text(
-                                        "Don't get smart with us: you can't upload your progress twice!"),
+                                        "Don't get smart with us!" + "\n" + "You can't upload your progress twice!" + "\n"),
                                   ));
 
                           //alert
@@ -230,6 +232,17 @@ class _HomePageState extends State<HomePage> {
                                 fixedUID,
                                 stepsData[0].value,
                                 heartData[0].caloriesCardio));
+                         final steps = stepsData[0].value;
+                         final calorie = heartData[0].caloriesCardio;
+
+                          //Alert per avvisare l'utente che i dati sono stati caricati
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => SimpleDialog(
+                                    //AlertDialog Title
+                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n'),
+                                  ));
+
                         final sp = await SharedPreferences.getInstance();
                         if (sp.getInt('portafoglio') == null) {
                           sp.setInt('portafoglio', 0);
