@@ -31,7 +31,9 @@ class _FetchPageState extends State<FetchPage> {
   Widget build(BuildContext context) {
     print('${FetchPage.routename} built');
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 179, 210, 236),
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 230, 67, 121),
         title: const Text(FetchPage.routename),
         leading: Builder(
               builder: (BuildContext context) {
@@ -51,6 +53,8 @@ class _FetchPageState extends State<FetchPage> {
             ),
       ),
       body: Center(
+
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

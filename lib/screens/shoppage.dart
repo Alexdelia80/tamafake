@@ -25,7 +25,7 @@ class _ShopPageState extends State<ShopPage> {
     print('${ShopPage.routename} built');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 20, 178, 218),
+        backgroundColor: Color.fromARGB(255, 230, 67, 121),
         title: const Center(child: Text('Shop')),
         leading: Builder(
           builder: (BuildContext context) {
