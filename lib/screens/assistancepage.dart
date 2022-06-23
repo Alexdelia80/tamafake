@@ -13,7 +13,7 @@ class AssistancePage extends StatelessWidget {
     print('${AssistancePage.routename} built');
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 234, 251, 255),
+        backgroundColor:Color(0xFF75B7E1),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 230, 67, 121),
             leading: Builder(
@@ -33,7 +33,7 @@ class AssistancePage extends StatelessWidget {
               },
             ),
             centerTitle: true,
-            title: const Center(child: Text('Assistance'))),
+            title:  Text('Assistance', style: TextStyle(fontSize: 25))),
         body: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +55,7 @@ class AssistancePage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 18,
                         ),
                       )
                     ],
@@ -87,7 +87,7 @@ class AssistancePage extends StatelessWidget {
                       Text('MONDAY-FRIDAY 10:00 - 18:00',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                           ))
                     ],
                   ))),
@@ -99,7 +99,7 @@ class AssistancePage extends StatelessWidget {
                       Icon(Icons.call, size: 40),
                       Text('CALL',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                           )),
                     ],
                   ),

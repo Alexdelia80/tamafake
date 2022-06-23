@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #Thu Jun 23 18:26:18 CEST 2022
 base.0=/Users/Asya/tamafake/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 =======
 #Thu Jun 23 10:17:34 CEST 2022
+=======
+#Thu Jun 23 13:45:48 CEST 2022
+>>>>>>> origin/asjavianello
 base.0=C\:\\Users\\ASUS\\tamafake\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 >>>>>>> asjavianello
 renamed.0=classes.dex

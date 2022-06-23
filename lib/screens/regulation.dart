@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tamafake/screens/homepage.dart';
 
 class RegulationPage extends StatelessWidget {
@@ -13,8 +12,10 @@ class RegulationPage extends StatelessWidget {
     print('${RegulationPage.routename} built');
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 234, 251, 255),
+        backgroundColor:Color(0xFF75B7E1),
         appBar: AppBar(
+            title: Text('Regulation', style: TextStyle(fontSize: 25)),
+            centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 230, 67, 121),
             leading: Builder(
               builder: (BuildContext context) {
@@ -32,8 +33,7 @@ class RegulationPage extends StatelessWidget {
                         MaterialLocalizations.of(context).openAppDrawerTooltip);
               },
             ),
-            centerTitle: true,
-            title: const Center(child: Text('Regulation'))),
+            ),
         body: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +45,7 @@ class RegulationPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Eevee's Regulation",
+                        "How can you play with Eevee?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
@@ -55,18 +55,18 @@ class RegulationPage extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 50,
+                height: 40,
               ),
               Container(
                   padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
                   child: (Column(
                     children: [
                       Text(
-                          "Hello friends of Eevee! Welcome to this new adventure!" +
-                              "\n" +
-                              "With Eevee we have fun training, but how does it work?" +
+                          "Hello friends of Eevee!" +"\n"+ "Welcome to this new adventure!" +
+                              "\n" + "\n" + 
+                              "With Eevee you can train and have fun at the same time but how does it work?" +
                               '\n' +
-                              "After you connect your FitBit profile and upload data you can use it to train Eevee as well. For every thousand steps you will earn €5 that you can spend in the shop to feed Eevee. Based on the money spent you will increase your progress and every 100€ spent you can level up. You can then track calories burned on the EevveFIT page to change the mood of your digital friend!",
+                              "After you authorize the App to access your Fitbit profile, you can upload your data and use it to train Eevee!" + "\n" + "For every 1000 steps you will earn 5€ that you can spend in the shop to feed Eevee. Based on the money spent in the shop Eevee's experience will increase and Eevee will level up every 100€ spent. You can also monitor your progess seeing the calories you have burned on the training page! Make your digital friend happy and play with Eevee!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
