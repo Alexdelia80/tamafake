@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
+import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/assistancepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                         print(indice);
                         print(lastdata);
                         //Controllo che la data non sia già presente nel database
-                        if (lastdata != dataINT || lastdata == null) {
+                        if (lastdata != dataINT) {
                           // Scrivo i dati nel database
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
@@ -268,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const FetchPage())),
+                                      builder: (context) => const AuthPage())),
                               child: const Text('Authorize',
                                   style: TextStyle(color: Colors.white)),
                             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/shoppage.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
+import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -135,7 +135,7 @@ class _ProgressState extends State<ProgressPage> {
               onTap: () {
                 //print('Authorization');
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FetchPage()));
+                    MaterialPageRoute(builder: (context) => const AuthPage()));
               },
             ),
             const Divider(),

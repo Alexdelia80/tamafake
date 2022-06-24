@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
+import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/regulation.dart';
@@ -38,10 +38,10 @@ class MyApp extends StatelessWidget {
         LoginPage.route: (context) => const LoginPage(),
         HomePage.route: (context) => const HomePage(),
         ShopPage.route: (context) => const ShopPage(),
-        FetchPage.route: (context) => const FetchPage(),
+        AuthPage.route: (context) => const AuthPage(),
         AssistancePage.route: (context) => const AssistancePage(),
         RegulationPage.route: (context) => const RegulationPage(),
-        TrainingPage.route: (context) => const TrainingPage(),
+        TrainingPage.route: (context) => TrainingPage(),
         PlotPage.route: (context) => const PlotPage(),
       },
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamafake/screens/assistancepage.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
+import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/regulation.dart';
@@ -58,10 +58,8 @@ class NavBar extends StatelessWidget {
                       fontSize: 23,
                     )),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TrainingPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TrainingPage()));
                 }),
             Divider(),
             ListTile(
@@ -88,7 +86,7 @@ class NavBar extends StatelessWidget {
                   )),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const FetchPage()));
+                    MaterialPageRoute(builder: (context) => const AuthPage()));
               },
             ),
             Divider(),
