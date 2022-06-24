@@ -9,7 +9,6 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:intl/intl.dart';
 import 'package:tamafake/screens/navbar.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -32,12 +31,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(context) {
-  final level = _returnLevel(context);
+    final level = _returnLevel(context);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('TAMA-fit',style: TextStyle(fontFamily: 'Lobster', fontSize: 30)),
+          title: const Text('TAMA-fit',
+              style: TextStyle(fontFamily: 'Lobster', fontSize: 30)),
           backgroundColor: Color.fromARGB(255, 230, 67, 121),
         ),
         backgroundColor: Color(0xFF75B7E1),
@@ -53,21 +53,22 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("LEVEL: $level",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "LEVEL: $level",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 // Progress Bar
-                FutureBuilder(      
+                FutureBuilder(
                   future: SharedPreferences.getInstance(),
                   builder: ((context, snapshot) {
                     if (snapshot.hasData) {
@@ -83,7 +84,8 @@ class _HomePageState extends State<HomePage> {
                           child: LinearProgressIndicator(
                               value: progress,
                               color: Color.fromARGB(255, 67, 129, 230),
-                              backgroundColor: Color.fromARGB(255, 135, 169, 197)),
+                              backgroundColor:
+                                  Color.fromARGB(255, 135, 169, 197)),
                         );
                       } else {
                         final progress = sp.getDouble('progress');
@@ -95,7 +97,8 @@ class _HomePageState extends State<HomePage> {
                           child: LinearProgressIndicator(
                               value: progress,
                               color: Color.fromARGB(255, 67, 129, 230),
-                              backgroundColor: Color.fromARGB(255, 135, 169, 197)),
+                              backgroundColor:
+                                  Color.fromARGB(255, 135, 169, 197)),
                         );
                       }
                     } else {
@@ -103,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   }),
                 ),
-                // Icon 
+                // Icon
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: Center(
@@ -125,7 +128,6 @@ class _HomePageState extends State<HomePage> {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
                     final sp = await SharedPreferences.getInstance();
                     if (sp.getString('AuthorizationCheck') != null) {
-                      
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -140,13 +142,14 @@ class _HomePageState extends State<HomePage> {
                         clientSecret: fitclientsec,
                       );
 
-                    // Fetch Steps data
-                    final stepsData = await fitbitActivityTimeseriesDataManager
-                        .fetch(FitbitActivityTimeseriesAPIURL.dayWithResource(
-                      date: DateTime.now().subtract(const Duration(days: 1)),
-                      userID: fixedUID,
-                      resource: fitbitActivityTimeseriesDataManager.type,
-                    )) as List<FitbitActivityTimeseriesData>;
+                      // Fetch Steps data
+                      final stepsData =
+                          await fitbitActivityTimeseriesDataManager.fetch(
+                              FitbitActivityTimeseriesAPIURL.dayWithResource(
+                        date: DateTime.now().subtract(const Duration(days: 1)),
+                        userID: fixedUID,
+                        resource: fitbitActivityTimeseriesDataManager.type,
+                      )) as List<FitbitActivityTimeseriesData>;
 
                       // Fetch Heart data
                       final calcData =
@@ -195,10 +198,18 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
-                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
-                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white)),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 230, 67, 121),
+                                    title: Text(
+                                        'Your Progress:' +
+                                            '\n' +
+                                            'Steps: $steps' +
+                                            '\n' +
+                                            'Calories: $calorie' +
+                                            '\n',
+                                        style: TextStyle(color: Colors.white)),
                                   ));
-                          
+
                           // Aggiorno il portafoglio
                           final sp = await SharedPreferences.getInstance();
                           if (sp.getInt('portafoglio') == null) {
@@ -224,8 +235,8 @@ class _HomePageState extends State<HomePage> {
                             sp.setInt('portafoglio', aggPortafoglio);
                             print(aggPortafoglio);
                           }
-                        } 
-                        
+                        }
+
                         // La data è già presente del database
                         else {
                           print(
@@ -235,9 +246,14 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
-                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 230, 67, 121),
                                     title: Text(
-                                        "Don't get smart with us!" + "\n" + "You can't upload your progress twice!" + "\n", style: TextStyle(color: Colors.white)),
+                                        "Don't get smart with us!" +
+                                            "\n" +
+                                            "You can't upload your progress twice!" +
+                                            "\n",
+                                        style: TextStyle(color: Colors.white)),
                                   ));
 
                           //alert
@@ -251,17 +267,26 @@ class _HomePageState extends State<HomePage> {
                                 fixedUID,
                                 stepsData[0].value,
                                 heartData[0].caloriesCardio));
-                         final steps = stepsData[0].value;
-                         final calorie = heartData[0].caloriesCardio;
+                        final steps = stepsData[0].value;
+                        final calorie = heartData[0].caloriesCardio;
 
-                          //Alert per avvisare l'utente che i dati sono stati caricati
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => SimpleDialog(
-                                    //AlertDialog Title
-                                    backgroundColor:Color.fromARGB(255, 230, 67, 121),
-                                    title: Text('Your Progress:' + '\n' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white) ),
-                                  ));
+                        //Alert per avvisare l'utente che i dati sono stati caricati
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => SimpleDialog(
+                                  //AlertDialog Title
+                                  backgroundColor:
+                                      Color.fromARGB(255, 230, 67, 121),
+                                  title: Text(
+                                      'Your Progress:' +
+                                          '\n' +
+                                          '\n' +
+                                          'Steps: $steps' +
+                                          '\n' +
+                                          'Calories: $calorie' +
+                                          '\n',
+                                      style: TextStyle(color: Colors.white)),
+                                ));
 
                         final sp = await SharedPreferences.getInstance();
                         if (sp.getInt('portafoglio') == null) {
@@ -291,12 +316,14 @@ class _HomePageState extends State<HomePage> {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           //AlertDialog Title
-                          title: const Text('Attention!',style: TextStyle(color: Colors.white )),
-                          backgroundColor:Color.fromARGB(255, 230, 67, 121),
+                          title: const Text('Attention!',
+                              style: TextStyle(color: Colors.white)),
+                          backgroundColor: Color.fromARGB(255, 230, 67, 121),
 
                           //AlertDialog description
                           content: const Text(
-                              'You have to authorize the app first!', style: TextStyle(color: Colors.white)),
+                              'You have to authorize the app first!',
+                              style: TextStyle(color: Colors.white)),
                           actions: <Widget>[
                             //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
                             TextButton(
@@ -305,11 +332,13 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const FetchPage())),
-                              child: const Text('Authorize', style: TextStyle(color: Colors.white) ),
+                              child: const Text('Authorize',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK', style: TextStyle(color: Colors.white)),
+                              child: const Text('OK',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ),
@@ -341,7 +370,7 @@ void _toLoginPage(BuildContext context) async {
   //Navigator.of(context).pushReplacementNamed(LoginPage.route);
 } //_toCalendarPage
 
- Future<int?>_returnLevel(context) async {
+Future<int?> _returnLevel(context) async {
   //Estrappolo il livello
   final listavatar =
       await Provider.of<DatabaseRepository>(context, listen: false)
