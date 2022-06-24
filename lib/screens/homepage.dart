@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // fetchName function is a asynchronously to GET http data
+    // fetchName function is a asynchronously to GET data
     _returnLevel(context).then((result) {
       // Once we receive our name we trigger rebuild.
       setState(() {
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         print(indice);
                         print(lastdata);
                         //Controllo che la data non sia già presente nel database
-                        if (lastdata != dataINT || lastdata == null) {
+                        if (lastdata != dataINT) {
                           // Scrivo i dati nel database
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
@@ -210,6 +210,8 @@ class _HomePageState extends State<HomePage> {
                                   heartData[0].caloriesPeak));
                           final steps = stepsData[0].value;
                           final calorie = heartData[0].caloriesCardio;
+                          print(
+                              'i valori cardiaci caricati sono: $heartData[0]');
 
                           //Alert per avvisare l'utente che i dati sono stati caricati
                           showDialog<String>(
@@ -267,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                                 heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
                         final calorie = heartData[0].caloriesCardio;
-
+                        print('i valori cardiaci caricati sono: $heartData[0]');
                         //Alert per avvisare l'utente che i dati sono stati caricati
                         showDialog<String>(
                             context: context,
@@ -381,7 +383,7 @@ Future<int?> _returnMoney(value) async {
     final int? attPortafoglio = sp.getInt('portafoglio');
     // Aggiorno il valore del portafoglio che inserirò all'interno di sp
     final int aggPortafoglio = attPortafoglio! + money;
-    sp.setInt('portafoglio', 250);
+    sp.setInt('portafoglio', aggPortafoglio);
     print('Il valore del tuo portafoglio è: $aggPortafoglio');
     return aggPortafoglio;
   }

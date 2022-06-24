@@ -21,12 +21,12 @@ class NavBar extends StatelessWidget {
           children: [
             UserAccountsDrawerHeader(
               decoration:
-                  BoxDecoration(color: Color.fromARGB(255, 230, 67, 121)),
-              accountName: Text('Ash Ketchum',
+                  const BoxDecoration(color: Color.fromARGB(255, 230, 67, 121)),
+              accountName: const Text('Ash Ketchum',
                   style: TextStyle(
                     fontSize: 25,
                   )),
-              accountEmail: Text('bug@expert.com',
+              accountEmail: const Text('bug@expert.com',
                   style: TextStyle(
                     fontSize: 18,
                   )),
@@ -37,9 +37,9 @@ class NavBar extends StatelessWidget {
               )),
             ),
             ListTile(
-                iconColor: Color.fromARGB(255, 230, 67, 121),
-                leading: Icon(Icons.shopping_cart, size: 30),
-                title: Text('Shop',
+                iconColor: const Color.fromARGB(255, 230, 67, 121),
+                leading: const Icon(Icons.shopping_cart, size: 30),
+                title: const Text('Shop',
                     style: TextStyle(
                       fontSize: 23,
                     )),
@@ -49,11 +49,11 @@ class NavBar extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => const ShopPage()));
                 }),
-            Divider(),
+            const Divider(),
             ListTile(
-                iconColor: Color.fromARGB(255, 230, 67, 121),
-                leading: Icon(MdiIcons.run, size: 30),
-                title: Text('Train with Eevee',
+                iconColor: const Color.fromARGB(255, 230, 67, 121),
+                leading: const Icon(MdiIcons.run, size: 30),
+                title: const Text('Train with Eevee',
                     style: TextStyle(
                       fontSize: 23,
                     )),
@@ -61,11 +61,11 @@ class NavBar extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TrainingPage()));
                 }),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.rule, size: 30),
+              leading: const Icon(Icons.rule, size: 30),
               iconColor: Color.fromARGB(255, 230, 67, 121),
-              title: Text('Regulation',
+              title: const Text('Regulation',
                   style: TextStyle(
                     fontSize: 23,
                   )),
@@ -76,11 +76,11 @@ class NavBar extends StatelessWidget {
                         builder: (context) => const RegulationPage()));
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              iconColor: Color.fromARGB(255, 230, 67, 121),
-              leading: Icon(Icons.settings, size: 30),
-              title: Text('Authorization',
+              iconColor: const Color.fromARGB(255, 230, 67, 121),
+              leading: const Icon(Icons.settings, size: 30),
+              title: const Text('Authorization',
                   style: TextStyle(
                     fontSize: 23,
                   )),
@@ -89,11 +89,11 @@ class NavBar extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const AuthPage()));
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              iconColor: Color.fromARGB(255, 230, 67, 121),
-              leading: Icon(Icons.call, size: 30),
-              title: Text('Assistance',
+              iconColor: const Color.fromARGB(255, 230, 67, 121),
+              leading: const Icon(Icons.call, size: 30),
+              title: const Text('Assistance',
                   style: TextStyle(
                     fontSize: 23,
                   )),
@@ -104,11 +104,11 @@ class NavBar extends StatelessWidget {
                         builder: (context) => const AssistancePage()));
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              iconColor: Color.fromARGB(255, 230, 67, 121),
-              leading: Icon(Icons.logout, size: 30),
-              title: Text('Log Out',
+              iconColor: const Color.fromARGB(255, 230, 67, 121),
+              leading: const Icon(Icons.logout, size: 30),
+              title: const Text('Log Out',
                   style: TextStyle(
                     fontSize: 23,
                   )),

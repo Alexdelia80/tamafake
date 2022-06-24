@@ -20,32 +20,64 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
-  Future<UserTable?> _loadData(context) async {
-    final calcData = DateTime.now().subtract(const Duration(days: 1));
-    int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
+// end Future function
 
-    final listtable =
-        await Provider.of<DatabaseRepository>(context, listen: false)
-            .findUser();
-
-    if (listtable.isNotEmpty) {
-      int? indice = listtable.length - 1;
-      int? lastdata = listtable[indice].data;
-      if (lastdata == dataINT) {
-        final sp = await SharedPreferences.getInstance();
-        if (sp.getString('AuthorizationCheck') != null) {
-          final datarec = listtable[indice];
-          return datarec;
-        } else {
-          return null;
-        } // Endif lastData=dataint
-      } else {
-        return null;
-      }
-    }
-  } // end Future function
+  List<double?>? datarec;
+  @override
+  void initState() {
+    super.initState();
+    // fetchName function is a asynchronously to GET data
+    _loadData(context).then((result) {
+      // Once we receive our name we trigger rebuild.
+      setState(() {
+        datarec = result;
+      });
+    });
+  }
 
   int touchedIndex = 0;
+  //final calCard = datarec.calCardio;
+  //double calCardio = datarec?[0] ?? -1
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.blue,
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: 250.0,
+        child: AspectRatio(
+          aspectRatio: 1.3,
+          child: Card(
+            color: Colors.white,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                    pieTouchData: PieTouchData(
+                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    }),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 0,
+                    sections: showingSections()),
+              ),
+            ),
+          ),
+        ));
+  }
 
   List<PieChartSectionData> showingSections() {
     return List.generate(4, (i) {
@@ -53,13 +85,20 @@ class _TrainingPageState extends State<TrainingPage> {
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
       final widgetSize = isTouched ? 55.0 : 40.0;
+      double calCardio = datarec?[0] ?? -1;
+      double calFatBurn = datarec?[1] ?? -1;
+      double calOoR = datarec?[2] ?? -1;
+      double calPeak = datarec?[3] ?? -1;
+      print('calorie cardio: $calCardio');
+      print('calorie FatBurn: $calFatBurn');
+      print('calorie out of Range: $calOoR');
+      print('calorie Peak: $calPeak');
 
       switch (i) {
         case 0:
-          // PRIMA SEZIONE DEL GRAFICO : 40 %
           return PieChartSectionData(
             color: const Color(0xff0293ee),
-            value: 30,
+            value: calCardio,
             title: '40%',
             radius: radius,
             titleStyle: TextStyle(
@@ -67,17 +106,16 @@ class _TrainingPageState extends State<TrainingPage> {
                 fontWeight: FontWeight.bold,
                 color: const Color(0xffffffff)),
             badgeWidget: _Badge(
-              'assets/ophthalmology-svgrepo-com.svg',
+              'assets/cardio.jpg',
               size: widgetSize,
               borderColor: const Color(0xff0293ee),
             ),
             badgePositionPercentageOffset: .98,
           );
-        // SECONDA SEZIONE
         case 1:
           return PieChartSectionData(
             color: const Color(0xfff8b250),
-            value: 30,
+            value: calFatBurn,
             title: '30%',
             radius: radius,
             titleStyle: TextStyle(
@@ -85,7 +123,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 fontWeight: FontWeight.bold,
                 color: const Color(0xffffffff)),
             badgeWidget: _Badge(
-              'assets/librarian-svgrepo-com.svg',
+              'assets/fat.jpg',
               size: widgetSize,
               borderColor: const Color(0xfff8b250),
             ),
@@ -94,7 +132,7 @@ class _TrainingPageState extends State<TrainingPage> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xff845bef),
-            value: 16,
+            value: calPeak,
             title: '16%',
             radius: radius,
             titleStyle: TextStyle(
@@ -102,7 +140,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 fontWeight: FontWeight.bold,
                 color: const Color(0xffffffff)),
             badgeWidget: _Badge(
-              'assets/fitness-svgrepo-com.svg',
+              'assets/peak.jpg',
               size: widgetSize,
               borderColor: const Color(0xff845bef),
             ),
@@ -111,7 +149,7 @@ class _TrainingPageState extends State<TrainingPage> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xff13d38e),
-            value: 15,
+            value: calOoR,
             title: '15%',
             radius: radius,
             titleStyle: TextStyle(
@@ -119,7 +157,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 fontWeight: FontWeight.bold,
                 color: const Color(0xffffffff)),
             badgeWidget: _Badge(
-              'assets/worker-svgrepo-com.svg',
+              'assets/oor.jpg',
               size: widgetSize,
               borderColor: const Color(0xff13d38e),
             ),
@@ -129,103 +167,6 @@ class _TrainingPageState extends State<TrainingPage> {
           throw 'Oh no';
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: Theme.of(context).textTheme.headline2!,
-      textAlign: TextAlign.center,
-      child: FutureBuilder<UserTable?>(
-        future:
-            _loadData(context), // a previously-obtained Future<String> or null
-        builder: (BuildContext context, AsyncSnapshot<UserTable?> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            final vettore = _loadData(context);
-            children = <Widget>[
-              Container(
-                  color: Colors.blue,
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: AspectRatio(
-                    aspectRatio: 1.3,
-                    child: Card(
-                      color: Colors.white,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: PieChart(
-                          PieChartData(
-                              pieTouchData: PieTouchData(touchCallback:
-                                  (FlTouchEvent event, pieTouchResponse) {
-                                setState(() {
-                                  if (!event.isInterestedForInteractions ||
-                                      pieTouchResponse == null ||
-                                      pieTouchResponse.touchedSection == null) {
-                                    touchedIndex = -1;
-                                    return;
-                                  }
-                                  touchedIndex = pieTouchResponse
-                                      .touchedSection!.touchedSectionIndex;
-                                });
-                              }),
-                              borderData: FlBorderData(
-                                show: false,
-                              ),
-                              sectionsSpace: 0,
-                              centerSpaceRadius: 0,
-                              sections: showingSections()),
-                        ),
-                      ),
-                    ),
-                  ))
-              /*
-              const Icon(
-                Icons.check_circle_outline,
-                color: Colors.green,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Result: ${snapshot.data}'),
-              )
-            */
-            ];
-          } else if (snapshot.hasError) {
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              )
-            ];
-          } else {
-            children = const <Widget>[
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ];
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
-            ),
-          );
-        },
-      ),
-    );
   }
 }
 
@@ -273,6 +214,37 @@ class _Badge extends StatelessWidget {
   }
 }
 
+Future<List<double?>?> _loadData(context) async {
+  final calcData = DateTime.now().subtract(const Duration(days: 1));
+  int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
+
+  final listtable =
+      await Provider.of<DatabaseRepository>(context, listen: false).findUser();
+
+  if (listtable.isNotEmpty) {
+    int? indice = listtable.length - 1;
+    int? lastdata = listtable[indice].data;
+    if (lastdata == dataINT) {
+      final sp = await SharedPreferences.getInstance();
+      if (sp.getString('AuthorizationCheck') != null) {
+        final datarec = listtable[indice];
+        List<double?>? vect = [
+          datarec.calCardio,
+          datarec.calFatBurn,
+          datarec.calOoR,
+          datarec.calPeak
+        ];
+        print(vect);
+        return vect;
+      } else {
+        return null;
+      } // Endif lastData=dataint
+    } else {
+      return null;
+    }
+  }
+} 
+
 /*
 Future<List<double?>?> _loadData(context) async {
   String fitclientid = '238BYH';
@@ -283,10 +255,8 @@ Future<List<double?>?> _loadData(context) async {
   String fixedUID = '7ML2XV';
   final calcData = DateTime.now().subtract(const Duration(days: 1));
   int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
-
   final listtable =
       await Provider.of<DatabaseRepository>(context, listen: false).findUser();
-
   if (listtable.isNotEmpty) {
     int? indice = listtable.length - 1;
     int? lastdata = listtable[indice].data;
@@ -341,7 +311,6 @@ Future<List<double?>?> _loadData(context) async {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const HomePage()));
-
                     Scaffold.of(context).openDrawer();
                   },
                   tooltip:
