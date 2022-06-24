@@ -32,11 +32,9 @@ class _FetchPageState extends State<FetchPage> {
   Widget build(BuildContext context) {
     print('Authorization');
     return Scaffold(
-      backgroundColor: Color(0xFF75B7E1),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-        centerTitle: true,
-        title: const Text('Authorization', style: TextStyle(fontSize: 25)),
+        title: const Text('Authorization'),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -58,6 +56,18 @@ class _FetchPageState extends State<FetchPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+              Container(
+                  padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                  child: (Column(
+                    children: [
+                      Text(
+                          'Eevee needs your data in order to function! Log into your FitBit profile and authorize the upload, you can delete your data at any time by clicking "unauthorize":',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                          )),
+                    ],
+                  ))),
             // ------------------------ Autorizza il caricamento ------------------
             ElevatedButton(
               onPressed: () async {
@@ -71,11 +81,7 @@ class _FetchPageState extends State<FetchPage> {
                     callbackUrlScheme: callbackurl);
                 sp.setString('AuthorizationCheck', userId!);
               },
-              child: const Text('AUTHORIZE'),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(255, 230, 67, 121)),
-                  elevation: MaterialStateProperty.all<double>(1.5)),
+              child: const Text('Tap to authorize'),
             ),
 
             // -------------------------- DISABILITA AUTORIZZAZIONE --------------------------
@@ -85,13 +91,10 @@ class _FetchPageState extends State<FetchPage> {
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     //AlertDialog Title
-                    backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-                    title: const Text('Attention!',
-                        style: TextStyle(color: Colors.white)),
+                    title: const Text('Attention!'),
                     //AlertDialog description
                     content: const Text(
-                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?',
-                        style: TextStyle(color: Colors.white)),
+                        'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () async {
@@ -105,32 +108,22 @@ class _FetchPageState extends State<FetchPage> {
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
                               .cleanUser();
-                          final sp = await SharedPreferences.getInstance();
+                          final  sp = await SharedPreferences.getInstance();
                           await sp.remove('portafoglio');
                           await sp.remove('progress');
                           await sp.remove('AuthorizationCheck');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
                         },
-                        child: const Text('Delete all',
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text('Delete all'),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Stay'),
-                        child: const Text('Stay',
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text('Stay'),
                       ),
                     ],
                   ),
                 );
               },
-              child: const Text('UNAUTHORIZE'),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(255, 230, 67, 121)),
-                  elevation: MaterialStateProperty.all<double>(1.5)),
+              child: const Text('Tap to unauthorize'),
             ),
           ],
         ),
