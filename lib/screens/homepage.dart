@@ -1,7 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
-import 'package:tamafake/screens/assistancepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:tamafake/database/entities/tables.dart';
@@ -21,6 +22,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int? value;
+  @override
+  void initState() {
+    super.initState();
+    // fetchName function is a asynchronously to GET http data
+    _returnLevel(context).then((result) {
+      // Once we receive our name we trigger rebuild.
+      setState(() {
+        value = result;
+      });
+    });
+  }
+
   String fitclientid = '238BYH';
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
@@ -30,15 +44,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(context) {
+    //final level = _returnLevel(context).then((level) => print('$level'));
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text('TAMA-fit',
               style: TextStyle(fontFamily: 'Lobster', fontSize: 30)),
-          backgroundColor: Color.fromARGB(255, 230, 67, 121),
+          backgroundColor: const Color.fromARGB(255, 230, 67, 121),
         ),
-        backgroundColor: Color(0xFF75B7E1),
+        backgroundColor: const Color(0xFF75B7E1),
         extendBody: true,
         body: Container(
           margin: const EdgeInsets.all(20),
@@ -49,6 +65,22 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "LEVEL: $value",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 // Progress Bar
                 FutureBuilder(
                   future: SharedPreferences.getInstance(),
@@ -65,9 +97,9 @@ class _HomePageState extends State<HomePage> {
                           width: 300,
                           child: LinearProgressIndicator(
                               value: progress,
-                              color: Color.fromARGB(255, 67, 129, 230),
+                              color: const Color.fromARGB(255, 67, 129, 230),
                               backgroundColor:
-                                  Color.fromARGB(255, 135, 169, 197)),
+                                  const Color.fromARGB(255, 135, 169, 197)),
                         );
                       } else {
                         final progress = sp.getDouble('progress');
@@ -90,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 // Icon
                 const Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: EdgeInsets.only(top: 50),
                   child: Center(
                     child: CircleAvatar(
                       backgroundImage: NetworkImage(
@@ -145,8 +177,9 @@ class _HomePageState extends State<HomePage> {
                         userID: fixedUID,
                       )) as List<FitbitHeartData>;
 
-                      print(stepsData[0].value);
-                      print(heartData[0].caloriesFatBurn);
+                      print('i passi di ieri sono stati: $stepsData[0].value');
+                      print(
+                          'le calorie di ieri sono state: $heartData[0].caloriesCardio');
                       print(dataINT);
 
                       //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
@@ -163,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         print(indice);
                         print(lastdata);
                         //Controllo che la data non sia già presente nel database
-                        if (lastdata != dataINT) {
+                        if (lastdata != dataINT || lastdata == null) {
                           // Scrivo i dati nel database
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
@@ -171,9 +204,12 @@ class _HomePageState extends State<HomePage> {
                                   dataINT,
                                   fixedUID,
                                   stepsData[0].value,
-                                  heartData[0].caloriesFatBurn));
+                                  heartData[0].caloriesCardio,
+                                  heartData[0].caloriesFatBurn,
+                                  heartData[0].caloriesOutOfRange,
+                                  heartData[0].caloriesPeak));
                           final steps = stepsData[0].value;
-                          final calorie = heartData[0].caloriesFatBurn;
+                          final calorie = heartData[0].caloriesCardio;
 
                           //Alert per avvisare l'utente che i dati sono stati caricati
                           showDialog<String>(
@@ -194,6 +230,7 @@ class _HomePageState extends State<HomePage> {
                           // ----- aggiorno il portafoglio --------
                           _returnMoney(stepsData[0].value);
                         }
+
                         // La data è già presente del database
                         else {
                           print(
@@ -224,9 +261,12 @@ class _HomePageState extends State<HomePage> {
                                 dataINT,
                                 fixedUID,
                                 stepsData[0].value,
-                                heartData[0].caloriesFatBurn));
+                                heartData[0].caloriesCardio,
+                                heartData[0].caloriesFatBurn,
+                                heartData[0].caloriesOutOfRange,
+                                heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
-                        final calorie = heartData[0].caloriesFatBurn;
+                        final calorie = heartData[0].caloriesCardio;
 
                         //Alert per avvisare l'utente che i dati sono stati caricati
                         showDialog<String>(
@@ -289,7 +329,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        drawer: const NavBar(),
+        drawer: NavBar(),
       ),
     );
   }
@@ -341,7 +381,7 @@ Future<int?> _returnMoney(value) async {
     final int? attPortafoglio = sp.getInt('portafoglio');
     // Aggiorno il valore del portafoglio che inserirò all'interno di sp
     final int aggPortafoglio = attPortafoglio! + money;
-    sp.setInt('portafoglio', aggPortafoglio);
+    sp.setInt('portafoglio', 250);
     print('Il valore del tuo portafoglio è: $aggPortafoglio');
     return aggPortafoglio;
   }

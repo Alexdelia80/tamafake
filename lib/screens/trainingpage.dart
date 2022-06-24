@@ -20,13 +20,7 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
-  Future<List<double?>?> _loadData(context) async {
-    String fitclientid = '238BYH';
-    String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
-    String redirecturi = 'example://fitbit/auth';
-    String callbackurl = 'example';
-    String? userID;
-    String fixedUID = '7ML2XV';
+  Future<UserTable?> _loadData(context) async {
     final calcData = DateTime.now().subtract(const Duration(days: 1));
     int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
 
@@ -40,29 +34,13 @@ class _TrainingPageState extends State<TrainingPage> {
       if (lastdata == dataINT) {
         final sp = await SharedPreferences.getInstance();
         if (sp.getString('AuthorizationCheck') != null) {
-          FitbitHeartDataManager fitbitActivityDataManager =
-              FitbitHeartDataManager(
-            clientID: fitclientid,
-            clientSecret: fitclientsec,
-          );
-          final heartData = await fitbitActivityDataManager
-              .fetch(FitbitHeartAPIURL.dayWithUserID(
-            date: calcData,
-            userID: fixedUID,
-          )) as List<FitbitHeartData>;
-          final calCardio = heartData[indice].caloriesCardio;
-          final calFatBurn = heartData[indice].caloriesFatBurn;
-          final calOOR = heartData[indice].caloriesOutOfRange;
-          final calPeak = heartData[indice].caloriesPeak;
-          List<double?>? vect = [calCardio, calFatBurn, calOOR, calPeak];
-          return vect;
+          final datarec = listtable[indice];
+          return datarec;
         } else {
-          List<double?>? vect = [0, 0, 0, 0];
-          return vect;
+          return null;
         } // Endif lastData=dataint
       } else {
-        List<double?>? vect = [0, 0, 0, 0];
-        return vect;
+        return null;
       }
     }
   } // end Future function
@@ -75,8 +53,7 @@ class _TrainingPageState extends State<TrainingPage> {
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
       final widgetSize = isTouched ? 55.0 : 40.0;
-      Future<List<double?>?> vettore = _loadData(context);
-      print('il vettore è: $vettore');
+
       switch (i) {
         case 0:
           // PRIMA SEZIONE DEL GRAFICO : 40 %
@@ -159,13 +136,13 @@ class _TrainingPageState extends State<TrainingPage> {
     return DefaultTextStyle(
       style: Theme.of(context).textTheme.headline2!,
       textAlign: TextAlign.center,
-      child: FutureBuilder<List<double?>?>(
+      child: FutureBuilder<UserTable?>(
         future:
             _loadData(context), // a previously-obtained Future<String> or null
-        builder:
-            (BuildContext context, AsyncSnapshot<List<double?>?> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<UserTable?> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
+            final vettore = _loadData(context);
             children = <Widget>[
               Container(
                   color: Colors.blue,

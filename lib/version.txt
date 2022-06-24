@@ -54,3 +54,11 @@ aggiustamenti generali del codice tra cui:
 - Sistemazione del drawer
 - Inserimento dei loghi e modifica della login page
 - Aggiunta dell'immagine degli avatar nella side bar
+
+VERSIONE 2.0.1
+Inizio implementazione del garfico,
+ottimazzazione del codice.
+
+VERSIONE 2.0.2
+Inserita gestione del livello,
+ottimazzazione codice.
