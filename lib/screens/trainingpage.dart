@@ -54,7 +54,7 @@ class _TrainingPageState extends State<TrainingPage> {
             const SizedBox(
               height: 28,
             ),
-            const Text('Types of calories consumed by Evee yesterday:'),
+            const Text('Types of calories that you consumed yesterday:'),
             const SizedBox(
               height: 28,
             ),

@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -23,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int? value;
+  String? uID;
   @override
   void initState() {
     super.initState();
@@ -31,6 +31,12 @@ class _HomePageState extends State<HomePage> {
       // Once we receive our name we trigger rebuild.
       setState(() {
         value = result;
+      });
+    });
+    _checkauth(context).then((result) {
+      // Once we receive our name we trigger rebuild.
+      setState(() {
+        uID = result;
       });
     });
   }
@@ -137,12 +143,16 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromARGB(255, 230, 67, 121)),
+                          const Color.fromARGB(255, 230, 67, 121)),
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
+                    String? uID = await _checkauth(context);
+                    print('your uid is: $uID');
                     final sp = await SharedPreferences.getInstance();
-                    if (sp.getString('AuthorizationCheck') != null) {
+                    // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
+                    if (sp.getString('AuthorizationCheck') != null &&
+                        uID != null) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -332,7 +342,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        drawer: NavBar(),
+        drawer: const NavBar(),
       ),
     );
   }
@@ -388,4 +398,28 @@ Future<int?> _returnMoney(value) async {
     print('Il valore del tuo portafoglio è: $aggPortafoglio');
     return aggPortafoglio;
   }
+}
+
+Future<String?> _checkauth(context) async {
+  String fitclientid = '238BYH';
+  String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
+  String redirecturi = 'example://fitbit/auth';
+  String callbackurl = 'example';
+
+  FitbitAccountDataManager fitbitAccountDataManager = FitbitAccountDataManager(
+    clientID: fitclientid,
+    clientSecret: fitclientsec,
+  );
+
+  String? userId = await FitbitConnector.authorize(
+      context: context,
+      clientID: fitclientid,
+      clientSecret: fitclientsec,
+      redirectUri: redirecturi,
+      callbackUrlScheme: callbackurl);
+  FitbitUserAPIURL fitbitUserApiUrl =
+      FitbitUserAPIURL.withUserID(userID: userId);
+
+  print('fitbitapiurl: $fitbitUserApiUrl');
+  return userId;
 }
