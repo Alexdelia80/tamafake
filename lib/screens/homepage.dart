@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     //final level = _returnLevel(context).then((level) => print('$level'));
 
     return MaterialApp(
+      //theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,

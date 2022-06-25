@@ -40,89 +40,106 @@ class _TrainingPageState extends State<TrainingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.blue,
-        alignment: Alignment.center,
-        width: double.infinity,
-        height: 250.0,
-        child: AspectRatio(
-          aspectRatio: 1.3,
-          child: Card(
-            color: Colors.white,
-            child: Column(
+    return MaterialApp(
+      //title: 'TamaFa Training',
+      theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
+      home: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+          title: const Text('TamaFa Training'),
+        ),
+        body: Column(
+          children: <Widget>[
+            const SizedBox(
+              height: 28,
+            ),
+            const Text('Types of calories consumed by Evee yesterday:'),
+            const SizedBox(
+              height: 28,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                const SizedBox(
-                  height: 28,
+                Indicator(
+                  color: const Color(0xff0293ee),
+                  text: 'Cardio',
+                  isSquare: false,
+                  size: touchedIndex == 0 ? 18 : 16,
+                  textColor: touchedIndex == 0 ? Colors.black : Colors.grey,
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Indicator(
-                      color: const Color(0xff0293ee),
-                      text: 'Cardio',
-                      isSquare: false,
-                      size: touchedIndex == 0 ? 18 : 16,
-                      textColor: touchedIndex == 0 ? Colors.black : Colors.grey,
-                    ),
-                    Indicator(
-                      color: const Color(0xff13d38e),
-                      text: 'FatBurn',
-                      isSquare: false,
-                      size: touchedIndex == 1 ? 18 : 16,
-                      textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
-                    ),
-                    Indicator(
-                      color: const Color.fromARGB(255, 182, 81, 81),
-                      text: 'Out of Range',
-                      isSquare: false,
-                      size: touchedIndex == 2 ? 18 : 16,
-                      textColor: touchedIndex == 2 ? Colors.black : Colors.grey,
-                    ),
-                    Indicator(
-                      color: const Color(0xfff8b250),
-                      text: 'Peak',
-                      isSquare: false,
-                      size: touchedIndex == 3 ? 18 : 16,
-                      textColor: touchedIndex == 3 ? Colors.black : Colors.grey,
-                    ),
-                  ],
+                Indicator(
+                  color: const Color(0xff13d38e),
+                  text: 'FatBurn',
+                  isSquare: false,
+                  size: touchedIndex == 1 ? 18 : 16,
+                  textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
                 ),
-                const SizedBox(
-                  height: 18,
+                Indicator(
+                  color: Color.fromARGB(255, 209, 121, 121),
+                  text: 'Out of Range',
+                  isSquare: false,
+                  size: touchedIndex == 2 ? 18 : 16,
+                  textColor: touchedIndex == 2 ? Colors.black : Colors.grey,
                 ),
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                          pieTouchData: PieTouchData(touchCallback:
-                              (FlTouchEvent event, pieTouchResponse) {
-                            setState(() {
-                              if (!event.isInterestedForInteractions ||
-                                  pieTouchResponse == null ||
-                                  pieTouchResponse.touchedSection == null) {
-                                touchedIndex = -1;
-                                return;
-                              }
-                              touchedIndex = pieTouchResponse
-                                  .touchedSection!.touchedSectionIndex;
-                            });
-                          }),
-                          startDegreeOffset: 180,
-                          borderData: FlBorderData(
-                            show: false,
-                          ),
-                          sectionsSpace: 1,
-                          centerSpaceRadius: 0,
-                          sections: showingSections()),
-                    ),
-                  ),
+                Indicator(
+                  color: const Color(0xfff8b250),
+                  text: 'Peak',
+                  isSquare: false,
+                  size: touchedIndex == 3 ? 18 : 16,
+                  textColor: touchedIndex == 3 ? Colors.black : Colors.grey,
                 ),
               ],
             ),
-          ),
-        ));
+            /* const SizedBox(
+              height: 5,
+            ), */
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: PieChart(
+                    PieChartData(
+                        pieTouchData: PieTouchData(touchCallback:
+                            (FlTouchEvent event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              touchedIndex = -1;
+                              return;
+                            }
+                            touchedIndex = pieTouchResponse
+                                .touchedSection!.touchedSectionIndex;
+                          });
+                        }),
+                        startDegreeOffset: 180,
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        sectionsSpace: 1,
+                        centerSpaceRadius: 0,
+                        sections: showingSections()),
+                  ),
+                )
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go Home'),
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromARGB(255, 230, 67, 121),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   List<PieChartSectionData> showingSections() {

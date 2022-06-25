@@ -62,3 +62,10 @@ ottimazzazione del codice.
 VERSIONE 2.0.2
 Inserita gestione del livello,
 ottimazzazione codice.
+
+VERSIONE 2.0.3
+Siamo alle battute finali:
+- Implementato tutto il diagramma a torta
+- correzione del codice in generale
+- vari miglioramenti grafici dei colori
+- prove di funzionamento generali dell'app.
