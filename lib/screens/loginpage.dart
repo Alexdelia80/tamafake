@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return FlutterLogin(
       title: 'TAMA-fit',
-      theme: LoginTheme(primaryColor: Color(0xFF75B7E1), logoWidth: 1.5, titleStyle: TextStyle(fontFamily: 'Lobster')),
+      theme: LoginTheme(primaryColor: Color.fromARGB(255, 230, 67, 121), logoWidth: 1.5, titleStyle: TextStyle(fontFamily: 'Lobster')),
       onLogin: _loginUser,
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,

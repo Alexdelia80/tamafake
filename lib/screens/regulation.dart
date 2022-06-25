@@ -48,17 +48,17 @@ class RegulationPage extends StatelessWidget {
                         "How can you play with Eevee?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
+                            fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                     ],
                   ),
                 ],
               ),
               SizedBox(
-                height: 40,
+                height: 30,
               ),
               Container(
-                  padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
                   child: (Column(
                     children: [
                       Text(

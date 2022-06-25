@@ -71,6 +71,7 @@ flutter:
   uses-material-design: true
   assets:
       - assets/ash.png
+      - assets/eevee.png
   fonts:
     - family: Lobster
       fonts:

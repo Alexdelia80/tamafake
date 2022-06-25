@@ -21,10 +21,10 @@ class NavBar extends StatelessWidget {
           children: [
             UserAccountsDrawerHeader(
               decoration:
-                  BoxDecoration(color: Color.fromARGB(255, 230, 67, 121)),
+                  BoxDecoration(color:Color.fromARGB(255, 230, 67, 121)),
               accountName: Text('Ash Ketchum',
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 22,
                   )),
               accountEmail: Text('bug@expert.com',
                   style: TextStyle(

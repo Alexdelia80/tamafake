@@ -173,14 +173,15 @@ class _HomePageState extends State<HomePage> {
                                   heartData[0].caloriesCardio));
                           final steps = stepsData[0].value;
                           final calorie = heartData[0].caloriesCardio;
-
+                          
                           //Alert per avvisare l'utente che i dati sono stati caricati
                           showDialog<String>(
                               context: context,
-                              builder: (BuildContext context) => SimpleDialog(
+                              builder: (BuildContext context) => AlertDialog(
                                     //AlertDialog Title
                                     backgroundColor:Color.fromARGB(255, 230, 67, 121),
-                                    title: Text('Your Progress:' + '\n' + 'Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white)),
+                                    title: Text('Your Progress:'),
+                                    content: Text('Steps: $steps' + '\n' + 'Calories: $calorie' + '\n', style: TextStyle(color: Colors.white)), 
                                   ));
                           
                           // Aggiorno il portafoglio
@@ -221,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                                     //AlertDialog Title
                                     backgroundColor:Color.fromARGB(255, 230, 67, 121),
                                     title: Text(
-                                        "Don't get smart with us!" + "\n" + "You can't upload your progress twice!" + "\n", style: TextStyle(color: Colors.white)),
+                                        "Do not cheat! You can't upload your progress twice!" + "\n", style: TextStyle(color: Colors.white)),
                                   ));
 
                           //alert
