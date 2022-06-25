@@ -1,13 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:tamafake/database/entities/tables.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fitbitter/fitbitter.dart';
+import 'package:tamafake/utils/indicator.dart';
+import 'package:tamafake/utils/color_extensions.dart';
 
 class TrainingPage extends StatefulWidget {
   TrainingPage({Key? key}) : super(key: key);
@@ -50,123 +49,177 @@ class _TrainingPageState extends State<TrainingPage> {
           aspectRatio: 1.3,
           child: Card(
             color: Colors.white,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                    pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
-                    }),
-                    borderData: FlBorderData(
-                      show: false,
+            child: Column(
+              children: <Widget>[
+                const SizedBox(
+                  height: 28,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Indicator(
+                      color: const Color(0xff0293ee),
+                      text: 'Cardio',
+                      isSquare: false,
+                      size: touchedIndex == 0 ? 18 : 16,
+                      textColor: touchedIndex == 0 ? Colors.black : Colors.grey,
                     ),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 0,
-                    sections: showingSections()),
-              ),
+                    Indicator(
+                      color: const Color(0xff13d38e),
+                      text: 'FatBurn',
+                      isSquare: false,
+                      size: touchedIndex == 1 ? 18 : 16,
+                      textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
+                    ),
+                    Indicator(
+                      color: const Color.fromARGB(255, 182, 81, 81),
+                      text: 'Out of Range',
+                      isSquare: false,
+                      size: touchedIndex == 2 ? 18 : 16,
+                      textColor: touchedIndex == 2 ? Colors.black : Colors.grey,
+                    ),
+                    Indicator(
+                      color: const Color(0xfff8b250),
+                      text: 'Peak',
+                      isSquare: false,
+                      size: touchedIndex == 3 ? 18 : 16,
+                      textColor: touchedIndex == 3 ? Colors.black : Colors.grey,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: PieChart(
+                      PieChartData(
+                          pieTouchData: PieTouchData(touchCallback:
+                              (FlTouchEvent event, pieTouchResponse) {
+                            setState(() {
+                              if (!event.isInterestedForInteractions ||
+                                  pieTouchResponse == null ||
+                                  pieTouchResponse.touchedSection == null) {
+                                touchedIndex = -1;
+                                return;
+                              }
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection!.touchedSectionIndex;
+                            });
+                          }),
+                          startDegreeOffset: 180,
+                          borderData: FlBorderData(
+                            show: false,
+                          ),
+                          sectionsSpace: 1,
+                          centerSpaceRadius: 0,
+                          sections: showingSections()),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ));
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 110.0 : 100.0;
-      final widgetSize = isTouched ? 55.0 : 40.0;
-      double calCardio = datarec?[0] ?? -1;
-      double calFatBurn = datarec?[1] ?? -1;
-      double calOoR = datarec?[2] ?? -1;
-      double calPeak = datarec?[3] ?? -1;
-      print('calorie cardio: $calCardio');
-      print('calorie FatBurn: $calFatBurn');
-      print('calorie out of Range: $calOoR');
-      print('calorie Peak: $calPeak');
+    return List.generate(
+      4,
+      (i) {
+        final isTouched = i == touchedIndex;
+        final opacity = isTouched ? 1.0 : 0.6;
 
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color(0xff0293ee),
-            value: calCardio,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/cardio.jpg',
-              size: widgetSize,
-              borderColor: const Color(0xff0293ee),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 1:
-          return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: calFatBurn,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/fat.jpg',
-              size: widgetSize,
-              borderColor: const Color(0xfff8b250),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: calPeak,
-            title: '16%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/peak.jpg',
-              size: widgetSize,
-              borderColor: const Color(0xff845bef),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: calOoR,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/oor.jpg',
-              size: widgetSize,
-              borderColor: const Color(0xff13d38e),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        default:
-          throw 'Oh no';
-      }
-    });
+        const color0 = Color(0xff0293ee);
+        const color1 = Color(0xff13d38e);
+        const color2 = Color.fromARGB(255, 191, 50, 50);
+        const color3 = Color(0xfff8b250);
+
+        double caltot = (datarec?[0] ?? -1) +
+            (datarec?[1] ?? -1) +
+            (datarec?[2] ?? -1) +
+            (datarec?[3] ?? -1);
+        double calCardio =
+            (((datarec?[0] ?? -1) * 100) / caltot).truncateToDouble();
+        double calFatBurn =
+            (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
+        double calOoR =
+            (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
+        double calPeak =
+            (((datarec?[3] ?? -1) * 100) / caltot).truncateToDouble();
+        print('calorie cardio: $calCardio');
+        print('calorie FatBurn: $calFatBurn');
+        print('calorie out of Range: $calOoR');
+        print('calorie Peak: $calPeak');
+
+        switch (i) {
+          case 0:
+            return PieChartSectionData(
+              color: color0.withOpacity(opacity),
+              value: calCardio,
+              title: '$calCardio%',
+              radius: 100,
+              titleStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 26, 25, 25)),
+              titlePositionPercentageOffset: 0.55,
+              borderSide: isTouched
+                  ? BorderSide(color: color0.darken(40), width: 6)
+                  : BorderSide(color: color0.withOpacity(0)),
+            );
+          case 1:
+            return PieChartSectionData(
+              color: color1.withOpacity(opacity),
+              value: calFatBurn,
+              title: '$calFatBurn%',
+              radius: 95,
+              titleStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 26, 25, 25)),
+              titlePositionPercentageOffset: 0.55,
+              borderSide: isTouched
+                  ? BorderSide(color: color1.darken(40), width: 6)
+                  : BorderSide(color: color2.withOpacity(0)),
+            );
+          case 2:
+            return PieChartSectionData(
+              color: color2.withOpacity(opacity),
+              value: calOoR,
+              title: '$calOoR%',
+              radius: 90,
+              titleStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 26, 25, 25)),
+              titlePositionPercentageOffset: 0.6,
+              borderSide: isTouched
+                  ? BorderSide(color: color2.darken(40), width: 6)
+                  : BorderSide(color: color2.withOpacity(0)),
+            );
+          case 3:
+            return PieChartSectionData(
+              color: color3.withOpacity(opacity),
+              value: calPeak,
+              title: '$calPeak%',
+              radius: 85,
+              titleStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 26, 25, 25)),
+              titlePositionPercentageOffset: 0.55,
+              borderSide: isTouched
+                  ? BorderSide(color: color3.darken(40), width: 6)
+                  : BorderSide(color: color2.withOpacity(0)),
+            );
+          default:
+            throw Error();
+        }
+      },
+    );
   }
 }
 
