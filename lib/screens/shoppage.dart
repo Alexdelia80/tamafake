@@ -58,7 +58,7 @@ class _ShopPageState extends State<ShopPage> {
       backgroundColor: Color(0xFF75B7E1),
       body: ListView(
         children: [
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.local_pizza, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -66,7 +66,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('20 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valPizza, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.icecream, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -74,7 +74,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('15 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valIce, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.fish, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -82,7 +82,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('10 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valFish, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.apple, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -90,7 +90,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('5 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valApple, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.baguette, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -98,7 +98,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('3 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valBread, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.bottleSoda, size: 30),
             iconColor: Color.fromARGB(255, 230, 67, 121),
@@ -106,8 +106,7 @@ class _ShopPageState extends State<ShopPage> {
             trailing: Text('1 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valWater, context),
           ),
-          Divider(),
-
+          const Divider(),
           // Stampo il portafoglio nella schermata di shop
           FutureBuilder(
             future: SharedPreferences.getInstance(),
@@ -144,7 +143,7 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // Funzione che sottrai i soldi del cibo dal portafoglio
+  // Metodo che sottrae i soldi spesi dal portafoglio
   void _subtract(int valore, context) async {
     final sp = await SharedPreferences.getInstance();
     setState(() {
@@ -185,7 +184,7 @@ class _ShopPageState extends State<ShopPage> {
 
           showDialog<String>(
             context: context,
-            builder: (BuildContext context) => AlertDialog(
+            builder: (BuildContext context) => const AlertDialog(
               //AlertDialog Title
               backgroundColor: Color.fromARGB(255, 230, 67, 121),
               title: const Text('YEP YOU ARE A GOOD TRAINER!!!',
@@ -247,7 +246,8 @@ void addAvatar(context, int valore) async {
     int lastexp = listavatar[indice].exp;
     final newexp = lastexp + valore;
     final newlevel = newexp ~/ 100 + 1;
-    print('level: $newlevel');
+    print('Nuovo livello raggiunto: $newlevel');
+    print('Nuova esperienza raggiunta: $newexp');
     Provider.of<DatabaseRepository>(context, listen: false)
         .insertAvatar(AvatarTable(newexp, userID, newlevel));
 

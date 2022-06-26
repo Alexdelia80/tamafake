@@ -1,4 +1,6 @@
-import 'dart:ffi';
+//import 'dart:ffi';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -23,22 +25,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int? value;
   String? uID;
+  double? progress;
+  int? exp;
+  int? esperienza = 0;
+
   @override
   void initState() {
     super.initState();
     // fetchName function is a asynchronously to GET data
-    _returnLevel(context).then((result) {
-      // Once we receive our name we trigger rebuild.
-      setState(() {
-        value = result;
-      });
-    });
-    _checkauth(context).then((result) {
-      // Once we receive our name we trigger rebuild.
-      setState(() {
-        uID = result;
-      });
-    });
+    _returnLevel(context).then((result) => {
+          // Once we receive our name we trigger rebuild.
+          setState(() {
+            value = result;
+          })
+        });
+    _checkauth(context).then((result) => {
+          // Once we receive our name we trigger rebuild.
+          setState(() {
+            uID = result;
+          })
+        });
+    _checkprogress(context).then((result) => {
+          // Once we receive our name we trigger rebuild.
+          setState(() {
+            progress = result;
+          })
+        });
+    _checkexp(context).then((result) => {
+          // Once we receive our name we trigger rebuild.
+          setState(() {
+            exp = result;
+          })
+        });
   }
 
   String fitclientid = '238BYH';
@@ -50,8 +68,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(context) {
-    //final level = _returnLevel(context).then((level) => print('$level'));
-
     return MaterialApp(
       //theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
       home: Scaffold(
@@ -66,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         body: Container(
           margin: const EdgeInsets.all(20),
           width: 500,
-          height: 500,
+          height: 700,
           child: Align(
             alignment: Alignment.center,
             child: Column(
@@ -78,17 +94,23 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // -------------- STAMPO IL LIVELLO ATTUALE ---------------------
                         Text(
                           "LEVEL: $value",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 40,
                         ),
                       ],
                     ),
                   ],
                 ),
-                // Progress Bar
+                // ------------------------------- Progress Bar ------------------------------
                 FutureBuilder(
                   future: SharedPreferences.getInstance(),
                   builder: ((context, snapshot) {
@@ -127,7 +149,8 @@ class _HomePageState extends State<HomePage> {
                     }
                   }),
                 ),
-                // Icon
+                // ------------------------------ END PROGRESS ---------------------------------
+                // ----------------------------- Immagine Evee ---------------------------------
                 const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
@@ -139,7 +162,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(40)),
-                // Load your progress
+                // -------------------------------- ESPERIENZA --------------------------------
+                Text(
+                  'Evee\'s total Experience: $exp',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                // --------------------- BOTTONE: Load your progress ------------------------------
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
@@ -147,12 +182,11 @@ class _HomePageState extends State<HomePage> {
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
-                    String? uID = await _checkauth(context);
-                    print('your uid is: $uID');
+                    //String? uID = await _checkauth(context);
+                    //print('your uid is: $uID');
                     final sp = await SharedPreferences.getInstance();
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
-                    if (sp.getString('AuthorizationCheck') != null &&
-                        uID != null) {
+                    if (sp.getString('AuthorizationCheck') != null) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -230,15 +264,16 @@ class _HomePageState extends State<HomePage> {
                               builder: (BuildContext context) => SimpleDialog(
                                     //AlertDialog Title
                                     backgroundColor:
-                                        Color.fromARGB(255, 230, 67, 121),
+                                        const Color.fromARGB(255, 230, 67, 121),
                                     title: Text(
-                                        'Your Progress:' +
+                                        'Your Progress: $progress' +
                                             '\n' +
                                             'Steps: $steps' +
                                             '\n' +
                                             'Calories: $calorie' +
                                             '\n',
-                                        style: TextStyle(color: Colors.white)),
+                                        style: const TextStyle(
+                                            color: Colors.white)),
                                   ));
                           // ----- aggiorno il portafoglio --------
                           _returnMoney(stepsData[0].value);
@@ -337,7 +372,7 @@ class _HomePageState extends State<HomePage> {
                   }, //onPressed
                   child: const Text('LOAD YOUR PROGRESS!',
                       style: TextStyle(fontSize: 18)),
-                ),
+                ), // ------------------- END LOAD YOUR PROGRESS -----------------------
               ],
             ),
           ),
@@ -347,6 +382,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 } //HomePage
+
+// FUNZIONI:
 
 void _toLoginPage(BuildContext context) async {
   //Unset the 'username' filed in SharedPreference
@@ -419,7 +456,34 @@ Future<String?> _checkauth(context) async {
       callbackUrlScheme: callbackurl);
   FitbitUserAPIURL fitbitUserApiUrl =
       FitbitUserAPIURL.withUserID(userID: userId);
-
   print('fitbitapiurl: $fitbitUserApiUrl');
   return userId;
+}
+
+Future<double?> _checkprogress(context) async {
+  final sp = await SharedPreferences.getInstance();
+  if (sp.getDouble('progress') == null) {
+    sp.setDouble('progress', 0);
+    final progress = sp.getDouble('progress');
+    //print('Progresso:$progress');
+    return progress;
+  } else {
+    final progress = sp.getDouble('progress');
+    //print('Progresso:$progress');
+    return progress;
+  }
+}
+
+Future<int?> _checkexp(context) async {
+  final listavatar =
+      await Provider.of<DatabaseRepository>(context, listen: false)
+          .findAvatar();
+  if (listavatar.isNotEmpty) {
+    final int indice = listavatar.length - 1;
+    int lastexp = listavatar[indice].exp;
+    print('your experience is: $lastexp');
+    return lastexp;
+  } else {
+    return 0;
+  }
 }

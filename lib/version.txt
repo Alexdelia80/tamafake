@@ -69,3 +69,8 @@ Siamo alle battute finali:
 - correzione del codice in generale
 - vari miglioramenti grafici dei colori
 - prove di funzionamento generali dell'app.
+
+VERSIONE 2.0.4
+Sistemazione della grafica;
+inserimento del livello di esperienza
+sistemazione del codice in generale

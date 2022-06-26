@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamafake/utils/indicator.dart';
 import 'package:tamafake/utils/color_extensions.dart';
+import 'package:tamafake/screens/homepage.dart';
 
 class TrainingPage extends StatefulWidget {
   TrainingPage({Key? key}) : super(key: key);
@@ -45,9 +46,25 @@ class _TrainingPageState extends State<TrainingPage> {
       theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
       home: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-          title: const Text('TamaFa Training'),
+          centerTitle: true,
+          title: const Text('Authorization', style: TextStyle(fontSize: 25)),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                  icon: const Icon(Icons.arrow_back_sharp),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+
+                    Scaffold.of(context).openDrawer();
+                  },
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip);
+            },
+          ),
         ),
         body: Column(
           children: <Widget>[
@@ -76,15 +93,16 @@ class _TrainingPageState extends State<TrainingPage> {
                   size: touchedIndex == 1 ? 18 : 16,
                   textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
                 ),
+                /*
                 Indicator(
                   color: Color.fromARGB(255, 209, 121, 121),
                   text: 'Out of Range',
                   isSquare: false,
                   size: touchedIndex == 2 ? 18 : 16,
                   textColor: touchedIndex == 2 ? Colors.black : Colors.grey,
-                ),
+                ),*/
                 Indicator(
-                  color: const Color(0xfff8b250),
+                  color: const Color.fromARGB(255, 209, 121, 121),
                   text: 'Peak',
                   isSquare: false,
                   size: touchedIndex == 3 ? 18 : 16,
@@ -127,6 +145,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 )
               ],
             ),
+            /*
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -135,7 +154,7 @@ class _TrainingPageState extends State<TrainingPage> {
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 230, 67, 121),
               ),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -144,7 +163,7 @@ class _TrainingPageState extends State<TrainingPage> {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(
-      4,
+      3,
       (i) {
         final isTouched = i == touchedIndex;
         final opacity = isTouched ? 1.0 : 0.6;
@@ -152,12 +171,10 @@ class _TrainingPageState extends State<TrainingPage> {
         const color0 = Color(0xff0293ee);
         const color1 = Color(0xff13d38e);
         const color2 = Color.fromARGB(255, 191, 50, 50);
-        const color3 = Color(0xfff8b250);
+        //const color3 = Color(0xfff8b250);
 
-        double caltot = (datarec?[0] ?? -1) +
-            (datarec?[1] ?? -1) +
-            (datarec?[2] ?? -1) +
-            (datarec?[3] ?? -1);
+        double caltot =
+            (datarec?[0] ?? -1) + (datarec?[1] ?? -1) + (datarec?[3] ?? -1);
         double calCardio =
             (((datarec?[0] ?? -1) * 100) / caltot).truncateToDouble();
         double calFatBurn =
@@ -192,7 +209,7 @@ class _TrainingPageState extends State<TrainingPage> {
               color: color1.withOpacity(opacity),
               value: calFatBurn,
               title: '$calFatBurn%',
-              radius: 95,
+              radius: 98,
               titleStyle: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -205,9 +222,9 @@ class _TrainingPageState extends State<TrainingPage> {
           case 2:
             return PieChartSectionData(
               color: color2.withOpacity(opacity),
-              value: calOoR,
-              title: '$calOoR%',
-              radius: 90,
+              value: calPeak,
+              title: '$calPeak%',
+              radius: 96,
               titleStyle: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -217,11 +234,12 @@ class _TrainingPageState extends State<TrainingPage> {
                   ? BorderSide(color: color2.darken(40), width: 6)
                   : BorderSide(color: color2.withOpacity(0)),
             );
+          /*
           case 3:
             return PieChartSectionData(
               color: color3.withOpacity(opacity),
-              value: calPeak,
-              title: '$calPeak%',
+              value: 1,
+              title: '1%',
               radius: 85,
               titleStyle: const TextStyle(
                   fontSize: 18,
@@ -231,7 +249,7 @@ class _TrainingPageState extends State<TrainingPage> {
               borderSide: isTouched
                   ? BorderSide(color: color3.darken(40), width: 6)
                   : BorderSide(color: color2.withOpacity(0)),
-            );
+            );*/
           default:
             throw Error();
         }

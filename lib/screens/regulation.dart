@@ -61,7 +61,7 @@ class RegulationPage extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
                   child: (Column(
                     children: [
-                      Text(
+                      const Text(
                           "Hello friends of Eevee!" +
                               "\n" +
                               "Welcome to this new adventure!" +
