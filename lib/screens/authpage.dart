@@ -11,8 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
-  static const route = '/fetchpage/';
-  static const routename = 'FetchPage';
+  static const route = '/authpage/';
+  static const routename = 'AuthPage';
 
   @override
   State<AuthPage> createState() => _AuthPageState();

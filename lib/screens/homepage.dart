@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                               fontSize: 20),
                         ),
                         const SizedBox(
-                          height: 40,
+                          height: 20,
                         ),
                       ],
                     ),
@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
                       if (sp.getDouble('progress') == null) {
                         sp.setDouble('progress', 0);
                         final progress = sp.getDouble('progress');
-
                         print('Progresso:$progress');
                         return SizedBox(
                           height: 20,
@@ -150,6 +149,9 @@ class _HomePageState extends State<HomePage> {
                   }),
                 ),
                 // ------------------------------ END PROGRESS ---------------------------------
+                const SizedBox(
+                  height: 40,
+                ),
                 // ----------------------------- Immagine Evee ---------------------------------
                 const Padding(
                   padding: EdgeInsets.only(top: 50),
@@ -161,8 +163,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                const Padding(padding: EdgeInsets.all(40)),
+                const Padding(padding: EdgeInsets.all(10)),
                 // -------------------------------- ESPERIENZA --------------------------------
+                /* const SizedBox(
+                  height: 40,
+                ),*/
                 Text(
                   'Evee\'s total Experience: $exp',
                   textAlign: TextAlign.center,
@@ -172,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 20),
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 100,
                 ),
                 // --------------------- BOTTONE: Load your progress ------------------------------
                 ElevatedButton(
@@ -251,10 +256,10 @@ class _HomePageState extends State<HomePage> {
                                   stepsData[0].value,
                                   heartData[0].caloriesCardio,
                                   heartData[0].caloriesFatBurn,
-                                  heartData[0].caloriesOutOfRange,
-                                  heartData[0].caloriesPeak));
+                                  heartData[0].caloriesOutOfRange));
                           final steps = stepsData[0].value;
                           final calorie = heartData[0].caloriesCardio;
+                          double cal = calorie!.truncateToDouble();
                           print(
                               'i valori cardiaci caricati sono: $heartData[0]');
 
@@ -270,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                                             '\n' +
                                             'Steps: $steps' +
                                             '\n' +
-                                            'Calories: $calorie' +
+                                            'Calories: $cal' +
                                             '\n',
                                         style: const TextStyle(
                                             color: Colors.white)),
@@ -311,10 +316,10 @@ class _HomePageState extends State<HomePage> {
                                 stepsData[0].value,
                                 heartData[0].caloriesCardio,
                                 heartData[0].caloriesFatBurn,
-                                heartData[0].caloriesOutOfRange,
                                 heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
                         final calorie = heartData[0].caloriesCardio;
+                        double cal = calorie!.truncateToDouble();
                         print('i valori cardiaci caricati sono: $heartData[0]');
                         //Alert per avvisare l'utente che i dati sono stati caricati
                         showDialog<String>(
@@ -324,12 +329,11 @@ class _HomePageState extends State<HomePage> {
                                   backgroundColor:
                                       Color.fromARGB(255, 230, 67, 121),
                                   title: Text(
-                                      'Your Progress:' +
-                                          '\n' +
+                                      'Your Progress: $progress' +
                                           '\n' +
                                           'Steps: $steps' +
                                           '\n' +
-                                          'Calories: $calorie' +
+                                          'Calories: $cal' +
                                           '\n',
                                       style: TextStyle(color: Colors.white)),
                                 ));

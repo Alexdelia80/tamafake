@@ -320,7 +320,6 @@ Future<List<double?>?> _loadData(context) async {
           datarec.calCardio,
           datarec.calFatBurn,
           datarec.calOoR,
-          datarec.calPeak
         ];
         print(vect);
         return vect;
