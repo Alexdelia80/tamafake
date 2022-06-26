@@ -84,7 +84,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UserTable` (`data` INTEGER NOT NULL, `userId` TEXT, `steps` REAL, `calCardio` REAL, `calFatBurn` REAL, `calOoR` REAL, PRIMARY KEY (`data`))');
+            'CREATE TABLE IF NOT EXISTS `UserTable` (`data` INTEGER NOT NULL, `userId` TEXT, `steps` REAL, `calCardio` REAL, `calFatBurn` REAL, `calPeak` REAL, PRIMARY KEY (`data`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `AvatarTable` (`exp` INTEGER NOT NULL, `userId` TEXT, `level` INTEGER, PRIMARY KEY (`exp`))');
 
@@ -117,7 +117,7 @@ class _$UserDao extends UserDao {
                   'steps': item.steps,
                   'calCardio': item.calCardio,
                   'calFatBurn': item.calFatBurn,
-                  'calOoR': item.calOoR
+                  'calPeak': item.calPeak
                 }),
         _userTableDeletionAdapter = DeletionAdapter(
             database,
@@ -129,7 +129,7 @@ class _$UserDao extends UserDao {
                   'steps': item.steps,
                   'calCardio': item.calCardio,
                   'calFatBurn': item.calFatBurn,
-                  'calOoR': item.calOoR
+                  'calPeak': item.calPeak
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -151,7 +151,7 @@ class _$UserDao extends UserDao {
             row['steps'] as double?,
             row['calCardio'] as double?,
             row['calFatBurn'] as double?,
-            row['calOoR'] as double?));
+            row['calPeak'] as double?));
   }
 
   @override

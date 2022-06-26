@@ -27,12 +27,12 @@ class _TrainingPageState extends State<TrainingPage> {
   void initState() {
     super.initState();
     // fetchName function is a asynchronously to GET data
-    _loadData(context).then((result) {
-      // Once we receive our name we trigger rebuild.
-      setState(() {
-        datarec = result;
-      });
-    });
+    _loadData(context).then((result) => {
+          // Once we receive our name we trigger rebuild.
+          setState(() {
+            datarec = result;
+          }),
+        });
   }
 
   int touchedIndex = 0;
@@ -174,19 +174,19 @@ class _TrainingPageState extends State<TrainingPage> {
         //const color3 = Color(0xfff8b250);
 
         double caltot =
-            (datarec?[0] ?? -1) + (datarec?[1] ?? -1) + (datarec?[3] ?? -1);
+            (datarec?[0] ?? -1) + (datarec?[1] ?? -1) + (datarec?[2] ?? -1);
         double calCardio =
-            (((datarec?[0] ?? -1) * 100) / caltot).truncateToDouble();
+            (((datarec?[0] ?? -1) * 100) / caltot).roundToDouble();
         double calFatBurn =
             (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
-        double calOoR =
-            (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
         double calPeak =
-            (((datarec?[3] ?? -1) * 100) / caltot).truncateToDouble();
+            (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
+        /*double calPeak =
+            (((datarec?[3] ?? -1) * 100) / caltot).truncateToDouble();*/
         print('calorie cardio: $calCardio');
         print('calorie FatBurn: $calFatBurn');
-        print('calorie out of Range: $calOoR');
-        print('calorie Peak: $calPeak');
+        print('calorie di Picco: $calPeak');
+        // print('calorie Peak: $calPeak');
 
         switch (i) {
           case 0:
@@ -319,7 +319,7 @@ Future<List<double?>?> _loadData(context) async {
         List<double?>? vect = [
           datarec.calCardio,
           datarec.calFatBurn,
-          datarec.calOoR,
+          datarec.calPeak,
         ];
         print(vect);
         return vect;

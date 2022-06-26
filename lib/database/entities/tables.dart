@@ -13,10 +13,10 @@ class UserTable {
 
   final double? calFatBurn;
 
-  final double? calOoR;
+  final double? calPeak;
 
   UserTable(this.data, this.userId, this.steps, this.calCardio, this.calFatBurn,
-      this.calOoR);
+      this.calPeak);
 }
 
 @entity

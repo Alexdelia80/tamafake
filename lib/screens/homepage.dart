@@ -39,12 +39,13 @@ class _HomePageState extends State<HomePage> {
             value = result;
           })
         });
+    /*
     _checkauth(context).then((result) => {
           // Once we receive our name we trigger rebuild.
           setState(() {
             uID = result;
           })
-        });
+        });*/
     _checkprogress(context).then((result) => {
           // Once we receive our name we trigger rebuild.
           setState(() {
@@ -187,11 +188,12 @@ class _HomePageState extends State<HomePage> {
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
-                    //String? uID = await _checkauth(context);
+                    String? uID = await _checkauth(context);
                     //print('your uid is: $uID');
                     final sp = await SharedPreferences.getInstance();
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
-                    if (sp.getString('AuthorizationCheck') != null) {
+                    if ((sp.getString('AuthorizationCheck') != null) &&
+                        (uID != null)) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -446,13 +448,8 @@ Future<String?> _checkauth(context) async {
   String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
   String redirecturi = 'example://fitbit/auth';
   String callbackurl = 'example';
-
-  FitbitAccountDataManager fitbitAccountDataManager = FitbitAccountDataManager(
-    clientID: fitclientid,
-    clientSecret: fitclientsec,
-  );
-
-  String? userId = await FitbitConnector.authorize(
+  String? userId = '';
+  userId = await FitbitConnector.authorize(
       context: context,
       clientID: fitclientid,
       clientSecret: fitclientsec,
