@@ -1,4 +1,0 @@
-#Fri Jun 24 19:22:22 CEST 2022
-base.0=/Users/Asya/tamafake/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
