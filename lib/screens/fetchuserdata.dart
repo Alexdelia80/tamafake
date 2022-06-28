@@ -53,21 +53,22 @@ class _FetchPageState extends State<FetchPage> {
         ),
       ),
       body: Center(
+        //Aggiunta didascalia
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-              Container(
-                  padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
-                  child: (Column(
-                    children: [
-                      Text(
-                          'Eevee needs your data in order to function! Log into your FitBit profile and authorize the upload, you can delete your data at any time by clicking "unauthorize":',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                          )),
-                    ],
-                  ))),
+            Container(
+                padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                child: (Column(
+                  children: [
+                    Text(
+                        'Eevee needs your data in order to function! Log into your FitBit profile and authorize the upload, you can delete your data at any time by clicking "unauthorize":',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ))),
             // ------------------------ Autorizza il caricamento ------------------
             ElevatedButton(
               onPressed: () async {
@@ -108,10 +109,14 @@ class _FetchPageState extends State<FetchPage> {
                           await Provider.of<DatabaseRepository>(context,
                                   listen: false)
                               .cleanUser();
-                          final  sp = await SharedPreferences.getInstance();
+                          final sp = await SharedPreferences.getInstance();
                           await sp.remove('portafoglio');
                           await sp.remove('progress');
                           await sp.remove('AuthorizationCheck');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
                         },
                         child: const Text('Delete all'),
                       ),
