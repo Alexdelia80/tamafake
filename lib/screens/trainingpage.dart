@@ -36,15 +36,12 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   int touchedIndex = 0;
-  //final calCard = datarec.calCardio;
-  //double calCardio = datarec?[0] ?? -1
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //title: 'TamaFa Training',
       theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
       home: Scaffold(
+        backgroundColor: Color(0xFF75B7E1),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 230, 67, 121),
           centerTitle: true,
@@ -69,9 +66,10 @@ class _TrainingPageState extends State<TrainingPage> {
         body: Column(
           children: <Widget>[
             const SizedBox(
-              height: 28,
+              height: 40,
             ),
-            const Text('Types of calories that you consumed yesterday:'),
+            const Text('Types of calories that you consumed yesterday:',
+                style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
             const SizedBox(
               height: 28,
             ),
@@ -80,27 +78,19 @@ class _TrainingPageState extends State<TrainingPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Indicator(
-                  color: const Color(0xff0293ee),
+                  color: Color.fromARGB(255, 238, 222, 2),
                   text: 'Cardio',
                   isSquare: false,
                   size: touchedIndex == 0 ? 18 : 16,
                   textColor: touchedIndex == 0 ? Colors.black : Colors.grey,
                 ),
                 Indicator(
-                  color: const Color(0xff13d38e),
+                  color: Color.fromARGB(255, 19, 77, 211),
                   text: 'FatBurn',
                   isSquare: false,
                   size: touchedIndex == 1 ? 18 : 16,
                   textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
                 ),
-                /*
-                Indicator(
-                  color: Color.fromARGB(255, 209, 121, 121),
-                  text: 'Out of Range',
-                  isSquare: false,
-                  size: touchedIndex == 2 ? 18 : 16,
-                  textColor: touchedIndex == 2 ? Colors.black : Colors.grey,
-                ),*/
                 Indicator(
                   color: const Color.fromARGB(255, 209, 121, 121),
                   text: 'Peak',
@@ -110,9 +100,9 @@ class _TrainingPageState extends State<TrainingPage> {
                 ),
               ],
             ),
-            /* const SizedBox(
+            const SizedBox(
               height: 5,
-            ), */
+            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -142,19 +132,9 @@ class _TrainingPageState extends State<TrainingPage> {
                         centerSpaceRadius: 0,
                         sections: showingSections()),
                   ),
-                )
+                ),
               ],
             ),
-            /*
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Go Home'),
-              style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 230, 67, 121),
-              ),
-            ),*/
           ],
         ),
       ),
@@ -168,10 +148,9 @@ class _TrainingPageState extends State<TrainingPage> {
         final isTouched = i == touchedIndex;
         final opacity = isTouched ? 1.0 : 0.6;
 
-        const color0 = Color(0xff0293ee);
-        const color1 = Color(0xff13d38e);
-        const color2 = Color.fromARGB(255, 191, 50, 50);
-        //const color3 = Color(0xfff8b250);
+        const color0 = Color.fromARGB(255, 238, 222, 2);
+        const color1 = Color.fromARGB(255, 19, 77, 211);
+        const color2 = Color.fromARGB(255, 209, 121, 121);
 
         double caltot =
             (datarec?[0] ?? -1) + (datarec?[1] ?? -1) + (datarec?[2] ?? -1);
@@ -181,12 +160,6 @@ class _TrainingPageState extends State<TrainingPage> {
             (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
         double calPeak =
             (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
-        /*double calPeak =
-            (((datarec?[3] ?? -1) * 100) / caltot).truncateToDouble();*/
-        print('calorie cardio: $calCardio');
-        print('calorie FatBurn: $calFatBurn');
-        print('calorie di Picco: $calPeak');
-        // print('calorie Peak: $calPeak');
 
         switch (i) {
           case 0:
@@ -234,22 +207,7 @@ class _TrainingPageState extends State<TrainingPage> {
                   ? BorderSide(color: color2.darken(40), width: 6)
                   : BorderSide(color: color2.withOpacity(0)),
             );
-          /*
-          case 3:
-            return PieChartSectionData(
-              color: color3.withOpacity(opacity),
-              value: 1,
-              title: '1%',
-              radius: 85,
-              titleStyle: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 26, 25, 25)),
-              titlePositionPercentageOffset: 0.55,
-              borderSide: isTouched
-                  ? BorderSide(color: color3.darken(40), width: 6)
-                  : BorderSide(color: color2.withOpacity(0)),
-            );*/
+
           default:
             throw Error();
         }
@@ -330,4 +288,4 @@ Future<List<double?>?> _loadData(context) async {
       return null;
     }
   }
-} 
+}
