@@ -46,6 +46,7 @@ class _TrainingPageState extends State<TrainingPage> {
     double calFatBurn =
         (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
     double calPeak = (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
+    int lastdataint = (datarec?[3] ?? 0).toInt();
 
     // -------------------------- fine modifiche --------------------------------------
     return MaterialApp(
@@ -78,7 +79,7 @@ class _TrainingPageState extends State<TrainingPage> {
             const SizedBox(
               height: 28,
             ),
-            const Text('Types of calories that you consumed yesterday:'),
+            Text('Types of calories that you consumed $lastdataint:'),
             const SizedBox(
               height: 28,
             ),
@@ -308,6 +309,7 @@ Future<List<double?>?> _loadData(context) async {
           datarec.calCardio,
           datarec.calFatBurn,
           datarec.calPeak,
+          datarec.data.ceilToDouble(),
         ];
         print(vect);
         return vect;
