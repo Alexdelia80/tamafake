@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tamafake/screens/fetchuserdata.dart';
+import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +61,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return FlutterLogin(
       title: 'TAMA-fit',
-      theme: LoginTheme(primaryColor: Color(0xFF75B7E1), logoWidth: 1.5, titleStyle: TextStyle(fontFamily: 'Lobster')),
+      theme: LoginTheme(
+          primaryColor: Color.fromARGB(255, 230, 67, 121),
+          logoWidth: 1.5,
+          titleStyle: TextStyle(fontFamily: 'Lobster')),
       onLogin: _loginUser,
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,
@@ -75,8 +78,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.of(context).pushReplacementNamed(HomePage.route);
   } //_toHomePage
 
-void _toAutorizationPage(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(FetchPage.route);
+  void _toAutorizationPage(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(AuthPage.route);
   }
-
 } // LoginScreen

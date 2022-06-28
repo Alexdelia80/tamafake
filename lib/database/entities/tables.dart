@@ -9,9 +9,14 @@ class UserTable {
 
   final double? steps;
 
-  final double? calories;
+  final double? calCardio;
 
-  UserTable(this.data, this.userId, this.steps, this.calories);
+  final double? calFatBurn;
+
+  final double? calPeak;
+
+  UserTable(this.data, this.userId, this.steps, this.calCardio, this.calFatBurn,
+      this.calPeak);
 }
 
 @entity
