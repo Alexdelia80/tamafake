@@ -37,7 +37,7 @@ class _ShopPageState extends State<ShopPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 230, 67, 121),
         centerTitle: true,
-        title:  Text('Shop', style: TextStyle(fontSize: 25)),
+        title: Text('Shop', style: TextStyle(fontSize: 25)),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -55,58 +55,58 @@ class _ShopPageState extends State<ShopPage> {
           },
         ),
       ),
-      backgroundColor:Color(0xFF75B7E1),
+      backgroundColor: Color(0xFF75B7E1),
       body: ListView(
         children: [
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.local_pizza, size: 30),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Pizza', style: TextStyle(fontSize: 23)),
             trailing: Text('20 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valPizza, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.icecream, size: 30 ),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            leading: Icon(Icons.icecream, size: 30),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Gourmet Ice Cream', style: TextStyle(fontSize: 23)),
             trailing: Text('15 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valIce, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.fish, size: 30),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Fish', style: TextStyle(fontSize: 23)),
             trailing: Text('10 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valFish, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.apple, size: 30),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Apple', style: TextStyle(fontSize: 23)),
             trailing: Text('5 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valApple, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.baguette, size: 30),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Bread', style: TextStyle(fontSize: 23)),
             trailing: Text('3 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valBread, context),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(MdiIcons.bottleSoda, size: 30),
-            iconColor:Color.fromARGB(255, 230, 67, 121),
+            iconColor: Color.fromARGB(255, 230, 67, 121),
             title: Text('Water', style: TextStyle(fontSize: 23)),
             trailing: Text('1 €', style: TextStyle(fontSize: 22)),
             onTap: () => _subtract(valWater, context),
           ),
-          Divider(),
+          const Divider(),
 
           // Stampo il portafoglio nella schermata di shop
           FutureBuilder(
@@ -119,7 +119,7 @@ class _ShopPageState extends State<ShopPage> {
                   final portafoglio = sp.getInt('portafoglio');
                   return Align(
                     alignment: Alignment.center,
-                    child: Text( 
+                    child: Text(
                       'Money: $portafoglio',
                       style: TextStyle(fontSize: 22),
                     ),
@@ -128,8 +128,8 @@ class _ShopPageState extends State<ShopPage> {
                   final portafoglio = sp.getInt('portafoglio');
                   return Align(
                     alignment: Alignment.bottomCenter,
-                    child: Text( '\n' + '\n' + 
-                      'Money: $portafoglio',
+                    child: Text(
+                      '\n' + '\n' + 'Money: $portafoglio',
                       style: TextStyle(fontSize: 25),
                     ),
                   );
@@ -144,65 +144,63 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // Funzione che sottrai i soldi del cibo dal portafoglio
+  // Funzione: sottraggo i soldi dal portafoglio quando acquisto qualcosa
   void _subtract(int valore, context) async {
     final sp = await SharedPreferences.getInstance();
     setState(() {
       int? portafoglio = sp.getInt('portafoglio');
-        if (portafoglio! >= (valore)) {
-          portafoglio = portafoglio - valore;
-          sp.setInt('portafoglio', portafoglio);
-          // Vedo da console il valore del portafoglio:
-          print('Money: $portafoglio');
+      if (portafoglio! >= (valore)) {
+        portafoglio = portafoglio - valore;
+        sp.setInt('portafoglio', portafoglio);
+        // Vedo da console il valore del portafoglio:
+        print('Money: $portafoglio');
 
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              //AlertDialog Title
-              backgroundColor:Color.fromARGB(255, 230, 67, 121),
-              title: const Text('YEP YOU ARE A GOOD TRAINER!!!', style: TextStyle(color: Colors.white)),
-              //AlertDialog description'
-              content: const Text('You bought Eevee some food!', style: TextStyle(color: Colors.white)),
-            ),
-          ); // Show
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => const AlertDialog(
+            //AlertDialog Title
+            backgroundColor: Color.fromARGB(255, 230, 67, 121),
+            title: Text('YOU ARE A GOOD TRAINER!!!',
+                style: TextStyle(color: Colors.white)),
+            //AlertDialog description'
+            content: Text('You bought Eevee some food!',
+                style: TextStyle(color: Colors.white)),
+          ),
+        ); // Show
 
-          //aggiorna tabella avatar con la funzione
-          addAvatar(context, valore);
-        } else {
-          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              //AlertDialog Title
-              backgroundColor:Color.fromARGB(255, 230, 67, 121),
-              title: const Text('Attention', style: TextStyle(color: Colors.white ) ),
-              //AlertDialog description
-              content: const Text(
-                  'You do not have enough money to buy this item!', style: TextStyle(color: Colors.white ) ),
-              actions: <Widget>[
-                //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
-                TextButton(
-                  //onPressed: () => Navigator.pop(context, 'Cancel'),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage())),
-                  child: const Text('Home', style: TextStyle(color: Colors.white ) ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK', style: TextStyle(color: Colors.white ) ),
-                ),
-              ],
-            ),
-          ); //showDialog
-        } //
+        //aggiorna tabella avatar con la funzione
+        addAvatar(context, valore);
+      } else {
+        // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            backgroundColor: Color.fromARGB(255, 230, 67, 121),
+            title:
+                const Text('ATTENTION!', style: TextStyle(color: Colors.white)),
+            content: const Text('You do not have enough money to buy this item',
+                style: TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HomePage())),
+                child:
+                    const Text('Home', style: TextStyle(color: Colors.white)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ); //showDialog
       }
-    ); // setState
+    }); // setState
   } //_subtract
   //ShopPage
 }
 
+// Funzione: aggiorna la tabella Avatar
 void addAvatar(context, int valore) async {
   String userID = '7ML2XV';
   final listavatar =
@@ -213,7 +211,6 @@ void addAvatar(context, int valore) async {
     int lastexp = listavatar[indice].exp;
     final newexp = lastexp + valore;
     final newlevel = newexp ~/ 100 + 1;
-    print('level: $newlevel');
     Provider.of<DatabaseRepository>(context, listen: false)
         .insertAvatar(AvatarTable(newexp, userID, newlevel));
 
@@ -221,7 +218,6 @@ void addAvatar(context, int valore) async {
     final sp = await SharedPreferences.getInstance();
     if (sp.getDouble('progress') == null) {
       sp.setDouble('progress', 0);
-      //calcolo progress
       final progress = (newexp - (newlevel - 1) * 100) / 100;
       sp.setDouble('progress', progress);
     } else {
@@ -238,7 +234,6 @@ void addAvatar(context, int valore) async {
         .insertAvatar(AvatarTable(lastexp, userID, level));
     final newexp = lastexp + valore;
     final newlevel = newexp ~/ 100 + 1;
-    print('level: $newlevel');
     await Provider.of<DatabaseRepository>(context, listen: false)
         .insertAvatar(AvatarTable(newexp, userID, newlevel));
 
@@ -246,7 +241,6 @@ void addAvatar(context, int valore) async {
     final sp = await SharedPreferences.getInstance();
     if (sp.getDouble('progress') == null) {
       sp.setDouble('progress', 0);
-      //calcolo progress
       final progress = (newexp - (newlevel - 1) * 100) / 100;
       sp.setDouble('progress', progress);
     } else {
