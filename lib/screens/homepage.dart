@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -178,7 +176,7 @@ class _HomePageState extends State<HomePage> {
 
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
                     if ((sp.getString('AuthorizationCheck') != null) &&
-                        (uID != null)) {
+                        uID == null) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -304,6 +302,7 @@ class _HomePageState extends State<HomePage> {
                                 heartData[0].caloriesFatBurn,
                                 heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
+                        final steps_int = steps!.toInt();
                         final calorie_cardio = heartData[0].caloriesCardio;
                         double cal_cardio = calorie_cardio!.truncateToDouble();
                         final calorie_fatburn = heartData[0].caloriesFatBurn;
