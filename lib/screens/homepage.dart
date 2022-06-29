@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 23),
                         ),
                         const SizedBox(
                           height: 20,
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                               value: progress,
                               color: const Color.fromARGB(255, 67, 129, 230),
                               backgroundColor:
-                                  const Color.fromARGB(255, 135, 169, 197)),
+                                  Color.fromARGB(255, 95, 234, 176)),
                         );
                       } else {
                         final progress = sp.getDouble('progress');
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                               value: progress,
                               color: Color.fromARGB(255, 67, 129, 230),
                               backgroundColor:
-                                  Color.fromARGB(255, 135, 169, 197)),
+                                  Color.fromARGB(255, 95, 234, 176)),
                         );
                       }
                     } else {
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 40,
                 ),
-                // ----------------------------- Immagine Evee ---------------------------------
+                // ----------------------------- Immagine Eevee ---------------------------------
                 const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
@@ -153,12 +153,12 @@ class _HomePageState extends State<HomePage> {
 
                 // -------------------------------- EXPERIENCE --------------------------------
                 Text(
-                  'Eevee\'s total experience: $exp',
+                  'EEVEE\'S TOTAL EXPERIENCE: $exp',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 23),
                 ),
                 const SizedBox(
                   height: 100,
@@ -171,12 +171,10 @@ class _HomePageState extends State<HomePage> {
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
-                    String? uID = await _checkauth(context);
                     final sp = await SharedPreferences.getInstance();
 
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
-                    if ((sp.getString('AuthorizationCheck') != null) &&
-                        uID == null) {
+                    if (sp.getString('AuthorizationCheck') != null) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -237,6 +235,7 @@ class _HomePageState extends State<HomePage> {
                                   heartData[0].caloriesFatBurn,
                                   heartData[0].caloriesPeak));
                           final steps = stepsData[0].value;
+                          int steps_int = steps!.toInt();
                           final calorie_cardio = heartData[0].caloriesCardio;
                           double cal_cardio =
                               calorie_cardio!.truncateToDouble();
@@ -253,9 +252,10 @@ class _HomePageState extends State<HomePage> {
                                     //AlertDialog Title
                                     backgroundColor:
                                         const Color.fromARGB(255, 230, 67, 121),
-                                    title: Text('Your progress:'),
+                                    title: Text('Your progress:',
+                                        style: TextStyle(color: Colors.white)),
                                     content: Text(
-                                        'Steps: $steps' +
+                                        'Steps: $steps_int' +
                                             '\n' +
                                             'Calories Cardio: $cal_cardio' +
                                             '\n' +
@@ -277,15 +277,14 @@ class _HomePageState extends State<HomePage> {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  const SimpleDialog(
+                                  const AlertDialog(
                                     //AlertDialog Title
                                     backgroundColor:
                                         Color.fromARGB(255, 230, 67, 121),
-                                    title: Text(
-                                        "Don't get cheat!" +
-                                            "\n" +
-                                            "You can't upload your progress twice!" +
-                                            "\n",
+                                    title: Text("Don't cheat!", style: TextStyle(color: Colors.white)),
+
+                                    content: Text(
+                                        "You can't upload your progress twice!",
                                         style: TextStyle(color: Colors.white)),
                                   ));
                           //alert
@@ -302,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                                 heartData[0].caloriesFatBurn,
                                 heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
-                        final steps_int = steps!.toInt();
+                        int steps_int = steps!.toInt();
                         final calorie_cardio = heartData[0].caloriesCardio;
                         double cal_cardio = calorie_cardio!.truncateToDouble();
                         final calorie_fatburn = heartData[0].caloriesFatBurn;
@@ -313,12 +312,14 @@ class _HomePageState extends State<HomePage> {
                         //Alert per avvisare l'utente che i dati sono stati caricati
                         showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => SimpleDialog(
+                            builder: (BuildContext context) => AlertDialog(
                                   //AlertDialog Title
                                   backgroundColor:
                                       Color.fromARGB(255, 230, 67, 121),
-                                  title: Text(
-                                      'Steps: $steps' +
+                                  title: Text('Your progress:',
+                                      style: TextStyle(color: Colors.white)),
+                                  content: Text(
+                                      'Steps: $steps_int' +
                                           '\n' +
                                           'Calories Cardio: $cal_cardio' +
                                           '\n' +
@@ -428,24 +429,6 @@ Future<int?> _returnMoney(value) async {
     print('Il valore del tuo portafoglio è: $aggPortafoglio');
     return aggPortafoglio;
   }
-}
-
-Future<String?> _checkauth(context) async {
-  String fitclientid = '238BYH';
-  String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
-  String redirecturi = 'example://fitbit/auth';
-  String callbackurl = 'example';
-  String? userId = '';
-  userId = await FitbitConnector.authorize(
-      context: context,
-      clientID: fitclientid,
-      clientSecret: fitclientsec,
-      redirectUri: redirecturi,
-      callbackUrlScheme: callbackurl);
-  FitbitUserAPIURL fitbitUserApiUrl =
-      FitbitUserAPIURL.withUserID(userID: userId);
-  print('fitbitapiurl: $fitbitUserApiUrl');
-  return userId;
 }
 
 Future<double?> _checkprogress(context) async {

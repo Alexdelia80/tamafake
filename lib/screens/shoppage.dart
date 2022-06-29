@@ -177,7 +177,7 @@ class _ShopPageState extends State<ShopPage> {
           builder: (BuildContext context) => AlertDialog(
             backgroundColor: Color.fromARGB(255, 230, 67, 121),
             title:
-                const Text('Attention!', style: TextStyle(color: Colors.white)),
+                const Text('ATTENTION!', style: TextStyle(color: Colors.white)),
             content: const Text('You do not have enough money to buy this item',
                 style: TextStyle(color: Colors.white)),
             actions: <Widget>[

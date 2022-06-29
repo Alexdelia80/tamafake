@@ -137,14 +137,14 @@ class _TrainingPageState extends State<TrainingPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const <Widget>[
                   Indicator(
-                    color: const Color(0xff0293ee),
+                    color: Color.fromARGB(255, 238, 222, 2),
                     text: 'Cardio',
                     isSquare: false,
                     size: 18,
                     textColor: Colors.black,
                   ),
                   Indicator(
-                    color: const Color(0xff13d38e),
+                    color: Color.fromARGB(255, 19, 77, 211),
                     text: 'FatBurn',
                     isSquare: false,
                     size: 18,
@@ -153,7 +153,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     //textColor: touchedIndex == 1 ? Colors.black : Colors.grey,
                   ),
                   Indicator(
-                    color: const Color.fromARGB(255, 209, 121, 121),
+                    color: Color.fromARGB(255, 209, 121, 121),
                     text: 'Peak',
                     isSquare: false,
                     size: 18,
@@ -223,9 +223,9 @@ class _TrainingPageState extends State<TrainingPage> {
         final isTouched = i == touchedIndex;
         final opacity = isTouched ? 1.0 : 0.6;
 
-        const color0 = Color(0xff0293ee);
-        const color1 = Color(0xff13d38e);
-        const color2 = Color.fromARGB(255, 191, 50, 50);
+        const color0 = Color.fromARGB(255, 238, 222, 2);
+        const color1 = Color.fromARGB(255, 19, 77, 211);
+        const color2 = Color.fromARGB(255, 209, 121, 121);
 
         double caltot =
             (datarec?[0] ?? -1) + (datarec?[1] ?? -1) + (datarec?[2] ?? -1);
