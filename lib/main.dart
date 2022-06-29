@@ -14,8 +14,9 @@ import 'package:tamafake/screens/trainingpage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final AppDatabase database =
-      await $FloorAppDatabase.databaseBuilder('database_app.db').build();
+  final AppDatabase database = await $FloorAppDatabase
+      .databaseBuilder('database_applicazione.db')
+      .build();
   final databaseRepository = DatabaseRepository(database: database);
 
   runApp(ChangeNotifierProvider<DatabaseRepository>(

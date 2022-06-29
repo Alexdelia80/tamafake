@@ -143,26 +143,44 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // Metodo che sottrae i soldi spesi dal portafoglio
+  // Funzione: sottraggo i soldi dal portafoglio quando acquisto qualcosa
   void _subtract(int valore, context) async {
     final sp = await SharedPreferences.getInstance();
     setState(() {
       int? portafoglio = sp.getInt('portafoglio');
-      if (portafoglio == null) {
+      if (portafoglio! >= (valore)) {
+        portafoglio = portafoglio - valore;
+        sp.setInt('portafoglio', portafoglio);
+        // Vedo da console il valore del portafoglio:
+        print('Money: $portafoglio');
+
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => const AlertDialog(
+            //AlertDialog Title
+            backgroundColor: Color.fromARGB(255, 230, 67, 121),
+            title: Text('YOU ARE A GOOD TRAINER!!!',
+                style: TextStyle(color: Colors.white)),
+            //AlertDialog description'
+            content: Text('You bought Eevee some food!',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
+          ),
+        ); // Show
+
+        //aggiorna tabella avatar con la funzione
+        addAvatar(context, valore);
+      } else {
+        // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            //AlertDialog Title
             backgroundColor: Color.fromARGB(255, 230, 67, 121),
-            title: const Text('Attention!'),
-            //AlertDialog description
-            content: const Text(
-                'You do not have money, you need to load your progress first!',
-                style: TextStyle(color: Colors.white)),
+            title:
+                const Text('ATTENTION!', style: TextStyle(color: Colors.white)),
+            content: const Text('You do not have enough money to buy this item',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             actions: <Widget>[
-              //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
               TextButton(
-                //onPressed: () => Navigator.pop(context, 'Cancel'),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const HomePage())),
                 child:
@@ -174,68 +192,14 @@ class _ShopPageState extends State<ShopPage> {
               ),
             ],
           ),
-        );
-      } else {
-        if (portafoglio >= (valore)) {
-          portafoglio = portafoglio - valore;
-          sp.setInt('portafoglio', portafoglio);
-          // Vedo da console il valore del portafoglio:
-          print('Money: $portafoglio');
-
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => const AlertDialog(
-              //AlertDialog Title
-              backgroundColor: Color.fromARGB(255, 230, 67, 121),
-              title: const Text('YEP YOU ARE A GOOD TRAINER!!!',
-                  style: TextStyle(color: Colors.white)),
-              //AlertDialog description'
-              content: const Text('You bought Eevee some food!',
-                  style: TextStyle(color: Colors.white)),
-            ),
-          ); // Show
-
-          //aggiorna tabella avatar con la funzione
-          addAvatar(context, valore);
-        } else {
-          // Richiama il Dialog di allerta dicendo che non abbiamo abbastanza soldi
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              //AlertDialog Title
-              backgroundColor: Color.fromARGB(255, 230, 67, 121),
-              title: const Text('Attention!',
-                  style: TextStyle(color: Colors.white)),
-              //AlertDialog description
-              content: const Text(
-                  'You do not have enough money to buy this item',
-                  style: TextStyle(color: Colors.white)),
-              actions: <Widget>[
-                //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
-                TextButton(
-                  //onPressed: () => Navigator.pop(context, 'Cancel'),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage())),
-                  child:
-                      const Text('Home', style: TextStyle(color: Colors.white)),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child:
-                      const Text('OK', style: TextStyle(color: Colors.white)),
-                ),
-              ],
-            ),
-          ); //showDialog
-        } //
+        ); //showDialog
       }
     }); // setState
   } //_subtract
   //ShopPage
 }
 
+// Funzione: aggiorna la tabella Avatar
 void addAvatar(context, int valore) async {
   String userID = '7ML2XV';
   final listavatar =
@@ -246,8 +210,6 @@ void addAvatar(context, int valore) async {
     int lastexp = listavatar[indice].exp;
     final newexp = lastexp + valore;
     final newlevel = newexp ~/ 100 + 1;
-    print('Nuovo livello raggiunto: $newlevel');
-    print('Nuova esperienza raggiunta: $newexp');
     Provider.of<DatabaseRepository>(context, listen: false)
         .insertAvatar(AvatarTable(newexp, userID, newlevel));
 
@@ -255,7 +217,6 @@ void addAvatar(context, int valore) async {
     final sp = await SharedPreferences.getInstance();
     if (sp.getDouble('progress') == null) {
       sp.setDouble('progress', 0);
-      //calcolo progress
       final progress = (newexp - (newlevel - 1) * 100) / 100;
       sp.setDouble('progress', progress);
     } else {
@@ -272,7 +233,6 @@ void addAvatar(context, int valore) async {
         .insertAvatar(AvatarTable(lastexp, userID, level));
     final newexp = lastexp + valore;
     final newlevel = newexp ~/ 100 + 1;
-    print('level: $newlevel');
     await Provider.of<DatabaseRepository>(context, listen: false)
         .insertAvatar(AvatarTable(newexp, userID, newlevel));
 
@@ -280,7 +240,6 @@ void addAvatar(context, int valore) async {
     final sp = await SharedPreferences.getInstance();
     if (sp.getDouble('progress') == null) {
       sp.setDouble('progress', 0);
-      //calcolo progress
       final progress = (newexp - (newlevel - 1) * 100) / 100;
       sp.setDouble('progress', progress);
     } else {

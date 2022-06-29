@@ -43,25 +43,25 @@ class RegulationPage extends StatelessWidget {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "How can you play with Eevee?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
+                            fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(
-                height: 40,
+              const SizedBox(
+                height: 30,
               ),
               Container(
-                  padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
                   child: (Column(
-                    children: [
-                      const Text(
+                    children: const [
+                      Text(
                           "Hello friends of Eevee!" +
                               "\n" +
                               "Welcome to this new adventure!" +

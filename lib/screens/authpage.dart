@@ -1,11 +1,8 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:tamafake/repository/databaseRepository.dart';
-import 'package:tamafake/database/entities/tables.dart';
-import 'package:tamafake/database/daos/tablesDao.dart';
 import 'package:tamafake/screens/homepage.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget {
@@ -56,6 +53,23 @@ class _AuthPageState extends State<AuthPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/eevee.png', width: 150, height: 150),
+            Container(
+                padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                child: (Column(
+                  children: const [
+                    Text(
+                        'Eevee needs your data in order to train!' +
+                            '\n' +
+                            '\n' +
+                            'Log into your Fitbit profile and authorize the upload of your data, but please remember that you can delete your data at any time by clicking "Unauthorize":',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ))),
+
             // ------------------------ Autorizza il caricamento ------------------
             ElevatedButton(
               onPressed: () async {
@@ -89,7 +103,7 @@ class _AuthPageState extends State<AuthPage> {
                     //AlertDialog description
                     content: const Text(
                         'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () async {
@@ -107,6 +121,10 @@ class _AuthPageState extends State<AuthPage> {
                           await sp.remove('portafoglio');
                           await sp.remove('progress');
                           await sp.remove('AuthorizationCheck');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
                         },
                         child: const Text('Delete all',
                             style: TextStyle(color: Colors.white)),

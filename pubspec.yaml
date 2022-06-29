@@ -36,7 +36,6 @@ dependencies:
   provider:
   material_design_icons_flutter:
   floor: ^1.2.0
-  fluid_bottom_nav_bar: ^1.3.0
   pie_chart: ^5.3.1
   fl_chart: ^0.55.0
   draw_graph: ^1.0.0
@@ -44,6 +43,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +71,8 @@ flutter:
   uses-material-design: true
   assets:
       - assets/ash.png
+      - assets/eevee.png
+      - assets/eeveeicon.png
   fonts:
     - family: Lobster
       fonts:
