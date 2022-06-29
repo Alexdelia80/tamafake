@@ -1,4 +1,4 @@
-#Wed Jun 29 16:09:29 CEST 2022
+#Wed Jun 29 17:06:59 CEST 2022
 base.0=C\:\\Users\\alexd\\git-test\\tamafake\\tamafake\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

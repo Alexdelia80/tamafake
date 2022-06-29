@@ -34,8 +34,6 @@ class _TrainingPageState extends State<TrainingPage> {
         });
   }
 
-  //--------------------------- modifiche da qui -------------------------------------
-  // questa variabile è null, prima era zero, va modificata!
   int? touchedIndex;
 
   @override
@@ -47,7 +45,16 @@ class _TrainingPageState extends State<TrainingPage> {
         (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
     double calPeak = (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
     int lastdataint = (datarec?[3] ?? 0).toInt();
-
+    String? datastring = lastdataint.toString();
+    // ---------------------------- aggiungi questo --------------------------------------
+    String? dataformat = datastring.substring(0, 2) +
+        "/" +
+        datastring.substring(2, 4) +
+        "/" +
+        datastring.substring(4, datastring.length);
+    double calC = (datarec?[0] ?? 0).roundToDouble();
+    double calF = (datarec?[1] ?? 0).roundToDouble();
+    double calP = (datarec?[2] ?? 0).roundToDouble();
     // -------------------------- fine modifiche --------------------------------------
     return MaterialApp(
       //title: 'TamaFa Training',
@@ -79,7 +86,7 @@ class _TrainingPageState extends State<TrainingPage> {
             const SizedBox(
               height: 28,
             ),
-            Text('Types of calories that you consumed $lastdataint:'),
+            Text('Types of calories that you consumed $dataformat:'),
             const SizedBox(
               height: 28,
             ),
@@ -146,13 +153,13 @@ class _TrainingPageState extends State<TrainingPage> {
                   ),
                 ),
                 // -------------------------- modifiche qui -----------------------------
-                const Padding(padding: EdgeInsets.only(top: 20)),
+                // const Padding(padding: EdgeInsets.only(top: 20)),
                 Text(
-                    "Calories Cardio: $calCardio"
+                    "Calories Cardio: $calC"
                     "\n"
-                    "Calories FatBurn: $calFatBurn"
+                    "Calories FatBurn: $calF"
                     "\n"
-                    "Calories Peak: $calPeak",
+                    "Calories Peak: $calP",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -197,7 +204,7 @@ class _TrainingPageState extends State<TrainingPage> {
               value: calCardio,
               //value: 33,
               title: '$calCardio%',
-              radius: 110,
+              radius: 110, // < ------ SE MODIFICHI QUESTO MODIFICHI GLI SPICCHI
               titleStyle: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
