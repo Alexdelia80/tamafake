@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamafake/utils/indicator.dart';
 import 'package:tamafake/screens/homepage.dart';
+import 'package:basic_utils/basic_utils.dart';
 
 class TrainingPage extends StatefulWidget {
   TrainingPage({Key? key}) : super(key: key);
@@ -41,7 +42,9 @@ class _TrainingPageState extends State<TrainingPage> {
         (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
     double calPeak = (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
     int lastdataint = (datarec?[3] ?? 0).toInt();
-
+    String? datastring = lastdataint.toString();
+    String data1 = StringUtils.addCharAtPosition(datastring, "/", 2);
+    String data2 = StringUtils.addCharAtPosition(data1, "/", 5);
     double calC = (datarec?[0] ?? 0).roundToDouble();
     double calF = (datarec?[1] ?? 0).roundToDouble();
     double calP = (datarec?[2] ?? 0).roundToDouble();
@@ -76,10 +79,8 @@ class _TrainingPageState extends State<TrainingPage> {
             const SizedBox(
               height: 28,
             ),
-            Text(
-                'Types of calories that you consumed when you played with Eevee last time:',
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center),
+            Text('Types of calories that you consumed in $data2',
+                style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
             const SizedBox(
               height: 28,
             ),

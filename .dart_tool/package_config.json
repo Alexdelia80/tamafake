@@ -38,6 +38,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "basic_utils",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/basic_utils-4.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0",
       "packageUri": "lib/",
@@ -344,6 +350,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "http",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "http_multi_server",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/http_multi_server-3.2.0",
       "packageUri": "lib/",
@@ -502,6 +514,12 @@
     {
       "name": "plugin_platform_interface",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pointycastle",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pointycastle-3.6.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -806,7 +824,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-06-29T18:21:37.684374Z",
+  "generated": "2022-06-29T19:44:57.742249Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

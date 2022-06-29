@@ -26,6 +26,10 @@ async
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib/
+basic_utils
+2.15
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/basic_utils-4.2.2/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/basic_utils-4.2.2/lib/
 boolean_selector
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/
@@ -218,6 +222,10 @@ graphs
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/graphs-2.1.0/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/graphs-2.1.0/lib/
+http
+2.14
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib/
 http_multi_server
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/http_multi_server-3.2.0/
@@ -326,6 +334,10 @@ plugin_platform_interface
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.2/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.2/lib/
+pointycastle
+2.12
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pointycastle-3.6.0/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pointycastle-3.6.0/lib/
 pool
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.5.0/
