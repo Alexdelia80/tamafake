@@ -12,13 +12,13 @@
 12         to allow setting breakpoints, to provide hot reload, etc.
 13    -->
 14    <uses-permission android:name="android.permission.INTERNET" />
-14-->C:\Users\ASUS\tamafake\android\app\src\debug\AndroidManifest.xml:6:5-66
-14-->C:\Users\ASUS\tamafake\android\app\src\debug\AndroidManifest.xml:6:22-64
+14-->C:\Users\alexd\git-test\tamafake\tamafake\android\app\src\debug\AndroidManifest.xml:6:5-66
+14-->C:\Users\alexd\git-test\tamafake\tamafake\android\app\src\debug\AndroidManifest.xml:6:22-64
 15
 16    <application
 17        android:name="android.app.Application"
 18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-18-->[androidx.core:core:1.6.0] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\122df2e57d294d1a53db26bbc3b813c1\core-1.6.0\AndroidManifest.xml:24:18-86
+18-->[androidx.core:core:1.6.0] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\122df2e57d294d1a53db26bbc3b813c1\core-1.6.0\AndroidManifest.xml:24:18-86
 19        android:debuggable="true"
 20        android:icon="@mipmap/ic_launcher"
 21        android:label="tamafake" >
@@ -66,26 +66,26 @@
 63            android:value="2" />
 64
 65        <activity
-65-->[:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+65-->[:url_launcher_android] C:\Users\alexd\git-test\tamafake\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
 66            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-66-->[:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
+66-->[:url_launcher_android] C:\Users\alexd\git-test\tamafake\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
 67            android:exported="false"
-67-->[:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+67-->[:url_launcher_android] C:\Users\alexd\git-test\tamafake\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
 68            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-68-->[:url_launcher_android] C:\Users\ASUS\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+68-->[:url_launcher_android] C:\Users\alexd\git-test\tamafake\tamafake\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
 69
 70        <uses-library
-70-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+70-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
 71            android:name="androidx.window.extensions"
-71-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+71-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
 72            android:required="false" />
-72-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+72-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
 73        <uses-library
-73-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+73-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
 74            android:name="androidx.window.sidecar"
-74-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+74-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
 75            android:required="false" />
-75-->[androidx.window:window:1.0.0-beta04] C:\Users\ASUS\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+75-->[androidx.window:window:1.0.0-beta04] C:\Users\alexd\.gradle\caches\transforms-2\files-2.1\03c633e46d75bfb21f082f0417f55161\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
 76    </application>
 77
 78</manifest>

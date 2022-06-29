@@ -8,6 +8,9 @@ import 'package:tamafake/screens/loginpage.dart';
 import 'package:tamafake/screens/regulation.dart';
 import 'package:tamafake/screens/shoppage.dart';
 import 'package:tamafake/screens/trainingpage.dart';
+import 'package:provider/provider.dart';
+import 'package:tamafake/repository/databaseRepository.dart';
+import 'package:intl/intl.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -20,8 +23,8 @@ class NavBar extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              decoration:
-                  const BoxDecoration(color:const Color.fromARGB(255, 230, 67, 121)),
+              decoration: const BoxDecoration(
+                  color: const Color.fromARGB(255, 230, 67, 121)),
               accountName: const Text('Ash Ketchum',
                   style: TextStyle(
                     fontSize: 25,
@@ -57,9 +60,32 @@ class NavBar extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 23,
                     )),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TrainingPage()));
+                onTap: () async {
+                  int? datarec = await _loadData(context);
+                  print('La ultima data inserita è: $datarec');
+                  //int? lastdataint = (datarec.?[3] ?? 0).toInt();
+                  if (datarec != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TrainingPage()));
+                  } else {
+                    print(
+                        'ATTENZIONE: Devi caricare i dati prima di vedere il grafico!');
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => const AlertDialog(
+                              //AlertDialog Title
+                              backgroundColor:
+                                  Color.fromARGB(255, 230, 67, 121),
+                              title: Text("Don't cheat!",
+                                  style: TextStyle(color: Colors.white)),
+
+                              content: Text(
+                                  "You need to fetch user data before to see Training!",
+                                  style: TextStyle(color: Colors.white)),
+                            ));
+                  }
                 }),
             const Divider(),
             ListTile(
@@ -158,3 +184,30 @@ void _toLoginPage(BuildContext context) async {
   Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
   //Navigator.of(context).pushReplacementNamed(LoginPage.route);
 } //_toCalendarPage
+
+Future<int?>? _loadData(context) async {
+  final calcData = DateTime.now().subtract(const Duration(days: 1));
+  int dataINT = int.parse(DateFormat("ddMMyyyy").format(calcData));
+
+  final listtable =
+      await Provider.of<DatabaseRepository>(context, listen: false).findUser();
+
+  if (listtable.isNotEmpty) {
+    int? indice = listtable.length - 1;
+    int? lastdata = listtable[indice].data;
+    if (lastdata == dataINT) {
+      final sp = await SharedPreferences.getInstance();
+      if (sp.getString('AuthorizationCheck') != null) {
+        final datarec = listtable[indice];
+        int? datavect = datarec.data;
+        return datavect;
+      } else {
+        int? datavect = 0;
+        return datavect;
+      } // Endif lastData=dataint
+    } else {
+      int? datavect = 0;
+      return datavect;
+    }
+  }
+}

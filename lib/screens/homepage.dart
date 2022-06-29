@@ -143,9 +143,8 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://www.woolha.com/media/2020/03/eevee.png'),
-                      radius: 70,
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/eevee.png'),
                     ),
                   ),
                 ),
@@ -281,7 +280,8 @@ class _HomePageState extends State<HomePage> {
                                     //AlertDialog Title
                                     backgroundColor:
                                         Color.fromARGB(255, 230, 67, 121),
-                                    title: Text("Don't cheat!", style: TextStyle(color: Colors.white)),
+                                    title: Text("Don't cheat!",
+                                        style: TextStyle(color: Colors.white)),
 
                                     content: Text(
                                         "You can't upload your progress twice!",
