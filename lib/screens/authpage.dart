@@ -105,7 +105,7 @@ class _AuthPageState extends State<AuthPage> {
                     //AlertDialog description
                     content: const Text(
                         'Please note: If you revoke permission all your data will be deleted. Do you want to proceed?',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () async {

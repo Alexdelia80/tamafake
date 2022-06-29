@@ -120,7 +120,7 @@ class NavBar extends StatelessWidget {
                     backgroundColor: Color.fromARGB(255, 230, 67, 121),
                     title: const Text(
                         'Are you sure you want to leave us? Eevee is sad about this...',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
                     actions: <Widget>[
                       //Qui si può far scegliere all'utente se fare il log out oppure di rimanere nella home
                       TextButton(

@@ -164,7 +164,7 @@ class _ShopPageState extends State<ShopPage> {
                 style: TextStyle(color: Colors.white)),
             //AlertDialog description'
             content: Text('You bought Eevee some food!',
-                style: TextStyle(color: Colors.white)),
+                style: TextStyle(color: Colors.white, fontSize: 18)),
           ),
         ); // Show
 
@@ -179,7 +179,7 @@ class _ShopPageState extends State<ShopPage> {
             title:
                 const Text('ATTENTION!', style: TextStyle(color: Colors.white)),
             content: const Text('You do not have enough money to buy this item',
-                style: TextStyle(color: Colors.white)),
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.push(context,

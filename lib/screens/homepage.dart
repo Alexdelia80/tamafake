@@ -284,7 +284,7 @@ class _HomePageState extends State<HomePage> {
 
                                     content: Text(
                                         "You can't upload your progress twice!",
-                                        style: TextStyle(color: Colors.white)),
+                                        style: TextStyle(color: Colors.white, fontSize: 18),),
                                   ));
                           //alert
                         }
@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                                           '\n' +
                                           'Calories Peak: $cal_peak' +
                                           '\n',
-                                      style: TextStyle(color: Colors.white)),
+                                      style: TextStyle(color: Colors.white, fontSize: 18 )),
                                 ));
                         // ------------------- aggiorno il portafoglio -----------------------
                         _returnMoney(stepsData[0].value);
@@ -342,7 +342,7 @@ class _HomePageState extends State<HomePage> {
                           //AlertDialog description
                           content: const Text(
                               'You have to authorize the app first!',
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.white, fontSize: 18)),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.push(
