@@ -74,3 +74,6 @@ VERSIONE 2.0.4
 Sistemazione della grafica;
 inserimento del livello di esperienza
 sistemazione del codice in generale
+
+VERSIONE 2.0.5 - 2.0.6
+Fixed Errors sul garfico
