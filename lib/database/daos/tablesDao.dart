@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'package:flutter/cupertino.dart';
 import 'package:tamafake/database/entities/tables.dart';
 import 'package:floor/floor.dart';
 

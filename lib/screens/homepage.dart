@@ -1,6 +1,3 @@
-//import 'dart:ffi';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tamafake/screens/authpage.dart';
 import 'package:tamafake/screens/loginpage.dart';
@@ -254,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                     //AlertDialog Title
                                     backgroundColor:
                                         const Color.fromARGB(255, 230, 67, 121),
-                                    title: Text('Your progress:',
+                                    title: const Text('Your progress:',
                                         style: TextStyle(color: Colors.white)),
                                     content: Text(
                                         'Steps: $steps_int' +
