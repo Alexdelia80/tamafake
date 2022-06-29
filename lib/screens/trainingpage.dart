@@ -20,6 +20,7 @@ class TrainingPage extends StatefulWidget {
 
 class _TrainingPageState extends State<TrainingPage> {
 
+
   List<double?>? datarec;
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   int? touchedIndex;
- 
+
   @override
   Widget build(BuildContext context) {
     double caltot =
@@ -42,116 +43,120 @@ class _TrainingPageState extends State<TrainingPage> {
         (((datarec?[1] ?? -1) * 100) / caltot).truncateToDouble();
     double calPeak = (((datarec?[2] ?? -1) * 100) / caltot).truncateToDouble();
     int lastdataint = (datarec?[3] ?? 0).toInt();
+    
+    double calC = (datarec?[0] ?? 0).roundToDouble();
+    double calF = (datarec?[1] ?? 0).roundToDouble();
+    double calP = (datarec?[2] ?? 0).roundToDouble();
+    
+    return MaterialApp(
       
-      return MaterialApp(
-        
-        theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
-        home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 230, 67, 121),
-            centerTitle: true,
-            title: const Text('Train with Eevee', style: TextStyle(fontSize: 25)),
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                    icon: const Icon(Icons.arrow_back_sharp),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+      theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
+      home: Scaffold(
+        backgroundColor: Color(0xFF75B7E1),
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 230, 67, 121),
+          centerTitle: true,
+          title: const Text('Train with Eevee', style: TextStyle(fontSize: 25)),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                  icon: const Icon(Icons.arrow_back_sharp),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
 
-                      Scaffold.of(context).openDrawer();
-                    },
-                    tooltip:
-                        MaterialLocalizations.of(context).openAppDrawerTooltip);
-              },
-            ),
-          ),
-          backgroundColor: const Color(0xFF75B7E1),
-          body: Column(
-            children: <Widget>[
-              const SizedBox(
-                height: 45,
-              ),
-              Text('Types of calories that you consumed in $lastdataint:', style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const <Widget>[
-                  Indicator(
-                    color: Color.fromARGB(255, 238, 222, 2),
-                    text: 'Cardio',
-                    isSquare: false,
-                    size: 20,
-                    textColor: Colors.black,
-                  ),
-                  Indicator(
-                    color: Color.fromARGB(255, 19, 77, 211),
-                    text: 'FatBurn',
-                    isSquare: false,
-                    size: 20,
-                    textColor: Colors.black,
-                  ),
-                  Indicator(
-                    color: Color.fromARGB(255, 209, 121, 121),
-                    text: 'Peak',
-                    isSquare: false,
-                    size: 20,
-                    textColor: Colors.black,
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                          pieTouchData: PieTouchData(touchCallback:
-                              (FlTouchEvent event, pieTouchResponse) {
-                            setState(() {
-                              if (!event.isInterestedForInteractions ||
-                                  pieTouchResponse == null ||
-                                  pieTouchResponse.touchedSection == null) {
-                                touchedIndex = -1;
-                                return;
-                              }
-                              touchedIndex = pieTouchResponse
-                                  .touchedSection!.touchedSectionIndex;
-                            });
-                          }),
-                          startDegreeOffset: 180,
-                          borderData: FlBorderData(
-                            show: false,
-                          ),
-                          sectionsSpace: 1,
-                          centerSpaceRadius: 0,
-                          sections: showingSections()),
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 10)),
-                  Text(
-                      "Calories Cardio: $calCardio"
-                      "\n"
-                      "Calories FatBurn: $calFatBurn"
-                      "\n"
-                      "Calories Peak: $calPeak",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      )),
-                ],
-              ),
-            ],
+                    Scaffold.of(context).openDrawer();
+                  },
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip);
+            },
           ),
         ),
-      );
+        body: Column(
+          children: <Widget>[
+            const SizedBox(
+              height: 28,
+            ),
+            Text('Types of calories that you consumed when you played with Eevee last time:', style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+            const SizedBox(
+              height: 28,
+            ),
+            
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const <Widget>[
+                Indicator(
+                  color: const Color.fromARGB(255, 12, 39, 192),
+                  text: 'Cardio',
+                  isSquare: false,
+                  size: 18,
+                  textColor: Colors.black,
+                ),
+                Indicator(
+                  color: Color.fromARGB(255, 211, 218, 77),
+                  text: 'FatBurn',
+                  isSquare: false,
+                  size: 18,
+                  textColor: Colors.black,
+                ),
+                Indicator(
+                  color: const Color.fromARGB(255, 209, 121, 121),
+                  text: 'Peak',
+                  isSquare: false,
+                  size: 18,
+                  textColor: Colors.black,
+                ),
+              ],
+            ), 
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: PieChart(
+                    PieChartData(
+                        pieTouchData: PieTouchData(touchCallback:
+                            (FlTouchEvent event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              touchedIndex = -1;
+                              return;
+                            }
+                            touchedIndex = pieTouchResponse
+                                .touchedSection!.touchedSectionIndex;
+                          });
+                        }),
+                        startDegreeOffset: 180,
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        sectionsSpace: 1,
+                        centerSpaceRadius: 0,
+                        sections: showingSections()),
+                  ),
+                ),
+                Text(
+                    "Calories Cardio: $calC"
+                    "\n"
+                    "Calories FatBurn: $calF"
+                    "\n"
+                    "Calories Peak: $calP",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   List<PieChartSectionData> showingSections() {
@@ -161,8 +166,8 @@ class _TrainingPageState extends State<TrainingPage> {
         final isTouched = i == touchedIndex;
         final opacity = isTouched ? 1.0 : 0.6;
 
-        const color0 = Color.fromARGB(255, 238, 222, 2);
-        const color1 = Color.fromARGB(255, 19, 77, 211);
+        const color0 = Color.fromARGB(255, 12, 39, 192);
+        const color1 = Color.fromARGB(255, 211, 218, 77);
         const color2 = Color.fromARGB(255, 209, 121, 121);
 
         double caltot =
@@ -180,7 +185,7 @@ class _TrainingPageState extends State<TrainingPage> {
               color: color0.withOpacity(opacity),
               value: calCardio,
               title: '$calCardio%',
-              radius: 110,
+              radius: 110, 
               titleStyle: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -215,7 +220,7 @@ class _TrainingPageState extends State<TrainingPage> {
             throw Error();
         }
       },
-    );
+    ); 
   }
 }
 
@@ -287,7 +292,7 @@ Future<List<double?>?> _loadData(context) async {
         return vect;
       } else {
         return null;
-      } 
+      } // Endif lastData=dataint
     } else {
       return null;
     }
