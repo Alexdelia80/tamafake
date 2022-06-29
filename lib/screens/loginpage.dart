@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     return FlutterLogin(
       title: 'TAMA-fit',
       theme: LoginTheme(
-          primaryColor: Color(0xFF75B7E1),
+          primaryColor: Color.fromARGB(255, 230, 67, 121),
           logoWidth: 1.5,
           titleStyle: TextStyle(fontFamily: 'Lobster')),
       onLogin: _loginUser,

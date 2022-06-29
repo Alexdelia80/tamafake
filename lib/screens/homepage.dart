@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   String? uID;
   double? progress;
   int? exp;
-  int? esperienza = 0;
 
   @override
   void initState() {
@@ -39,13 +38,6 @@ class _HomePageState extends State<HomePage> {
             value = result;
           })
         });
-    /*
-    _checkauth(context).then((result) => {
-          // Once we receive our name we trigger rebuild.
-          setState(() {
-            uID = result;
-          })
-        });*/
     _checkprogress(context).then((result) => {
           // Once we receive our name we trigger rebuild.
           setState(() {
@@ -102,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 23),
                         ),
                         const SizedBox(
                           height: 20,
@@ -111,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                // ------------------------------- Progress Bar ------------------------------
+                // ------------------------------- Experience Bar ------------------------------
                 FutureBuilder(
                   future: SharedPreferences.getInstance(),
                   builder: ((context, snapshot) {
@@ -120,7 +112,6 @@ class _HomePageState extends State<HomePage> {
                       if (sp.getDouble('progress') == null) {
                         sp.setDouble('progress', 0);
                         final progress = sp.getDouble('progress');
-                        print('Progresso:$progress');
                         return SizedBox(
                           height: 20,
                           width: 300,
@@ -128,12 +119,10 @@ class _HomePageState extends State<HomePage> {
                               value: progress,
                               color: const Color.fromARGB(255, 67, 129, 230),
                               backgroundColor:
-                                  const Color.fromARGB(255, 135, 169, 197)),
+                                  Color.fromARGB(255, 95, 234, 176)),
                         );
                       } else {
                         final progress = sp.getDouble('progress');
-                        print('Progresso:$progress');
-
                         return SizedBox(
                           height: 20,
                           width: 300,
@@ -141,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                               value: progress,
                               color: Color.fromARGB(255, 67, 129, 230),
                               backgroundColor:
-                                  Color.fromARGB(255, 135, 169, 197)),
+                                  Color.fromARGB(255, 95, 234, 176)),
                         );
                       }
                     } else {
@@ -153,34 +142,31 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 40,
                 ),
-                // ----------------------------- Immagine Evee ---------------------------------
+                // ----------------------------- Immagine Eevee ---------------------------------
                 const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://www.woolha.com/media/2020/03/eevee.png'),
-                      radius: 70,
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/eevee.png'),
                     ),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                // -------------------------------- ESPERIENZA --------------------------------
-                /* const SizedBox(
-                  height: 40,
-                ),*/
+
+                // -------------------------------- EXPERIENCE --------------------------------
                 Text(
-                  'Evee\'s total Experience: $exp',
+                  'EEVEE\'S TOTAL EXPERIENCE: $exp',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 23),
                 ),
                 const SizedBox(
                   height: 100,
                 ),
-                // --------------------- BOTTONE: Load your progress ------------------------------
+                // --------------------- BUTTON: Load your progress ------------------------------
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
@@ -188,12 +174,11 @@ class _HomePageState extends State<HomePage> {
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     //Controllo che l'autorizzazione ci sia, altrimenti parte un alert
-                    String? uID = await _checkauth(context);
+                    //String? uID = await _checkauth(context);
                     //print('your uid is: $uID');
                     final sp = await SharedPreferences.getInstance();
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
-                    if ((sp.getString('AuthorizationCheck') != null) &&
-                        (uID != null)) {
+                    if (sp.getString('AuthorizationCheck') != null) {
                       // Instantiate a proper data manager
                       FitbitActivityTimeseriesDataManager
                           fitbitActivityTimeseriesDataManager =
@@ -229,10 +214,7 @@ class _HomePageState extends State<HomePage> {
                         userID: fixedUID,
                       )) as List<FitbitHeartData>;
 
-                      print('i passi di ieri sono stati: $stepsData[0].value');
-                      print(
-                          'le calorie di ieri sono state: $heartData[0].caloriesCardio');
-                      print(dataINT);
+                      print('Data: $dataINT');
 
                       //----------------------------  INSERIMENTO E GESTIONE CONFLITTO  -----------------------------------------
                       // ------- ESTRAPOLO L'ULTIMA DATA PRESENTE NEL DB E LA CONFRONTO CON IL FETCH---------
@@ -244,9 +226,6 @@ class _HomePageState extends State<HomePage> {
                       if (listtable.isNotEmpty) {
                         int? indice = listtable.length - 1;
                         int? lastdata = listtable[indice].data;
-                        print(listtable);
-                        print(indice);
-                        print(lastdata);
                         //Controllo che la data non sia già presente nel database
                         if (lastdata != dataINT) {
                           // Scrivo i dati nel database
@@ -258,31 +237,40 @@ class _HomePageState extends State<HomePage> {
                                   stepsData[0].value,
                                   heartData[0].caloriesCardio,
                                   heartData[0].caloriesFatBurn,
-                                  heartData[0].caloriesOutOfRange));
+                                  heartData[0].caloriesPeak));
                           final steps = stepsData[0].value;
-                          final calorie = heartData[0].caloriesCardio;
-                          double cal = calorie!.truncateToDouble();
-                          print(
-                              'i valori cardiaci caricati sono: $heartData[0]');
+                          int steps_int = steps!.toInt();
+                          final calorie_cardio = heartData[0].caloriesCardio;
+                          double cal_cardio =
+                              calorie_cardio!.truncateToDouble();
+                          final calorie_fatburn = heartData[0].caloriesFatBurn;
+                          double cal_fatburn =
+                              calorie_fatburn!.truncateToDouble();
+                          final calorie_peak = heartData[0].caloriesPeak;
+                          double cal_peak = calorie_peak!.truncateToDouble();
 
                           //Alert per avvisare l'utente che i dati sono stati caricati
                           showDialog<String>(
                               context: context,
-                              builder: (BuildContext context) => SimpleDialog(
+                              builder: (BuildContext context) => AlertDialog(
                                     //AlertDialog Title
                                     backgroundColor:
                                         const Color.fromARGB(255, 230, 67, 121),
-                                    title: Text(
-                                        'Your Progress: $progress' +
+                                    title: Text('Your progress:',
+                                        style: TextStyle(color: Colors.white)),
+                                    content: Text(
+                                        'Steps: $steps_int' +
                                             '\n' +
-                                            'Steps: $steps' +
+                                            'Calories Cardio: $cal_cardio' +
                                             '\n' +
-                                            'Calories: $cal' +
+                                            'Calories Fat Burn: $cal_fatburn' +
+                                            '\n' +
+                                            'Calories Peak: $cal_peak' +
                                             '\n',
                                         style: const TextStyle(
                                             color: Colors.white)),
                                   ));
-                          // ----- aggiorno il portafoglio --------
+                          // ------------------- aggiorno il portafoglio ---------------------
                           _returnMoney(stepsData[0].value);
                         }
 
@@ -290,22 +278,20 @@ class _HomePageState extends State<HomePage> {
                         else {
                           print(
                               'ATTENZIONE: Non puoi caricare due volte gli stessi dati!');
-                          //Alert per avvisare che i dati non possono essere caricati due volte lo stesso giorno
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  const SimpleDialog(
+                                  const AlertDialog(
                                     //AlertDialog Title
                                     backgroundColor:
                                         Color.fromARGB(255, 230, 67, 121),
-                                    title: Text(
-                                        "Don't get smart with us!" +
-                                            "\n" +
-                                            "You can't upload your progress twice!" +
-                                            "\n",
+                                    title: Text("Don't cheat!",
+                                        style: TextStyle(color: Colors.white)),
+
+                                    content: Text(
+                                        "You can't upload your progress twice!",
                                         style: TextStyle(color: Colors.white)),
                                   ));
-
                           //alert
                         }
                       } else {
@@ -320,26 +306,35 @@ class _HomePageState extends State<HomePage> {
                                 heartData[0].caloriesFatBurn,
                                 heartData[0].caloriesPeak));
                         final steps = stepsData[0].value;
-                        final calorie = heartData[0].caloriesCardio;
-                        double cal = calorie!.truncateToDouble();
-                        print('i valori cardiaci caricati sono: $heartData[0]');
+                        int steps_int = steps!.toInt();
+                        final calorie_cardio = heartData[0].caloriesCardio;
+                        double cal_cardio = calorie_cardio!.truncateToDouble();
+                        final calorie_fatburn = heartData[0].caloriesFatBurn;
+                        double cal_fatburn =
+                            calorie_fatburn!.truncateToDouble();
+                        final calorie_peak = heartData[0].caloriesPeak;
+                        double cal_peak = calorie_peak!.truncateToDouble();
                         //Alert per avvisare l'utente che i dati sono stati caricati
                         showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => SimpleDialog(
+                            builder: (BuildContext context) => AlertDialog(
                                   //AlertDialog Title
                                   backgroundColor:
                                       Color.fromARGB(255, 230, 67, 121),
-                                  title: Text(
-                                      'Your Progress: $progress' +
+                                  title: Text('Your progress:',
+                                      style: TextStyle(color: Colors.white)),
+                                  content: Text(
+                                      'Steps: $steps_int' +
                                           '\n' +
-                                          'Steps: $steps' +
+                                          'Calories Cardio: $cal_cardio' +
                                           '\n' +
-                                          'Calories: $cal' +
+                                          'Calories Fat Burn: $cal_fatburn' +
+                                          '\n' +
+                                          'Calories Peak: $cal_peak' +
                                           '\n',
                                       style: TextStyle(color: Colors.white)),
                                 ));
-                        // ----- aggiorno il portafoglio --------
+                        // ------------------- aggiorno il portafoglio -----------------------
                         _returnMoney(stepsData[0].value);
                       }
                     } else {
@@ -350,15 +345,12 @@ class _HomePageState extends State<HomePage> {
                           title: const Text('Attention!',
                               style: TextStyle(color: Colors.white)),
                           backgroundColor: Color.fromARGB(255, 230, 67, 121),
-
                           //AlertDialog description
                           content: const Text(
                               'You have to authorize the app first!',
                               style: TextStyle(color: Colors.white)),
                           actions: <Widget>[
-                            //Qui si può far scegliere all'utente di tornare alla home oppure di rimanere nello shop
                             TextButton(
-                              //onPressed: () => Navigator.pop(context, 'Cancel'),
                               onPressed: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -378,7 +370,8 @@ class _HomePageState extends State<HomePage> {
                   }, //onPressed
                   child: const Text('LOAD YOUR PROGRESS!',
                       style: TextStyle(fontSize: 18)),
-                ), // ------------------- END LOAD YOUR PROGRESS -----------------------
+                ),
+                // ------------------- END LOAD YOUR PROGRESS -----------------------
               ],
             ),
           ),
@@ -389,7 +382,7 @@ class _HomePageState extends State<HomePage> {
   }
 } //HomePage
 
-// FUNZIONI:
+// FUNCTIONS:
 
 void _toLoginPage(BuildContext context) async {
   //Unset the 'username' filed in SharedPreference
@@ -422,7 +415,7 @@ Future<int?> _returnMoney(value) async {
   final sp = await SharedPreferences.getInstance();
   if (sp.getInt('portafoglio') == null) {
     sp.setInt('portafoglio', 0);
-    final int money = (value ~/ 200); // Divisione intera
+    final int money = (value ~/ 200);
     // Prendo il valore attuale del portafoglio con get
     final int? attPortafoglio = sp.getInt('portafoglio');
     // Aggiorno il valore del portafoglio che inserirò all'interno di sp
@@ -431,7 +424,7 @@ Future<int?> _returnMoney(value) async {
     print('Il valore del tuo portafoglio è: $aggPortafoglio');
     return aggPortafoglio;
   } else {
-    // Calcolo i soldi che mi servono (guadagno 2 euro ogni 1000 steps)
+    // Calcolo i soldi che mi servono (guadagno 5 euro ogni 1000 steps)
     final int money = (value ~/ 200); // Divisione intera
     // Prendo il valore attuale del portafoglio con get
     final int? attPortafoglio = sp.getInt('portafoglio');
@@ -443,34 +436,14 @@ Future<int?> _returnMoney(value) async {
   }
 }
 
-Future<String?> _checkauth(context) async {
-  String fitclientid = '238BYH';
-  String fitclientsec = '9d8c4fb21e663b4f783f3f4fc6acffb8';
-  String redirecturi = 'example://fitbit/auth';
-  String callbackurl = 'example';
-  String? userId = '';
-  userId = await FitbitConnector.authorize(
-      context: context,
-      clientID: fitclientid,
-      clientSecret: fitclientsec,
-      redirectUri: redirecturi,
-      callbackUrlScheme: callbackurl);
-  FitbitUserAPIURL fitbitUserApiUrl =
-      FitbitUserAPIURL.withUserID(userID: userId);
-  print('fitbitapiurl: $fitbitUserApiUrl');
-  return userId;
-}
-
 Future<double?> _checkprogress(context) async {
   final sp = await SharedPreferences.getInstance();
   if (sp.getDouble('progress') == null) {
     sp.setDouble('progress', 0);
     final progress = sp.getDouble('progress');
-    //print('Progresso:$progress');
     return progress;
   } else {
     final progress = sp.getDouble('progress');
-    //print('Progresso:$progress');
     return progress;
   }
 }
@@ -482,7 +455,6 @@ Future<int?> _checkexp(context) async {
   if (listavatar.isNotEmpty) {
     final int indice = listavatar.length - 1;
     int lastexp = listavatar[indice].exp;
-    print('your experience is: $lastexp');
     return lastexp;
   } else {
     return 0;
