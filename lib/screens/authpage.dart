@@ -82,6 +82,8 @@ class _AuthPageState extends State<AuthPage> {
                     redirectUri: redirecturi,
                     callbackUrlScheme: callbackurl);
                 sp.setString('AuthorizationCheck', userId!);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HomePage()));
               },
               child: const Text('AUTHORIZE'),
               style: ButtonStyle(

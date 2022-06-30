@@ -28,21 +28,17 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // fetchName function is a asynchronously to GET data
     _returnLevel(context).then((result) => {
-          // Once we receive our name we trigger rebuild.
           setState(() {
             value = result;
           })
         });
     _checkprogress(context).then((result) => {
-          // Once we receive our name we trigger rebuild.
           setState(() {
             progress = result;
           })
         });
     _checkexp(context).then((result) => {
-          // Once we receive our name we trigger rebuild.
           setState(() {
             exp = result;
           })
@@ -59,7 +55,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(context) {
     return MaterialApp(
-      //theme: ThemeData(primaryColor: const Color.fromARGB(255, 230, 67, 121)),
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -140,13 +135,15 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                 ),
                 // ----------------------------- Immagine Eevee ---------------------------------
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/eeveeicon.png'),
-                      radius: 70,
-                    ),
+                        radius: 80,
+                        child: ClipOval(
+                          child: Image.asset('assets/eeveeicon.png',
+                              width: 150, height: 150, fit: BoxFit.cover),
+                        )),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
@@ -171,7 +168,6 @@ class _HomePageState extends State<HomePage> {
                       elevation: MaterialStateProperty.all<double>(1.5)),
                   onPressed: () async {
                     final sp = await SharedPreferences.getInstance();
-
                     // ----------------  IF PRINCIPALE DELLO STATEMENT -----------------
                     if (sp.getString('AuthorizationCheck') != null) {
                       // Instantiate a proper data manager
@@ -187,7 +183,6 @@ class _HomePageState extends State<HomePage> {
                         clientID: fitclientid,
                         clientSecret: fitclientsec,
                       );
-
                       // Fetch Steps data
                       final stepsData =
                           await fitbitActivityTimeseriesDataManager.fetch(
